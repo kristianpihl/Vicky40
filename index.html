@@ -36,7 +36,7 @@
     const SUPABASE_URL = 'https://xdrfuezskfmjpjowzhhs.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_FzJbVHWaQ_kSqu_Xk8NeUg_tVb9SQLW';
 
-    const supabase = window.supabase.createClient(
+    const supabaseClient = window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY
     );
@@ -52,7 +52,7 @@
         const email = document.getElementById('email').value;
         const message = document.getElementById('message').value;
 
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('submissions')
             .insert([
                 {
