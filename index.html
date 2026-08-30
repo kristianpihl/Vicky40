@@ -15,7 +15,7 @@
 
     <h2>Send inn informasjon</h2>
 
-    <form>
+    <form id="submission-form">
         <label for="name">Navn:</label><br>
         <input type="text" id="name" name="name"><br><br>
 
@@ -30,6 +30,48 @@
 
         <button type="submit">Send inn</button>
     </form>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    const SUPABASE_URL = 'https://xdrfuezskfmjpjowzhhs.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_FzJbVHWaQ_kSqu_Xk8NeUg_tVb9SQLW';
+
+    const supabase = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+</script>
+
+<script>
+    const form = document.getElementById('submission-form');
+
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+
+        const { data, error } = await supabase
+            .from('submissions')
+            .insert([
+                {
+                    name: name,
+                    email: email,
+                    message: message
+                }
+            ]);
+
+        if (error) {
+            console.error(error);
+            alert('Noe gikk galt. Prøv igjen.');
+            return;
+        }
+
+        alert('Takk! Skjemaet er sendt inn.');
+        form.reset();
+    });
+</script>
 
 </body>
 </html>
