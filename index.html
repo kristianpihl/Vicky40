@@ -1,107 +1,34 @@
 <!DOCTYPE html>
 <html lang="no">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Min nettside</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#e07a5f" />
 
-    <h1>Velkommen!</h1>
+    <!-- Privat fest: ber søkemotorer la være å indeksere siden.
+         Fjern denne linja hvis du vil at siden skal kunne dukke opp i Google. -->
+    <meta name="robots" content="noindex" />
 
-    <p>Dette er min første nettside med GitHub og Vercel.</p>
+    <title>[NAVN] 40 år</title>
+    <meta
+      name="description"
+      content="Alt om 40-årsfeiringen – program, påmelding, gjester og praktisk info."
+    />
 
-    <p>Dette er min første endring.</p>
-
-    <h2>Send inn informasjon</h2>
-
-    <form id="submission-form">
-        <label for="name">Navn:</label><br>
-        <input type="text" id="name" name="name"><br><br>
-
-        <label for="email">E-post:</label><br>
-        <input type="email" id="email" name="email"><br><br>
-
-        <label for="message">Melding:</label><br>
-        <textarea id="message" name="message" rows="5"></textarea><br><br>
-
-        <label for="image">Last opp bilde:</label><br>
-        <input type="file" id="image" name="image" accept="image/*"><br>
-        <small>Maks 5 MB.</small><br><br>
-
-        <button type="submit">Send inn</button>
-    </form>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <script>
-        const SUPABASE_URL = 'https://xdrfuezskfmjpjowzhhs.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_FzJbVHWaQ_kSqu_Xk8NeUg_tVb9SQLW';
-
-        const supabaseClient = window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_KEY
-        );
-
-        const form = document.getElementById('submission-form');
-
-        form.addEventListener('submit', async function(event) {
-            event.preventDefault();
-
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const message = document.getElementById('message').value;
-            const imageFile = document.getElementById('image').files[0];
-
-            // Sjekk at bildet ikke er større enn 5 MB.
-            if (imageFile && imageFile.size > 5 * 1024 * 1024) {
-                alert('Bildet er for stort. Maksimal størrelse er 5 MB.');
-                return;
-            }
-
-            let imagePath = null;
-
-            // Last opp bildet hvis brukeren har valgt et.
-            if (imageFile) {
-                const fileExtension = imageFile.name.split('.').pop();
-                const fileName = `${crypto.randomUUID()}.${fileExtension}`;
-
-                const { error: uploadError } = await supabaseClient
-                    .storage
-                    .from('uploads')
-                    .upload(fileName, imageFile);
-
-                if (uploadError) {
-                    console.error(uploadError);
-                    alert('Bildet kunne ikke lastes opp. Prøv igjen.');
-                    return;
-                }
-
-                imagePath = fileName;
-            }
-
-            // Lagre informasjonen i databasen.
-            const { error } = await supabaseClient
-                .from('submissions')
-                .insert([
-                    {
-                        name: name,
-                        email: email,
-                        message: message,
-                        image_path: imagePath
-                    }
-                ]);
-
-            if (error) {
-                console.error(error);
-                alert('Noe gikk galt. Prøv igjen.');
-                return;
-            }
-
-            alert('Takk! Skjemaet er sendt inn.');
-            form.reset();
-        });
-    </script>
-
-</body>
+    <!-- Hvordan lenka ser ut når den deles (Messenger, WhatsApp, Facebook ...).
+         Bytt /og-bilde.svg med din egen /og-bilde.jpg (1200 x 630) når du har et. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="nb_NO" />
+    <meta property="og:title" content="[NAVN] 40 år" />
+    <meta property="og:description" content="Bli med og feir – en helg i Oslo." />
+    <meta property="og:image" content="/og-bilde.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="/og-bilde.svg" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

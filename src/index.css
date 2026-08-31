@@ -1,0 +1,629 @@
+/* =========================================================
+   Global stil for hele nettsiden.
+   Fargepaletten ligger som CSS-variabler øverst – endre der.
+   ========================================================= */
+
+:root {
+  /* --- Fargepalett: lyse, matte farger + hvitt + mørk font --- */
+  --color-bg: #ffffff;          /* hovedbakgrunn */
+  --color-surface: #f7f4ef;     /* svak varm tone til seksjoner/kort */
+  --color-text: #262223;        /* mørk brødtekst */
+  --color-muted: #6b6560;       /* dempet tekst */
+  --color-border: #e7e0d6;      /* fine skillelinjer */
+
+  --color-primary: #e07a5f;     /* varm terrakotta – vennlig og leken */
+  --color-primary-dark: #c9634a;/* mørkere variant til hover */
+  --color-accent: #81b29a;      /* matt salviegrønn – sekundærfarge */
+  --color-highlight: #f2cc8f;   /* matt varm gul – små detaljer */
+
+  /* --- Koble paletten til Bootstrap sine variabler --- */
+  --bs-primary: var(--color-primary);
+  --bs-primary-rgb: 224, 122, 95;
+  --bs-body-color: var(--color-text);
+  --bs-body-bg: var(--color-bg);
+  --bs-border-color: var(--color-border);
+  --bs-link-color: var(--color-primary-dark);
+  --bs-link-hover-color: var(--color-primary);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* --- Layout-skjelett: holder footer nederst også på korte sider --- */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1 0 auto;
+}
+
+/* --- Toppbar --- */
+.topbar {
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.topbar-brand {
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: var(--color-text);
+}
+
+.topbar-brand-age {
+  color: var(--color-primary);
+}
+
+.topbar .nav-link {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.topbar .nav-link.active {
+  color: var(--color-primary-dark);
+}
+
+.topbar-cta {
+  white-space: nowrap;
+}
+
+@media (min-width: 992px) {
+  .topbar-cta {
+    margin-left: 1rem;
+  }
+}
+
+/* --- Knapper (bruker paletten via Bootstrap 5.3-variabler) --- */
+.btn-primary {
+  --bs-btn-bg: var(--color-primary);
+  --bs-btn-border-color: var(--color-primary);
+  --bs-btn-hover-bg: var(--color-primary-dark);
+  --bs-btn-hover-border-color: var(--color-primary-dark);
+  --bs-btn-active-bg: var(--color-primary-dark);
+  --bs-btn-active-border-color: var(--color-primary-dark);
+  --bs-btn-color: #ffffff;
+  --bs-btn-hover-color: #ffffff;
+}
+
+/* --- Standard luft rundt sideinnhold --- */
+.page {
+  padding-top: 2.5rem;
+  padding-bottom: 3.5rem;
+}
+
+.page-lead {
+  color: var(--color-muted);
+  max-width: 42rem;
+}
+
+/* --- Fremside --- */
+.front-heading {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  margin-bottom: 1.25rem;
+}
+
+.front-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+}
+
+.front-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.front-intro p:last-child {
+  margin-bottom: 0;
+}
+
+@media (min-width: 992px) {
+  .front-right {
+    padding-top: 0.25rem;
+  }
+}
+
+/* --- Nedteller --- */
+.countdown {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.countdown-unit {
+  flex: 1;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 0.75rem 0.25rem;
+  text-align: center;
+}
+
+.countdown-value {
+  display: block;
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-primary-dark);
+}
+
+.countdown-label {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.countdown-done {
+  background-color: var(--color-highlight);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.countdown-done-text {
+  margin: 0;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* --- Undersideknapper --- */
+.subpage-button {
+  --bs-btn-color: var(--color-primary-dark);
+  --bs-btn-border-color: var(--color-primary);
+  --bs-btn-hover-bg: var(--color-primary);
+  --bs-btn-hover-border-color: var(--color-primary);
+  --bs-btn-hover-color: #ffffff;
+  --bs-btn-active-bg: var(--color-primary-dark);
+  --bs-btn-active-border-color: var(--color-primary-dark);
+  font-weight: 600;
+}
+
+/* --- Artikkelmal --- */
+.article {
+  max-width: 820px;
+}
+
+.article-image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  margin-bottom: 1.5rem;
+}
+
+.article-title {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  margin-bottom: 1.25rem;
+}
+
+.article-body p {
+  margin-bottom: 1rem;
+}
+
+.article-body h2 {
+  font-size: 1.4rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.article-body ul,
+.article-body ol {
+  margin-bottom: 1rem;
+  padding-left: 1.25rem;
+}
+
+.article-body li {
+  margin-bottom: 0.35rem;
+}
+
+/* --- Listevisning --- */
+.list-page {
+  max-width: 820px;
+}
+
+.list-title {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  margin-bottom: 0.75rem;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+
+a.list-item:hover {
+  border-color: var(--color-primary);
+}
+
+.list-item-image {
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+}
+
+.list-item-title {
+  font-size: 1.15rem;
+  margin: 0 0 0.25rem;
+}
+
+.list-item-ingress {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--color-muted);
+}
+
+@media (max-width: 480px) {
+  .list-item-image {
+    width: 72px;
+    height: 72px;
+  }
+}
+
+/* --- Programvisning --- */
+.program-page {
+  max-width: 820px;
+}
+
+.program-title {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  margin-bottom: 0.75rem;
+}
+
+.program-day {
+  margin-bottom: 2.5rem;
+}
+
+.program-day-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-highlight);
+}
+
+.program-day-name {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.program-day-date {
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.program-event {
+  display: grid;
+  grid-template-columns: 5rem 1fr;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.program-events .program-event:first-child {
+  border-top: 0;
+}
+
+.program-time {
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+.program-event-title {
+  font-size: 1.1rem;
+  margin: 0 0 0.25rem;
+}
+
+.program-location {
+  margin: 0 0 0.25rem;
+  font-size: 0.95rem;
+  color: var(--color-muted);
+}
+
+.program-desc {
+  margin: 0;
+}
+
+.program-empty {
+  color: var(--color-muted);
+  padding-top: 0.75rem;
+}
+
+@media (max-width: 480px) {
+  .program-event {
+    grid-template-columns: 4rem 1fr;
+    gap: 0.75rem;
+  }
+}
+
+/* --- Gjestevisning --- */
+.guests-page {
+  max-width: 960px;
+}
+
+.guests-title {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  margin-bottom: 0.75rem;
+}
+
+.guest-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.guest-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.guest-card-body {
+  padding: 1rem 1.15rem 1.25rem;
+}
+
+.guest-name {
+  font-size: 1.2rem;
+  margin: 0 0 0.15rem;
+}
+
+.guest-relation {
+  margin: 0 0 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-primary-dark);
+}
+
+.guest-text {
+  margin: 0;
+  font-size: 0.97rem;
+}
+
+/* --- RSVP-skjema --- */
+.rsvp-page {
+  max-width: 640px;
+}
+
+.rsvp-form {
+  margin-top: 1.5rem;
+}
+
+.rsvp-person {
+  margin-bottom: 1rem;
+  border-color: var(--color-border);
+  border-radius: 14px;
+}
+
+.rsvp-person-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rsvp-person-title {
+  font-size: 1.15rem;
+  margin: 0 0 1rem;
+}
+
+.rsvp-remove {
+  padding: 0;
+  text-decoration: none;
+  color: var(--color-primary-dark);
+}
+
+.rsvp-days {
+  padding-top: 0.25rem;
+}
+
+.rsvp-add {
+  margin-bottom: 0.5rem;
+}
+
+.rsvp-done {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+}
+
+.rsvp-done h2 {
+  margin-top: 0;
+}
+
+/* --- Video (YouTube) --- */
+.video-embed {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+}
+
+.video-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+  background-color: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: 16px;
+  color: var(--color-muted);
+}
+
+/* --- Bilder: opplasting --- */
+.gallery-page {
+  max-width: 960px;
+}
+
+.gallery-upload {
+  max-width: 560px;
+  margin: 1.5rem 0 2.5rem;
+  padding: 1.25rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+}
+
+.gallery-upload h2,
+.gallery-list h2 {
+  font-size: 1.3rem;
+  margin: 0 0 1rem;
+}
+
+.upload-list {
+  margin: 0 0 0.5rem;
+  padding-left: 1.1rem;
+  font-size: 0.9rem;
+}
+
+.upload-done {
+  max-width: 560px;
+  padding: 1.25rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+}
+
+/* --- Bilder: galleri --- */
+.gallery-status {
+  color: var(--color-muted);
+  padding: 1rem 0;
+}
+
+.gallery-grid {
+  columns: 3 220px;
+  column-gap: 1rem;
+}
+
+.gallery-item {
+  margin: 0 0 1rem;
+  break-inside: avoid;
+}
+
+.gallery-thumb {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.gallery-thumb img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  transition: opacity 0.15s ease;
+}
+
+.gallery-thumb:hover img {
+  opacity: 0.9;
+}
+
+.gallery-caption {
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1080;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: rgba(20, 15, 12, 0.86);
+  cursor: zoom-out;
+}
+
+.lightbox img {
+  max-width: 100%;
+  max-height: 82vh;
+  border-radius: 8px;
+}
+
+.lightbox-caption {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #f3ede4;
+}
+
+/* --- Footer --- */
+.footer {
+  flex-shrink: 0;
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: 1.5rem 0;
+  color: var(--color-muted);
+}

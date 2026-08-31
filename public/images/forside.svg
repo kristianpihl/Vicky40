@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Plassholder for forsidebilde">
+  <rect width="800" height="600" rx="24" fill="#f7f4ef" />
+  <circle cx="400" cy="240" r="92" fill="#f2cc8f" />
+  <text x="400" y="270" font-family="system-ui, sans-serif" font-size="82" font-weight="700" fill="#c9634a" text-anchor="middle">40</text>
+  <text x="400" y="410" font-family="system-ui, sans-serif" font-size="30" font-weight="600" fill="#6b6560" text-anchor="middle">Sett inn bilde her</text>
+  <text x="400" y="452" font-family="system-ui, sans-serif" font-size="18" fill="#6b6560" text-anchor="middle">public/images/forside.jpg</text>
+</svg>

@@ -1,0 +1,13 @@
+node_modules
+dist
+dist-ssr
+
+# Miljøvariabler – ligger lokalt og i Vercel, ikke i git
+.env
+.env.local
+.env.*.local
+
+# Verktøy / OS
+.vercel
+.DS_Store
+*.log
