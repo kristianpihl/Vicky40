@@ -1,5 +1,6 @@
 -- Bilder: metadata-tabell + storage-bucket for bildeopplasting.
 -- Kjør i Supabase: SQL Editor -> New query -> lim inn -> Run.
+-- Trygg å kjøre flere ganger.
 
 -- 1) Tabell med info om hvert bilde
 create table if not exists public.photos (
@@ -10,6 +11,11 @@ create table if not exists public.photos (
   caption text,                 -- valgfri tekst
   approved boolean not null default false  -- vises i galleriet først når denne er true
 );
+
+-- Gi anon-rollen (den offentlige nøkkelen) tilgang til tabellen.
+-- Uten dette får man «permission denied for table photos» (42501).
+-- RLS-reglene under bestemmer så hvilke rader som faktisk kan legges til / leses.
+grant insert, select on table public.photos to anon;
 
 alter table public.photos enable row level security;
 

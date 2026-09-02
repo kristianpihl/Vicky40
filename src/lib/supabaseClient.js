@@ -7,10 +7,14 @@ const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 if (!supabaseUrl || !supabaseKey) {
   console.warn(
     'Mangler VITE_SUPABASE_URL eller VITE_SUPABASE_ANON_KEY. ' +
-      'Sjekk .env-fila lokalt og miljøvariablene i Vercel.',
+      'RSVP, bildeopplasting og galleri virker ikke før disse er satt – ' +
+      'i .env lokalt, og i Vercel under Settings → Environment Variables.',
   )
 }
 
-// Én delt klient som resten av appen importerer:
-//   import { supabase } from '../lib/supabaseClient.js'
-export const supabase = createClient(supabaseUrl, supabaseKey)
+// Reserveverdier gjør at resten av nettsiden fungerer selv om nøklene mangler.
+// Da feiler bare skjemaene (med en tydelig melding), i stedet for hele siden.
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseKey || 'placeholder-key',
+)
