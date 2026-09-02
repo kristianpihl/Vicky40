@@ -2,12 +2,12 @@ import { Link } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 import { site } from '../content/site.js'
 
-// Full-bredde knapper til undersidene, stablet under hverandre.
-// Bruker samme liste som toppbaren (site.navLinks) – send inn en egen
-// liste via prop hvis du vil ha andre knapper her senere.
+// Full-width buttons to the other pages, stacked on top of each other.
+// Uses the same list as the top bar (site.navLinks) – pass your own list
+// via a prop if you want different buttons here later.
 export default function SubpageButtons({ links = site.navLinks }) {
   return (
-    <nav className="subpage-buttons d-grid gap-2" aria-label="Undersider">
+    <nav className="subpage-buttons d-grid gap-2" aria-label="Other pages">
       {links.map((link) => (
         <Button
           key={link.to}

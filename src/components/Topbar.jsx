@@ -2,8 +2,8 @@ import { Navbar, Nav, Container, Button } from 'react-bootstrap'
 import { NavLink } from 'react-router-dom'
 import { site } from '../content/site.js'
 
-// Toppbar som følger med når man scroller. Kollapser til en «hamburger»-meny
-// på mobil. Lenkene styres fra src/content/site.js.
+// Top bar that stays in view when you scroll. Collapses to a "hamburger" menu
+// on mobile. The links are controlled from src/content/site.js.
 export default function Topbar() {
   return (
     <Navbar expand="lg" sticky="top" className="topbar">
@@ -12,9 +12,9 @@ export default function Topbar() {
           {site.personName} <span className="topbar-brand-age">40</span>
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="hovedmeny" />
+        <Navbar.Toggle aria-controls="main-menu" />
 
-        <Navbar.Collapse id="hovedmeny">
+        <Navbar.Collapse id="main-menu">
           <Nav className="me-auto">
             {site.navLinks.map((link) => (
               <Nav.Link key={link.to} as={NavLink} to={link.to}>
@@ -23,9 +23,9 @@ export default function Topbar() {
             ))}
           </Nav>
 
-          {/* Her kan «Last opp bilder» bli en egen knapp senere. */}
-          <Button as={NavLink} to="/bilder" variant="primary" className="topbar-cta">
-            Last opp bilder
+          {/* This can become a dedicated "Upload photos" button later. */}
+          <Button as={NavLink} to="/photos" variant="primary" className="topbar-cta">
+            Upload photos
           </Button>
         </Navbar.Collapse>
       </Container>

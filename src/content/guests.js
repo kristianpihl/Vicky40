@@ -1,28 +1,28 @@
-// Gjestelista. Legg til så mange du vil – rekkefølgen her blir rekkefølgen på siden.
+// The guest list. Add as many as you like – the order here is the order on the page.
 //
-// Hver gjest:
-//   name      – navn
-//   relation  – kort undertekst (valgfritt), f.eks. «Barndomsvenn»
-//   text      – litt om personen (valgfritt)
-//   image     – { src, alt }. Uten bilde vises en nøytral plassholder.
+// Each guest:
+//   name      – name
+//   relation  – short subtitle (optional), e.g. "Childhood friend"
+//   text      – a little about the person (optional)
+//   image     – { src, alt }. Without an image a neutral placeholder is shown.
 
 export const guests = [
   {
-    name: 'Fornavn Etternavn',
-    relation: 'Barndomsvenn',
-    text: 'Kort tekst om personen – hvordan dere kjenner hverandre, en morsom detalj, eller hva de driver med til daglig.',
+    name: 'First Last',
+    relation: 'Childhood friend',
+    text: 'A short bit about this person – how you know each other, a fun detail, or what they do for a living.',
     image: { src: '/images/gjest.svg', alt: '' },
   },
   {
-    name: 'Fornavn Etternavn',
-    relation: 'Kollega',
-    text: 'Kort tekst om personen.',
+    name: 'First Last',
+    relation: 'Colleague',
+    text: 'A short bit about this person.',
     image: { src: '/images/gjest.svg', alt: '' },
   },
   {
-    name: 'Fornavn Etternavn',
-    relation: 'Studievenn',
-    text: 'Kort tekst om personen.',
+    name: 'First Last',
+    relation: 'University friend',
+    text: 'A short bit about this person.',
     image: { src: '/images/gjest.svg', alt: '' },
   },
 ]

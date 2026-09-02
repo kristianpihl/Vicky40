@@ -5,8 +5,8 @@ import RouteMeta from './components/RouteMeta.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 import AppRoutes from './routes.jsx'
 
-// Felles ramme rundt alle sider: toppbar øverst, sideinnhold i midten,
-// footer nederst. Selve sidene byttes ut inne i <AppRoutes />.
+// Shared frame around every page: top bar on top, page content in the middle,
+// footer at the bottom. The pages themselves swap out inside <AppRoutes />.
 export default function App() {
   return (
     <div className="app-shell">

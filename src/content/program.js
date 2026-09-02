@@ -1,66 +1,66 @@
-// Programmet for helgen. Rediger fritt.
+// The programme for the weekend. Edit freely.
 //
-// Hver dag har: day (navn), date (tekst), og en liste events.
-// Hvert event har: time, title, og valgfritt location og description.
-// En dag uten events viser bare «kommer»-tekst.
+// Each day has: day (name), date (text), and a list of events.
+// Each event has: time, title, and optionally location and description.
+// A day with no events just shows a "coming soon" line.
 
 export const program = [
   {
-    day: 'Torsdag',
-    date: '18. februar',
+    day: 'Thursday',
+    date: 'February 18',
     events: [
       {
         time: '18:00',
-        title: 'Uformell samling',
-        location: 'Baren på hotellet',
-        description: 'For de som kommer allerede torsdag – ingen påmelding nødvendig.',
+        title: 'Informal get-together',
+        location: 'The hotel bar',
+        description: 'For those already arriving on Thursday – no sign-up needed.',
       },
     ],
   },
   {
-    day: 'Fredag',
-    date: '19. februar',
+    day: 'Friday',
+    date: 'February 19',
     events: [
       {
         time: '12:00',
-        title: 'Lunsj og byvandring',
-        location: 'Møtes i sentrum',
-        description: 'Vi rusler rundt og ser litt på byen. Kle deg for været.',
+        title: 'Lunch and city walk',
+        location: 'Meet in the city centre',
+        description: "We'll wander around and see a bit of the city. Dress for the weather.",
       },
       {
         time: '19:00',
-        title: 'Felles middag',
+        title: 'Group dinner',
         location: '[Restaurant]',
-        description: 'Bordet er reservert. Gi beskjed i påmeldingen hvis du blir med.',
+        description: 'The table is booked. Let us know in your RSVP if you are joining.',
       },
     ],
   },
   {
-    day: 'Lørdag',
-    date: '20. februar',
+    day: 'Saturday',
+    date: 'February 20',
     events: [
       {
         time: '11:00',
-        title: 'Sen frokost',
-        location: 'Hotellet',
+        title: 'Late breakfast',
+        location: 'The hotel',
       },
       {
         time: '18:00',
-        title: 'Middag og fest',
-        location: '[Lokalet]',
-        description: 'Kveldens hovedbegivenhet. Mer info kommer.',
+        title: 'Dinner and party',
+        location: '[The venue]',
+        description: 'The main event of the evening. More info to come.',
       },
     ],
   },
   {
-    day: 'Søndag',
-    date: '21. februar',
+    day: 'Sunday',
+    date: 'February 21',
     events: [
       {
         time: '11:00',
-        title: 'Avslutning og farvel',
-        location: 'Hotellet',
-        description: 'Kaffe og noe å bite i før alle drar hver til sitt.',
+        title: 'Wind-down and goodbyes',
+        location: 'The hotel',
+        description: 'Coffee and a bite to eat before everyone heads home.',
       },
     ],
   },

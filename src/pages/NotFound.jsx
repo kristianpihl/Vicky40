@@ -1,13 +1,13 @@
 import { Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
-// Vises når ingen av rutene i routes.jsx passer adressen.
+// Shown when none of the routes in routes.jsx match the address.
 export default function NotFound() {
   return (
     <Container className="page text-center">
-      <h1>Fant ikke siden</h1>
-      <p className="page-lead mx-auto">Denne adressen finnes ikke.</p>
-      <Link to="/">Tilbake til forsiden</Link>
+      <h1>Page not found</h1>
+      <p className="page-lead mx-auto">This address doesn't exist.</p>
+      <Link to="/">Back to the front page</Link>
     </Container>
   )
 }

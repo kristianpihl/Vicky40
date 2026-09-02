@@ -5,8 +5,8 @@ function publicUrl(path) {
   return supabase.storage.from('photos').getPublicUrl(path).data.publicUrl
 }
 
-// Bildevisning: henter godkjente bilder fra Supabase og viser dem i et rutenett.
-// Klikk på et bilde for å se det stort. refreshKey bumpes utenfra for å laste på nytt.
+// Photo view: fetches approved photos from Supabase and shows them in a grid.
+// Click a photo to see it large. refreshKey is bumped from outside to reload.
 export default function GalleryTemplate({ refreshKey = 0 }) {
   const [photos, setPhotos] = useState([])
   const [status, setStatus] = useState('loading') // loading | ready | error
@@ -21,7 +21,7 @@ export default function GalleryTemplate({ refreshKey = 0 }) {
       .order('created_at', { ascending: false })
 
     if (error) {
-      console.error('Kunne ikke hente bilder:', error)
+      console.error('Could not fetch photos:', error)
       setStatus('error')
       return
     }
@@ -42,19 +42,19 @@ export default function GalleryTemplate({ refreshKey = 0 }) {
   }, [])
 
   if (status === 'loading') {
-    return <p className="gallery-status">Laster bilder …</p>
+    return <p className="gallery-status">Loading photos …</p>
   }
   if (status === 'error') {
     return (
       <p className="gallery-status">
-        Kunne ikke laste bildene akkurat nå. Prøv å laste siden på nytt.
+        Couldn't load the photos right now. Try reloading the page.
       </p>
     )
   }
   if (photos.length === 0) {
     return (
       <p className="gallery-status">
-        Ingen bilder er publisert ennå. Kom gjerne tilbake senere!
+        No photos have been published yet. Check back later!
       </p>
     )
   }
@@ -64,7 +64,7 @@ export default function GalleryTemplate({ refreshKey = 0 }) {
       <div className="gallery-grid">
         {photos.map((photo) => {
           const url = publicUrl(photo.storage_path)
-          const alt = photo.caption || `Bilde fra ${photo.uploaded_by}`
+          const alt = photo.caption || `Photo from ${photo.uploaded_by}`
           return (
             <figure className="gallery-item" key={photo.id}>
               <button
@@ -75,7 +75,7 @@ export default function GalleryTemplate({ refreshKey = 0 }) {
                 <img src={url} alt={alt} loading="lazy" />
               </button>
               <figcaption className="gallery-caption">
-                {photo.caption ? `${photo.caption} · ` : ''}fra{' '}
+                {photo.caption ? `${photo.caption} · ` : ''}from{' '}
                 {photo.uploaded_by}
               </figcaption>
             </figure>
@@ -92,7 +92,7 @@ export default function GalleryTemplate({ refreshKey = 0 }) {
         >
           <img src={selected.url} alt={selected.caption || ''} />
           <p className="lightbox-caption">
-            {selected.caption ? `${selected.caption} · ` : ''}fra{' '}
+            {selected.caption ? `${selected.caption} · ` : ''}from{' '}
             {selected.uploaded_by}
           </p>
         </div>

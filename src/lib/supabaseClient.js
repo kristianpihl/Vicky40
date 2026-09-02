@@ -1,19 +1,20 @@
 import { createClient } from '@supabase/supabase-js'
 
-// Verdiene leses fra miljøvariabler (.env lokalt, Environment Variables i Vercel).
+// The values are read from environment variables (.env locally, Environment
+// Variables in Vercel).
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 if (!supabaseUrl || !supabaseKey) {
   console.warn(
-    'Mangler VITE_SUPABASE_URL eller VITE_SUPABASE_ANON_KEY. ' +
-      'RSVP, bildeopplasting og galleri virker ikke før disse er satt – ' +
-      'i .env lokalt, og i Vercel under Settings → Environment Variables.',
+    'Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY. ' +
+      'RSVP, photo upload and the gallery will not work until these are set – ' +
+      'in .env locally, and in Vercel under Settings → Environment Variables.',
   )
 }
 
-// Reserveverdier gjør at resten av nettsiden fungerer selv om nøklene mangler.
-// Da feiler bare skjemaene (med en tydelig melding), i stedet for hele siden.
+// Fallback values so the rest of the site still works even if the keys are
+// missing. Then only the forms fail (with a clear message), not the whole site.
 export const supabase = createClient(
   supabaseUrl || 'https://placeholder.supabase.co',
   supabaseKey || 'placeholder-key',

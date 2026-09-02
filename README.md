@@ -1,72 +1,72 @@
 # Vicky40
 
-Nettside til en 40-årsfeiring. Bygget med Vite + React + React Router +
-React-Bootstrap, med Supabase for RSVP og bildeopplasting. Deployes på Vercel.
+Website for a 40th birthday celebration. Built with Vite + React + React Router +
+React-Bootstrap, with Supabase for RSVP and photo uploads. Deployed on Vercel.
 
-## Kom i gang lokalt
+## Getting started locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Åpne adressen Vite skriver ut (som regel http://localhost:5173).
+Open the address Vite prints (usually http://localhost:5173).
 
-## Miljøvariabler
+## Environment variables
 
-Kopier `.env.example` til `.env` og fyll inn verdiene fra Supabase
-(Settings → API). De samme to variablene må også ligge i Vercel under
+Copy `.env.example` to `.env` and fill in the values from Supabase
+(Settings → API). The same two variables must also be set in Vercel under
 Project Settings → Environment Variables:
 
-| Variabel                 | Hva                                    |
+| Variable                 | What                                   |
 | ------------------------ | -------------------------------------- |
-| `VITE_SUPABASE_URL`      | Project URL fra Supabase               |
-| `VITE_SUPABASE_ANON_KEY` | Publishable / anon key fra Supabase    |
+| `VITE_SUPABASE_URL`      | Project URL from Supabase              |
+| `VITE_SUPABASE_ANON_KEY` | Publishable / anon key from Supabase   |
 
 ## Database (Supabase)
 
-Kjør disse én gang i Supabase → SQL Editor:
+Run these once in Supabase → SQL Editor:
 
-| Fil                  | Lager                                              |
-| -------------------- | ------------------------------------------------- |
-| `supabase/rsvp.sql`  | Tabell for påmeldinger                            |
-| `supabase/photos.sql`| Tabell + storage-bucket for bildeopplasting       |
+| File                  | Creates                                          |
+| --------------------- | ----------------------------------------------- |
+| `supabase/rsvp.sql`   | Table for RSVPs                                 |
+| `supabase/photos.sql` | Table + storage bucket for photo uploads        |
 
-Påmeldinger leses i Table editor (`rsvp`). Opplastede bilder vises i galleriet
-først når `approved` settes til `true` på raden i `photos`.
+RSVPs are read in the Table editor (`rsvp`). Uploaded photos only appear in the
+gallery once `approved` is set to `true` on the row in `photos`.
 
-## Mappestruktur
+## Folder structure
 
 ```
 src/
-  main.jsx            Oppstart – React + Router + CSS
-  App.jsx             Felles ramme: Topbar + innhold + Footer
-  routes.jsx          Alle nettadresser
-  index.css           Fargepalett og global stil
+  main.jsx            Entry point – React + Router + CSS
+  App.jsx             Shared frame: Topbar + content + Footer
+  routes.jsx          All URLs
+  index.css           Colour palette and global styles
   lib/
-    supabaseClient.js Delt Supabase-klient
+    supabaseClient.js Shared Supabase client
   content/
-    site.js           Navn, dato, lenker i toppbaren
-    program.js        Programmet dag for dag
-    guests.js         Gjestelista
-    pageMeta.js       Fane-titler per side
-  components/         Gjenbrukbare biter (Topbar, Footer, Countdown ...)
-  templates/          Malene (fremside, artikkel, liste, program, gjester, galleri)
-  pages/             Én fil per side, bruker en mal + innhold
-  forms/             RsvpForm og PhotoUploadForm
+    site.js           Name, date, top-bar links
+    program.js        The programme, day by day
+    guests.js         The guest list
+    pageMeta.js       Browser-tab titles per page
+  components/         Reusable pieces (Topbar, Footer, Countdown ...)
+  templates/          The templates (front, article, list, programme, guests, gallery)
+  pages/             One file per page, uses a template + content
+  forms/             RsvpForm and PhotoUploadForm
 ```
 
-## Før lansering
+## Before launch
 
-- Bytt ut `[NAVN]` i `src/content/site.js` og `index.html`.
-- Legg inn egne bilder i `public/images/` og et delingsbilde `public/og-bilde.jpg`
-  (1200 × 630), og oppdater stien i `index.html`.
-- `index.html` har `<meta name="robots" content="noindex" />` fordi dette er en
-  privat fest. Fjern linja hvis siden skal kunne finnes i Google.
+- Replace `Vickie` in `src/content/site.js` and `index.html` if the name changes.
+- Add your own images to `public/images/` and a share image `public/og-bilde.jpg`
+  (1200 × 630), and update the path in `index.html`.
+- `index.html` has `<meta name="robots" content="noindex" />` because this is a
+  private party. Remove that line if the site should be findable in Google.
 
-## Bygg for produksjon
+## Build for production
 
 ```bash
-npm run build      # lager mappa dist/
-npm run preview    # forhåndsvis produksjonsbygget lokalt
+npm run build      # creates the dist/ folder
+npm run preview    # preview the production build locally
 ```

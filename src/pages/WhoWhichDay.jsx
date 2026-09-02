@@ -1,26 +1,26 @@
 import ArticleTemplate from '../templates/ArticleTemplate.jsx'
 
-const image = { src: '/images/artikkel.svg', alt: 'Hvem kommer hvilken dag' }
+const image = { src: '/images/artikkel.svg', alt: "Who's coming when" }
 
 export default function WhoWhichDay() {
   return (
-    <ArticleTemplate title="Hvem kommer hvilken dag" image={image}>
+    <ArticleTemplate title="Who's coming when" image={image}>
       <p>
-        Oversikt over hvem som er med når. Denne fylles ut etter hvert som
-        påmeldingene kommer inn.
+        An overview of who's joining on which day. This gets filled in as the
+        RSVPs come in.
       </p>
 
-      <h2>Torsdag</h2>
-      <p>[Navn, navn, navn …]</p>
+      <h2>Thursday</h2>
+      <p>[Name, name, name …]</p>
 
-      <h2>Fredag</h2>
-      <p>[Navn, navn, navn …]</p>
+      <h2>Friday</h2>
+      <p>[Name, name, name …]</p>
 
-      <h2>Lørdag</h2>
-      <p>[Navn, navn, navn …]</p>
+      <h2>Saturday</h2>
+      <p>[Name, name, name …]</p>
 
-      <h2>Søndag</h2>
-      <p>[Navn, navn, navn …]</p>
+      <h2>Sunday</h2>
+      <p>[Name, name, name …]</p>
     </ArticleTemplate>
   )
 }

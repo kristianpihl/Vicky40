@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
-// Ruller til toppen hver gang man bytter side.
+// Scrolls to the top every time you switch pages.
 export default function ScrollToTop() {
   const { pathname } = useLocation()
 

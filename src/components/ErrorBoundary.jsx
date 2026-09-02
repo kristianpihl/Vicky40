@@ -1,7 +1,7 @@
 import { Component } from 'react'
 
-// Fanger opp uventede feil i en underside slik at resten av nettsiden
-// (toppbar, footer) fortsatt vises i stedet for en blank skjerm.
+// Catches unexpected errors in a page so the rest of the site
+// (top bar, footer) still shows instead of a blank screen.
 export default class ErrorBoundary extends Component {
   constructor(props) {
     super(props)
@@ -13,19 +13,19 @@ export default class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, info) {
-    console.error('Uventet feil i siden:', error, info)
+    console.error('Unexpected error in page:', error, info)
   }
 
   render() {
     if (this.state.hasError) {
       return (
         <div className="container page">
-          <h1>Noe gikk galt</h1>
+          <h1>Something went wrong</h1>
           <p className="page-lead">
-            Prøv å laste siden på nytt. Hvis det fortsetter, gi beskjed til den
-            som lagde nettsiden.
+            Try reloading the page. If it keeps happening, let the person who
+            made this site know.
           </p>
-          <a href="/">Tilbake til forsiden</a>
+          <a href="/">Back to the front page</a>
         </div>
       )
     }

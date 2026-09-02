@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Plassholder for toppbilde">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Top image placeholder">
   <rect width="800" height="450" rx="20" fill="#f7f4ef" />
   <circle cx="400" cy="185" r="58" fill="#81b29a" opacity="0.35" />
-  <text x="400" y="250" font-family="system-ui, sans-serif" font-size="24" font-weight="600" fill="#6b6560" text-anchor="middle">Toppbilde</text>
-  <text x="400" y="284" font-family="system-ui, sans-serif" font-size="15" fill="#6b6560" text-anchor="middle">bytt ut i public/images/</text>
+  <text x="400" y="250" font-family="system-ui, sans-serif" font-size="24" font-weight="600" fill="#6b6560" text-anchor="middle">Top image</text>
+  <text x="400" y="284" font-family="system-ui, sans-serif" font-size="15" fill="#6b6560" text-anchor="middle">replace in public/images/</text>
 </svg>

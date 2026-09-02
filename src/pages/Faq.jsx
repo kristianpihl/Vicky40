@@ -1,33 +1,33 @@
 import { Link } from 'react-router-dom'
 import ArticleTemplate from '../templates/ArticleTemplate.jsx'
 
-// Praktisk info / ofte stilte spørsmål. Bruker artikkelmalen uten toppbilde.
+// Practical info / frequently asked questions. Uses the article template with no top image.
 export default function Faq() {
   return (
-    <ArticleTemplate title="Praktisk info">
-      <h2>Når og hvor er festen?</h2>
+    <ArticleTemplate title="Practical info">
+      <h2>When and where is the party?</h2>
       <p>
-        [Dato] fra kl. [tid], i [lokale/adresse]. Se{' '}
-        <Link to="/program">programmet</Link> for detaljer dag for dag.
+        [Date] from [time], at [venue/address]. See the{' '}
+        <Link to="/program">programme</Link> for details day by day.
       </p>
 
-      <h2>Hvordan melder jeg meg på?</h2>
+      <h2>How do I sign up?</h2>
       <p>
-        Bruk <Link to="/rsvp">påmeldingsskjemaet</Link>. Der kan du melde på
-        flere personer og si fra om allergier.
+        Use the <Link to="/rsvp">RSVP form</Link>. There you can sign up several
+        people and note any allergies.
       </p>
 
-      <h2>Er det overnatting?</h2>
-      <p>[Info om hotell, anbefalinger, eller om det er booket noe felles.]</p>
+      <h2>Is there accommodation?</h2>
+      <p>[Info about hotels, recommendations, or whether something has been booked together.]</p>
 
-      <h2>Er det en dresscode?</h2>
-      <p>[Fyll inn – for eksempel «pent, men komfortabelt».]</p>
+      <h2>Is there a dress code?</h2>
+      <p>[Fill in – for example "smart but comfortable".]</p>
 
-      <h2>Kan jeg ta med partner eller barn?</h2>
-      <p>[Fyll inn.]</p>
+      <h2>Can I bring a partner or children?</h2>
+      <p>[Fill in.]</p>
 
-      <h2>Hvem kan jeg spørre?</h2>
-      <p>Kontakt [navn] på [telefon / e-post].</p>
+      <h2>Who can I ask?</h2>
+      <p>Contact [name] on [phone / email].</p>
     </ArticleTemplate>
   )
 }

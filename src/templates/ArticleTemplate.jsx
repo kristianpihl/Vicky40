@@ -1,9 +1,9 @@
 import { Container } from 'react-bootstrap'
 
-// Generell artikkelmal: valgfritt toppbilde, tittel, deretter tekst.
-// Teksten sendes inn som children – helt vanlig JSX (<p>, <h2>, <ul> ...).
+// General article template: optional top image, title, then text.
+// The text is passed in as children – plain JSX (<p>, <h2>, <ul> ...).
 //
-//   <ArticleTemplate title="Om stedet" image={{ src, alt }}>
+//   <ArticleTemplate title="The venue" image={{ src, alt }}>
 //     <p>...</p>
 //   </ArticleTemplate>
 export default function ArticleTemplate({ title, image, children }) {

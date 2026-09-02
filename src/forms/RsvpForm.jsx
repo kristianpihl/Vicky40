@@ -35,11 +35,11 @@ export default function RsvpForm() {
 
   function validate() {
     for (const p of people) {
-      if (!p.name.trim()) return 'Alle personer må ha et navn.'
-      if (p.days.length === 0) return 'Velg minst én dag for hver person.'
+      if (!p.name.trim()) return 'Everyone needs a name.'
+      if (p.days.length === 0) return 'Pick at least one day for each person.'
     }
     if (email && !email.includes('@')) {
-      return 'Sjekk at e-postadressen ser riktig ut.'
+      return 'Please check that the email address looks right.'
     }
     return ''
   }
@@ -67,7 +67,7 @@ export default function RsvpForm() {
 
     const { error } = await supabase.from('rsvp').insert(payload)
     if (error) {
-      console.error('RSVP-innsending feilet:', error)
+      console.error('RSVP submission failed:', error)
       setStatus('error')
       return
     }
@@ -85,10 +85,10 @@ export default function RsvpForm() {
   if (status === 'success') {
     return (
       <div className="rsvp-done">
-        <h2>Takk for påmeldingen! 🎉</h2>
-        <p>Vi har registrert svaret ditt. Vi gleder oss til å se deg.</p>
+        <h2>Thanks for your RSVP! 🎉</h2>
+        <p>We've got your answer. We can't wait to see you.</p>
         <Button variant="outline-primary" onClick={reset}>
-          Send en ny påmelding
+          Submit another RSVP
         </Button>
       </div>
     )
@@ -101,7 +101,7 @@ export default function RsvpForm() {
           <Card.Body>
             <div className="rsvp-person-header">
               <h2 className="rsvp-person-title">
-                {index === 0 ? 'Deg selv' : `Person ${index + 1}`}
+                {index === 0 ? 'You' : `Person ${index + 1}`}
               </h2>
               {index > 0 && (
                 <Button
@@ -109,24 +109,24 @@ export default function RsvpForm() {
                   className="rsvp-remove"
                   onClick={() => removePerson(index)}
                 >
-                  Fjern
+                  Remove
                 </Button>
               )}
             </div>
 
             <Form.Group className="mb-3" controlId={`rsvp-name-${index}`}>
-              <Form.Label>Fullt navn</Form.Label>
+              <Form.Label>Full name</Form.Label>
               <Form.Control
                 type="text"
                 value={person.name}
                 onChange={(e) => updatePerson(index, 'name', e.target.value)}
-                placeholder="Fornavn Etternavn"
+                placeholder="First Last"
                 required
               />
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Hvilke dager?</Form.Label>
+              <Form.Label>Which days?</Form.Label>
               <div className="rsvp-days">
                 {site.partyDays.map((day) => (
                   <Form.Check
@@ -143,7 +143,7 @@ export default function RsvpForm() {
             </Form.Group>
 
             <Form.Group controlId={`rsvp-allergies-${index}`}>
-              <Form.Label>Allergier eller hensyn (valgfritt)</Form.Label>
+              <Form.Label>Allergies or dietary needs (optional)</Form.Label>
               <Form.Control
                 as="textarea"
                 rows={2}
@@ -151,7 +151,7 @@ export default function RsvpForm() {
                 onChange={(e) =>
                   updatePerson(index, 'allergies', e.target.value)
                 }
-                placeholder="F.eks. nøtteallergi, vegetar, laktoseintolerant"
+                placeholder="E.g. nut allergy, vegetarian, lactose intolerant"
               />
             </Form.Group>
           </Card.Body>
@@ -164,30 +164,30 @@ export default function RsvpForm() {
         className="rsvp-add"
         onClick={addPerson}
       >
-        + Legg til en person
+        + Add a person
       </Button>
 
       <Row className="g-3 mt-2">
         <Col xs={12}>
           <Form.Group controlId="rsvp-email">
-            <Form.Label>E-post (valgfritt)</Form.Label>
+            <Form.Label>Email (optional)</Form.Label>
             <Form.Control
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="så vi kan nå deg ved spørsmål"
+              placeholder="so we can reach you with questions"
             />
           </Form.Group>
         </Col>
         <Col xs={12}>
           <Form.Group controlId="rsvp-comment">
-            <Form.Label>Kommentar (valgfritt)</Form.Label>
+            <Form.Label>Comment (optional)</Form.Label>
             <Form.Control
               as="textarea"
               rows={3}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="Noe vi bør vite?"
+              placeholder="Anything we should know?"
             />
           </Form.Group>
         </Col>
@@ -200,9 +200,9 @@ export default function RsvpForm() {
       )}
       {status === 'error' && (
         <Alert variant="danger" className="mt-3">
-          Noe gikk galt under innsendingen. Prøv igjen om litt. Hvis det
-          fortsetter: sjekk at «rsvp»-tabellen er opprettet i Supabase (se
-          <code> supabase/rsvp.sql</code>).
+          Something went wrong while submitting. Try again in a moment. If it
+          keeps happening, check that the <code>rsvp</code> table has been
+          created in Supabase (see <code>supabase/rsvp.sql</code>).
         </Alert>
       )}
 
@@ -213,7 +213,7 @@ export default function RsvpForm() {
         className="rsvp-submit mt-3 w-100"
         disabled={status === 'submitting'}
       >
-        {status === 'submitting' ? 'Sender …' : 'Send påmelding'}
+        {status === 'submitting' ? 'Sending …' : 'Send RSVP'}
       </Button>
     </Form>
   )

@@ -13,21 +13,21 @@ import Gallery from './pages/Gallery.jsx'
 import PromoVideo from './pages/PromoVideo.jsx'
 import NotFound from './pages/NotFound.jsx'
 
-// Alle nettadresser samlet ett sted. Vil du endre en URL, gjør det her
-// og i navLinks i src/content/site.js.
+// All URLs in one place. To change a URL, do it here and in
+// navLinks in src/content/site.js (and pageMeta.js).
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/rsvp" element={<Rsvp />} />
       <Route path="/program" element={<Program />} />
-      <Route path="/gjester" element={<Guests />} />
-      <Route path="/hvem-kommer-hvilken-dag" element={<WhoWhichDay />} />
-      <Route path="/stedet" element={<Venue />} />
+      <Route path="/guests" element={<Guests />} />
+      <Route path="/who-is-coming-when" element={<WhoWhichDay />} />
+      <Route path="/venue" element={<Venue />} />
       <Route path="/oslo" element={<Oslo />} />
-      <Route path="/oslo/barer" element={<OsloBars />} />
-      <Route path="/praktisk-info" element={<Faq />} />
-      <Route path="/bilder" element={<Gallery />} />
+      <Route path="/oslo/bars" element={<OsloBars />} />
+      <Route path="/faq" element={<Faq />} />
+      <Route path="/photos" element={<Gallery />} />
       <Route path="/promo-video" element={<PromoVideo />} />
       <Route path="*" element={<NotFound />} />
     </Routes>

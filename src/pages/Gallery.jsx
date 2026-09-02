@@ -4,23 +4,24 @@ import PhotoUploadForm from '../forms/PhotoUploadForm.jsx'
 import GalleryTemplate from '../templates/GalleryTemplate.jsx'
 
 export default function Gallery() {
-  // Bumpes når en opplasting er ferdig, så galleriet henter på nytt.
+  // Bumped when an upload finishes, so the gallery reloads.
   const [refreshKey, setRefreshKey] = useState(0)
 
   return (
     <Container className="page gallery-page">
-      <h1>Bilder</h1>
+      <h1>Photos</h1>
       <p className="page-lead">
-        Last opp dine egne bilder fra helgen, og se bildene som er delt.
+        Upload your own photos from the weekend, and see the ones others have
+        shared.
       </p>
 
       <section className="gallery-upload">
-        <h2>Last opp bilder</h2>
+        <h2>Upload photos</h2>
         <PhotoUploadForm onUploaded={() => setRefreshKey((k) => k + 1)} />
       </section>
 
       <section className="gallery-list">
-        <h2>Delte bilder</h2>
+        <h2>Shared photos</h2>
         <GalleryTemplate refreshKey={refreshKey} />
       </section>
     </Container>

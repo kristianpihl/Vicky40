@@ -1,34 +1,34 @@
 import ListTemplate from '../templates/ListTemplate.jsx'
 
-// EKSEMPELSIDE som viser listevisnings-malen i bruk.
-// Endre innholdet, eller slett denne fila + ruten i routes.jsx hvis du
-// ikke vil ha den.
+// EXAMPLE PAGE showing the list template in use.
+// Edit the content, or delete this file + the route in routes.jsx if you
+// don't want it.
 const bars = [
   {
     href: 'https://example.com',
     image: { src: '/images/liste.svg', alt: '' },
-    title: 'Navn på bar 1',
-    ingress: 'Kort beskrivelse – stemning, hva stedet er kjent for, og hvor det ligger.',
+    title: 'Bar name 1',
+    ingress: 'A short description – the vibe, what the place is known for, and where it is.',
   },
   {
     href: 'https://example.com',
     image: { src: '/images/liste.svg', alt: '' },
-    title: 'Navn på bar 2',
-    ingress: 'Kort beskrivelse – stemning, hva stedet er kjent for, og hvor det ligger.',
+    title: 'Bar name 2',
+    ingress: 'A short description – the vibe, what the place is known for, and where it is.',
   },
   {
     href: 'https://example.com',
     image: { src: '/images/liste.svg', alt: '' },
-    title: 'Navn på bar 3',
-    ingress: 'Kort beskrivelse – stemning, hva stedet er kjent for, og hvor det ligger.',
+    title: 'Bar name 3',
+    ingress: 'A short description – the vibe, what the place is known for, and where it is.',
   },
 ]
 
 export default function OsloBars() {
   return (
     <ListTemplate
-      title="Barer vi liker i Oslo"
-      intro="Et lite utvalg for de som vil på byen mellom slagene."
+      title="Bars we like in Oslo"
+      intro="A small selection for those who want a night out between the events."
       items={bars}
     />
   )

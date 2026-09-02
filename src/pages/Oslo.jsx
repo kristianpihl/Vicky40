@@ -5,23 +5,25 @@ const image = { src: '/images/artikkel.svg', alt: 'Oslo' }
 
 export default function Oslo() {
   return (
-    <ArticleTemplate title="Litt om byen Oslo" image={image}>
+    <ArticleTemplate title="About Oslo" image={image}>
       <p>
-        For dere som ikke er så kjent i Oslo: byen er lett å bevege seg i, og
-        det meste ligger i gangavstand eller en kort t-banetur unna.
+        For those of you who don't know Oslo well: the city is easy to get
+        around, and most things are within walking distance or a short metro
+        ride away.
       </p>
 
-      <h2>Komme seg rundt</h2>
+      <h2>Getting around</h2>
       <p>
-        Flytoget og vanlig tog går fra Gardermoen til Oslo S på rundt 20–25
-        minutter. I sentrum kommer du langt til fots; ellers dekker t-bane,
-        trikk og buss resten (samme billett i sone 1).
+        The airport express and regular trains run from Gardermoen to Oslo
+        Central in about 20–25 minutes. You can walk most places in the centre;
+        otherwise the metro, tram and bus cover the rest (one ticket for zone 1).
       </p>
 
-      <h2>Mens du er her</h2>
+      <h2>While you're here</h2>
       <p>
-        Det er kort vei til blant annet Operaen, Akershus festning, Aker Brygge
-        og Grünerløkka. <Link to="/oslo/barer">Se noen bartips →</Link>
+        It's a short walk to the Opera House, Akershus Fortress, Aker Brygge and
+        Grünerløkka, among other places.{' '}
+        <Link to="/oslo/bars">See a few bar tips →</Link>
       </p>
     </ArticleTemplate>
   )

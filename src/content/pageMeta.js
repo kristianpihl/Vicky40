@@ -1,20 +1,20 @@
-// Fane-titler (og valgfri beskrivelse) per side.
-// Nøkkelen er nettadressen – samme som i src/routes.jsx.
-// Uten «title» brukes bare sidenavnet ([NAVN] 40 år).
+// Browser-tab titles (and optional description) per page.
+// The key is the URL – same as in src/routes.jsx.
+// Without a "title", only the site name is used (Vickie 40).
 
 export const pageMeta = {
   '/': {
     description:
-      'Alt om 40-årsfeiringen – program, påmelding, gjester og praktisk info.',
+      'Everything about the 40th birthday weekend – programme, RSVP, guests and practical info.',
   },
-  '/rsvp': { title: 'Meld deg på', description: 'Meld deg og eventuelle følgesvenner på feiringen.' },
-  '/program': { title: 'Program', description: 'Hva skjer når og hvor, dag for dag.' },
-  '/gjester': { title: 'Gjester', description: 'Bli litt kjent med hvem du møter i helgen.' },
-  '/hvem-kommer-hvilken-dag': { title: 'Hvem kommer hvilken dag' },
-  '/stedet': { title: 'Stedet' },
-  '/oslo': { title: 'Om Oslo' },
-  '/oslo/barer': { title: 'Barer i Oslo' },
-  '/praktisk-info': { title: 'Praktisk info' },
-  '/bilder': { title: 'Bilder' },
-  '/promo-video': { title: 'Promo-video' },
+  '/rsvp': { title: 'RSVP', description: 'Sign yourself and any guests up for the celebration.' },
+  '/program': { title: 'Programme', description: "What's happening, when and where, day by day." },
+  '/guests': { title: 'Guests', description: "Get to know who you'll meet during the weekend." },
+  '/who-is-coming-when': { title: "Who's coming when" },
+  '/venue': { title: 'The venue' },
+  '/oslo': { title: 'About Oslo' },
+  '/oslo/bars': { title: 'Bars in Oslo' },
+  '/faq': { title: 'Practical info' },
+  '/photos': { title: 'Photos' },
+  '/promo-video': { title: 'Promo video' },
 }

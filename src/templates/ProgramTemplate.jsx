@@ -1,14 +1,14 @@
 import { Container } from 'react-bootstrap'
 import { program } from '../content/program.js'
 
-// Programvisning: én seksjon per dag, med en tidslinje av hendelser under.
-// Data hentes fra src/content/program.js (kan overstyres med en prop).
+// Programme view: one section per day, with a timeline of events beneath.
+// Data comes from src/content/program.js (can be overridden with a prop).
 export default function ProgramTemplate({ days = program }) {
   return (
     <Container className="page program-page">
-      <h1 className="program-title">Program</h1>
+      <h1 className="program-title">Programme</h1>
       <p className="page-lead">
-        Her ser du hva som skjer når og hvor, dag for dag.
+        Here's what's happening, when and where, day by day.
       </p>
 
       {days.map((day) => (
@@ -19,7 +19,7 @@ export default function ProgramTemplate({ days = program }) {
           </header>
 
           {day.events.length === 0 ? (
-            <p className="program-empty">Program for denne dagen kommer.</p>
+            <p className="program-empty">The programme for this day is coming.</p>
           ) : (
             <div className="program-events">
               {day.events.map((event, i) => (

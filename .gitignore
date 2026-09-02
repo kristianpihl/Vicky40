@@ -2,12 +2,12 @@ node_modules
 dist
 dist-ssr
 
-# Miljøvariabler – ligger lokalt og i Vercel, ikke i git
+# Environment variables – kept locally and in Vercel, not in git
 .env
 .env.local
 .env.*.local
 
-# Verktøy / OS
+# Tooling / OS
 .vercel
 .DS_Store
 *.log

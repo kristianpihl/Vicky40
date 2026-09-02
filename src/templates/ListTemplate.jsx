@@ -1,8 +1,8 @@
 import { Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
-// Ett listeelement. Blir en lenke hvis item har «to» (intern side) eller
-// «href» (ekstern lenke), ellers bare en rad uten lenke.
+// One list item. Becomes a link if the item has "to" (internal page) or
+// "href" (external link), otherwise just a row without a link.
 function ListItem({ item }) {
   const inner = (
     <>
@@ -42,10 +42,10 @@ function ListItem({ item }) {
   return <div className="list-item">{inner}</div>
 }
 
-// Listevisnings-malen: en tittel, valgfri ingress, og en liste med elementer
-// nedover. Hvert element har et lite bilde til venstre og tekst til høyre.
+// List template: a title, an optional intro, and a list of items going down.
+// Each item has a small image on the left and text on the right.
 //
-//   <ListTemplate title="Barer" intro="..." items={[{ title, ingress, image, href }]} />
+//   <ListTemplate title="Bars" intro="..." items={[{ title, ingress, image, href }]} />
 export default function ListTemplate({ title, intro, items = [] }) {
   return (
     <Container className="page list-page">

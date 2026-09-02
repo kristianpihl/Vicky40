@@ -2,8 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 
-// Rekkefølgen er viktig: Bootstrap først, så vår egen CSS på toppen
-// slik at våre farger og justeringer vinner.
+// Order matters: Bootstrap first, then our own CSS on top
+// so our colours and tweaks win.
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
 

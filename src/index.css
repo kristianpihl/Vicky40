@@ -1,22 +1,22 @@
 /* =========================================================
-   Global stil for hele nettsiden.
-   Fargepaletten ligger som CSS-variabler øverst – endre der.
+   Global styles for the whole site.
+   The colour palette is at the top as CSS variables – edit there.
    ========================================================= */
 
 :root {
-  /* --- Fargepalett: lyse, matte farger + hvitt + mørk font --- */
-  --color-bg: #ffffff;          /* hovedbakgrunn */
-  --color-surface: #f7f4ef;     /* svak varm tone til seksjoner/kort */
-  --color-text: #262223;        /* mørk brødtekst */
-  --color-muted: #6b6560;       /* dempet tekst */
-  --color-border: #e7e0d6;      /* fine skillelinjer */
+  /* --- Colour palette: light, matte colours + white + dark text --- */
+  --color-bg: #ffffff;          /* main background */
+  --color-surface: #f7f4ef;     /* soft warm tone for sections/cards */
+  --color-text: #262223;        /* dark body text */
+  --color-muted: #6b6560;       /* muted text */
+  --color-border: #e7e0d6;      /* subtle dividers */
 
-  --color-primary: #e07a5f;     /* varm terrakotta – vennlig og leken */
-  --color-primary-dark: #c9634a;/* mørkere variant til hover */
-  --color-accent: #81b29a;      /* matt salviegrønn – sekundærfarge */
-  --color-highlight: #f2cc8f;   /* matt varm gul – små detaljer */
+  --color-primary: #e07a5f;     /* warm terracotta – friendly and playful */
+  --color-primary-dark: #c9634a;/* darker variant for hover */
+  --color-accent: #81b29a;      /* matte sage green – secondary colour */
+  --color-highlight: #f2cc8f;   /* matte warm yellow – small details */
 
-  /* --- Koble paletten til Bootstrap sine variabler --- */
+  /* --- Wire the palette into Bootstrap's variables --- */
   --bs-primary: var(--color-primary);
   --bs-primary-rgb: 224, 122, 95;
   --bs-body-color: var(--color-text);
@@ -47,7 +47,7 @@ h4 {
   line-height: 1.2;
 }
 
-/* --- Layout-skjelett: holder footer nederst også på korte sider --- */
+/* --- Layout skeleton: keeps the footer at the bottom on short pages too --- */
 .app-shell {
   display: flex;
   flex-direction: column;
@@ -58,7 +58,7 @@ h4 {
   flex: 1 0 auto;
 }
 
-/* --- Toppbar --- */
+/* --- Top bar --- */
 .topbar {
   background-color: var(--color-bg);
   border-bottom: 1px solid var(--color-border);
@@ -93,7 +93,7 @@ h4 {
   }
 }
 
-/* --- Knapper (bruker paletten via Bootstrap 5.3-variabler) --- */
+/* --- Buttons (use the palette via Bootstrap 5.3 variables) --- */
 .btn-primary {
   --bs-btn-bg: var(--color-primary);
   --bs-btn-border-color: var(--color-primary);
@@ -105,7 +105,7 @@ h4 {
   --bs-btn-hover-color: #ffffff;
 }
 
-/* --- Standard luft rundt sideinnhold --- */
+/* --- Standard spacing around page content --- */
 .page {
   padding-top: 2.5rem;
   padding-bottom: 3.5rem;
@@ -116,7 +116,7 @@ h4 {
   max-width: 42rem;
 }
 
-/* --- Fremside --- */
+/* --- Front page --- */
 .front-heading {
   font-size: clamp(1.8rem, 4vw, 2.6rem);
   margin-bottom: 1.25rem;
@@ -146,7 +146,7 @@ h4 {
   }
 }
 
-/* --- Nedteller --- */
+/* --- Countdown --- */
 .countdown {
   display: flex;
   gap: 0.75rem;
@@ -191,7 +191,7 @@ h4 {
   color: var(--color-text);
 }
 
-/* --- Undersideknapper --- */
+/* --- Subpage buttons --- */
 .subpage-button {
   --bs-btn-color: var(--color-primary-dark);
   --bs-btn-border-color: var(--color-primary);
@@ -203,7 +203,7 @@ h4 {
   font-weight: 600;
 }
 
-/* --- Artikkelmal --- */
+/* --- Article template --- */
 .article {
   max-width: 820px;
 }
@@ -244,7 +244,7 @@ h4 {
   margin-bottom: 0.35rem;
 }
 
-/* --- Listevisning --- */
+/* --- List view --- */
 .list-page {
   max-width: 820px;
 }
@@ -305,7 +305,7 @@ a.list-item:hover {
   }
 }
 
-/* --- Programvisning --- */
+/* --- Programme view --- */
 .program-page {
   max-width: 820px;
 }
@@ -383,7 +383,7 @@ a.list-item:hover {
   }
 }
 
-/* --- Gjestevisning --- */
+/* --- Guest view --- */
 .guests-page {
   max-width: 960px;
 }
@@ -434,7 +434,7 @@ a.list-item:hover {
   font-size: 0.97rem;
 }
 
-/* --- RSVP-skjema --- */
+/* --- RSVP form --- */
 .rsvp-page {
   max-width: 640px;
 }
@@ -515,7 +515,7 @@ a.list-item:hover {
   color: var(--color-muted);
 }
 
-/* --- Bilder: opplasting --- */
+/* --- Photos: upload --- */
 .gallery-page {
   max-width: 960px;
 }
@@ -549,7 +549,7 @@ a.list-item:hover {
   border-radius: 16px;
 }
 
-/* --- Bilder: galleri --- */
+/* --- Photos: gallery --- */
 .gallery-status {
   color: var(--color-muted);
   padding: 1rem 0;

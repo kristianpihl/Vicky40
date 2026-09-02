@@ -1,27 +1,27 @@
 import ArticleTemplate from '../templates/ArticleTemplate.jsx'
 
-// Bytt til din egen bildefil, f.eks. '/images/stedet.jpg'
-const image = { src: '/images/artikkel.svg', alt: 'Stedet festen skal være' }
+// Swap in your own image file, e.g. '/images/venue.jpg'
+const image = { src: '/images/artikkel.svg', alt: 'The party venue' }
 
 export default function Venue() {
   return (
-    <ArticleTemplate title="Litt om stedet festen skal være" image={image}>
+    <ArticleTemplate title="About the venue" image={image}>
       <p>
-        Festen holdes i [navn på lokalet] i Oslo. Her er det god plass til både
-        middag, mingling og dansegulv.
+        The party is held at [venue name] in Oslo. There's plenty of room for
+        dinner, mingling and a dance floor.
       </p>
 
-      <h2>Adresse</h2>
+      <h2>Address</h2>
       <p>
-        [Gateadresse], Oslo. [Kort om hvordan man kommer seg dit – nærmeste
-        t-bane/trikk, og om det finnes parkering.]
+        [Street address], Oslo. [A short note on how to get there – nearest
+        metro/tram, and whether there's parking.]
       </p>
 
-      <h2>Bra å vite</h2>
+      <h2>Good to know</h2>
       <ul>
-        <li>Garderobe finnes i lokalet.</li>
-        <li>[Noe om servering, drikke og tidspunkter.]</li>
-        <li>[Noe om tilgjengelighet, heis e.l.]</li>
+        <li>There's a cloakroom at the venue.</li>
+        <li>[Something about food, drinks and timings.]</li>
+        <li>[Something about accessibility, lift, etc.]</li>
       </ul>
     </ArticleTemplate>
   )

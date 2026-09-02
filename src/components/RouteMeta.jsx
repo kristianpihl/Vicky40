@@ -3,13 +3,13 @@ import { useLocation } from 'react-router-dom'
 import { site } from '../content/site.js'
 import { pageMeta } from '../content/pageMeta.js'
 
-// Setter <title> og meta-beskrivelse ut fra hvilken side man er på.
-// Titlene ligger i src/content/pageMeta.js.
+// Sets <title> and the meta description based on which page you're on.
+// The titles live in src/content/pageMeta.js.
 export default function RouteMeta() {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    const base = `${site.personName} 40 år`
+    const base = `${site.personName} 40`
     const meta = pageMeta[pathname] || {}
 
     document.title = meta.title ? `${meta.title} – ${base}` : base

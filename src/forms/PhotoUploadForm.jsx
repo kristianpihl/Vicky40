@@ -20,13 +20,13 @@ export default function PhotoUploadForm({ onUploaded }) {
   }
 
   function validate() {
-    if (!uploadedBy.trim()) return 'Skriv inn hvem bildene er fra.'
-    if (files.length === 0) return 'Velg minst ett bilde.'
-    if (files.length > MAX_FILES) return `Maks ${MAX_FILES} bilder om gangen.`
+    if (!uploadedBy.trim()) return 'Enter who the photos are from.'
+    if (files.length === 0) return 'Choose at least one photo.'
+    if (files.length > MAX_FILES) return `Max ${MAX_FILES} photos at a time.`
     for (const file of files) {
-      if (!file.type.startsWith('image/')) return `«${file.name}» er ikke et bilde.`
+      if (!file.type.startsWith('image/')) return `"${file.name}" is not an image.`
       if (file.size > MAX_FILE_MB * 1024 * 1024) {
-        return `«${file.name}» er større enn ${MAX_FILE_MB} MB.`
+        return `"${file.name}" is larger than ${MAX_FILE_MB} MB.`
       }
     }
     return ''
@@ -59,7 +59,7 @@ export default function PhotoUploadForm({ onUploaded }) {
         .upload(path, file, { contentType: file.type, upsert: false })
 
       if (uploadError) {
-        console.error('Opplasting feilet:', file.name, uploadError)
+        console.error('Upload failed:', file.name, uploadError)
         failed.push(file.name)
       } else {
         const { error: dbError } = await supabase.from('photos').insert({
@@ -68,7 +68,7 @@ export default function PhotoUploadForm({ onUploaded }) {
           caption: caption.trim() || null,
         })
         if (dbError) {
-          console.error('Lagring i database feilet:', file.name, dbError)
+          console.error('Saving to database failed:', file.name, dbError)
           failed.push(file.name)
         } else {
           ok += 1
@@ -81,7 +81,7 @@ export default function PhotoUploadForm({ onUploaded }) {
     if (ok === 0) {
       setStatus('error')
       setMessage(
-        'Ingen bilder ble lastet opp. Sjekk at «photos»-oppsettet er kjørt i Supabase (se supabase/photos.sql).',
+        'No photos were uploaded. Check that the "photos" setup has been run in Supabase (see supabase/photos.sql).',
       )
       return
     }
@@ -89,8 +89,8 @@ export default function PhotoUploadForm({ onUploaded }) {
     setStatus('success')
     setMessage(
       failed.length === 0
-        ? `Takk! ${ok} ${ok === 1 ? 'bilde' : 'bilder'} lastet opp.`
-        : `${ok} lastet opp, men ${failed.length} feilet. Prøv de siste på nytt.`,
+        ? `Thanks! ${ok} ${ok === 1 ? 'photo' : 'photos'} uploaded.`
+        : `${ok} uploaded, but ${failed.length} failed. Try the rest again.`,
     )
     setFiles([])
     setCaption('')
@@ -110,10 +110,10 @@ export default function PhotoUploadForm({ onUploaded }) {
       <div className="upload-done">
         <p className="mb-2">{message}</p>
         <p className="text-muted mb-3">
-          Bildene vises i galleriet når de er godkjent.
+          The photos appear in the gallery once they've been approved.
         </p>
         <Button variant="outline-primary" onClick={reset}>
-          Last opp flere
+          Upload more
         </Button>
       </div>
     )
@@ -122,28 +122,28 @@ export default function PhotoUploadForm({ onUploaded }) {
   return (
     <Form className="upload-form" onSubmit={handleSubmit} noValidate>
       <Form.Group className="mb-3" controlId="upload-by">
-        <Form.Label>Hvem er bildene fra?</Form.Label>
+        <Form.Label>Who are the photos from?</Form.Label>
         <Form.Control
           type="text"
           value={uploadedBy}
           onChange={(e) => setUploadedBy(e.target.value)}
-          placeholder="Navnet ditt"
+          placeholder="Your name"
           required
         />
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="upload-caption">
-        <Form.Label>Tekst til bildene (valgfritt)</Form.Label>
+        <Form.Label>Caption for the photos (optional)</Form.Label>
         <Form.Control
           type="text"
           value={caption}
           onChange={(e) => setCaption(e.target.value)}
-          placeholder="F.eks. «Fra lunsjen på fredag»"
+          placeholder='E.g. "From lunch on Friday"'
         />
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="upload-files">
-        <Form.Label>Velg bilder</Form.Label>
+        <Form.Label>Choose photos</Form.Label>
         <Form.Control
           type="file"
           accept="image/*"
@@ -151,8 +151,8 @@ export default function PhotoUploadForm({ onUploaded }) {
           onChange={handleFileChange}
         />
         <Form.Text>
-          Flere om gangen går fint. Maks {MAX_FILES} bilder, {MAX_FILE_MB} MB per
-          bilde.
+          Several at a time is fine. Max {MAX_FILES} photos, {MAX_FILE_MB} MB per
+          photo.
         </Form.Text>
       </Form.Group>
 
@@ -186,8 +186,8 @@ export default function PhotoUploadForm({ onUploaded }) {
         disabled={status === 'uploading'}
       >
         {status === 'uploading'
-          ? `Laster opp ${progress.done} av ${progress.total} …`
-          : 'Last opp'}
+          ? `Uploading ${progress.done} of ${progress.total} …`
+          : 'Upload'}
       </Button>
     </Form>
   )
