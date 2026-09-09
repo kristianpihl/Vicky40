@@ -16,6 +16,11 @@
 
 export const updates = [
   {
+    date: '2026-09-09T22:00',
+    page: '/faq',
+    text: 'Practical info filled in: RSVP deadline, how to change or cancel, food, dress code per day, gifts, staying over, and lost-and-found at Solstua.',
+  },
+  {
     date: '2026-09-09T21:30',
     page: '/program',
     text: 'Programme dates set to the actual weekend (Thu 04.02 – Sun 07.02), and every part of the weekend is at Solstua.',
