@@ -16,6 +16,11 @@
 
 export const updates = [
   {
+    date: '2026-09-09T21:30',
+    page: '/program',
+    text: 'Programme dates set to the actual weekend (Thu 04.02 – Sun 07.02), and every part of the weekend is at Solstua.',
+  },
+  {
     date: '2026-09-09T20:30',
     page: '/venue',
     text: 'The venue is set: Solstua at Voksenkollen. Address, the rooms, how to get there and a quick fact box are all on the page now.',

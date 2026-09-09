@@ -7,59 +7,59 @@
 export const program = [
   {
     day: 'Thursday',
-    date: 'February 18',
+    date: '04.02',
     events: [
       {
         time: '18:00',
         title: 'Informal get-together',
-        location: 'The hotel bar',
+        location: 'Solstua',
         description: 'For those already arriving on Thursday – no sign-up needed.',
       },
     ],
   },
   {
     day: 'Friday',
-    date: 'February 19',
+    date: '05.02',
     events: [
       {
         time: '12:00',
         title: 'Lunch and city walk',
-        location: 'Meet in the city centre',
+        location: 'Solstua',
         description: "We'll wander around and see a bit of the city. Dress for the weather.",
       },
       {
         time: '19:00',
         title: 'Group dinner',
-        location: '[Restaurant]',
+        location: 'Solstua',
         description: 'The table is booked. Let us know in your RSVP if you are joining.',
       },
     ],
   },
   {
     day: 'Saturday',
-    date: 'February 20',
+    date: '06.02',
     events: [
       {
         time: '11:00',
         title: 'Late breakfast',
-        location: 'The hotel',
+        location: 'Solstua',
       },
       {
         time: '18:00',
         title: 'Dinner and party',
-        location: '[The venue]',
+        location: 'Solstua',
         description: 'The main event of the evening. More info to come.',
       },
     ],
   },
   {
     day: 'Sunday',
-    date: 'February 21',
+    date: '07.02',
     events: [
       {
         time: '11:00',
         title: 'Wind-down and goodbyes',
-        location: 'The hotel',
+        location: 'Solstua',
         description: 'Coffee and a bite to eat before everyone heads home.',
       },
     ],
