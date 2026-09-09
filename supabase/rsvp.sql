@@ -10,6 +10,7 @@ create table if not exists public.rsvp (
   sleeping_at_cabin boolean,   -- true = staying overnight, false = day guest
   arrival_day text,            -- 'Thursday' | 'Friday' | 'Saturday' (only when sleeping at the cabin)
   events jsonb,                -- ["Friday","Saturday"] (only when NOT sleeping at the cabin)
+  cancelled boolean not null default false,  -- true = this submission cancels the RSVP
   -- people: one object per person, e.g.
   -- [{ "name": "Kari Nordmann", "phone": "+47 900 00 000", "allergies": "Nuts" }]
   people jsonb not null
@@ -19,6 +20,7 @@ create table if not exists public.rsvp (
 alter table public.rsvp add column if not exists sleeping_at_cabin boolean;
 alter table public.rsvp add column if not exists arrival_day text;
 alter table public.rsvp add column if not exists events jsonb;
+alter table public.rsvp add column if not exists cancelled boolean not null default false;
 
 -- Let the anon role (the public key) add rows.
 -- Without this you get "permission denied for table rsvp" (42501).

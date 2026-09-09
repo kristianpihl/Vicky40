@@ -491,6 +491,18 @@ a.list-item:hover {
   margin-top: 1.5rem;
 }
 
+.rsvp-cancel-toggle {
+  margin-bottom: 1.25rem;
+  font-weight: 600;
+}
+
+.rsvp-cancel-fields {
+  padding: 1.25rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+}
+
 .rsvp-person {
   margin-bottom: 1rem;
   border-color: var(--color-border);
@@ -815,9 +827,15 @@ a.list-item:hover {
   box-shadow: 0 12px 30px -14px rgba(224, 122, 95, 0.28);
 }
 
-/* Earlier (replaced) submissions – shown dimmer behind a toggle. */
+/* Cancelled / earlier submissions – shown dimmer. */
 .admin-history {
   margin-top: 1.25rem;
+}
+
+.admin-subheading {
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+  font-weight: 700;
 }
 
 .admin-history-toggle {
@@ -932,6 +950,10 @@ a.list-item:hover {
 
 .admin-pill--active {
   background-color: var(--color-yes);
+}
+
+.admin-pill--cancelled {
+  background-color: var(--color-muted);
 }
 
 .admin-pill--replaced {

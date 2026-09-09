@@ -49,16 +49,20 @@ function splitByEmail(submissions) {
   }
 
   const byDateDesc = (a, b) => new Date(b.created_at) - new Date(a.created_at)
-  const current = []
+  const active = []
+  const cancelled = []
   const superseded = []
   for (const list of groups.values()) {
     list.sort(byDateDesc)
-    current.push(list[0])
-    superseded.push(...list.slice(1))
+    const [newest, ...older] = list
+    if (newest.cancelled === true) cancelled.push(newest)
+    else active.push(newest)
+    superseded.push(...older)
   }
-  current.sort(byDateDesc)
+  active.sort(byDateDesc)
+  cancelled.sort(byDateDesc)
   superseded.sort(byDateDesc)
-  return { current, superseded }
+  return { active, cancelled, superseded }
 }
 
 // One table row per person.
@@ -103,14 +107,17 @@ const Dot = ({ on }) => (
   />
 )
 
-// "Active" = the current answer. "Replaced" = an older answer from the same
-// email that a newer submission has replaced.
-const StatusPill = ({ status }) =>
-  status === 'active' ? (
-    <span className="admin-pill admin-pill--active">Active</span>
-  ) : (
-    <span className="admin-pill admin-pill--replaced">Replaced</span>
-  )
+// "Active" = the current answer. "Cancelled" = the guest called it off.
+// "Replaced" = an older answer that a newer submission from the same email replaced.
+const StatusPill = ({ status }) => {
+  if (status === 'cancelled') {
+    return <span className="admin-pill admin-pill--cancelled">Cancelled</span>
+  }
+  if (status === 'replaced') {
+    return <span className="admin-pill admin-pill--replaced">Replaced</span>
+  }
+  return <span className="admin-pill admin-pill--active">Active</span>
+}
 
 // Guest count per day, split by cabin / not cabin.
 function daySummary(guests) {
@@ -154,13 +161,13 @@ function GuestTable({ rows, muted, status }) {
               <td className="admin-td-name">{g.name}</td>
               <td className="admin-td-center">{g.cabin}</td>
               <td className="admin-td-center">
-                <Dot on={g.thursday} />
+                {status === 'cancelled' ? '—' : <Dot on={g.thursday} />}
               </td>
               <td className="admin-td-center">
-                <Dot on={g.friday} />
+                {status === 'cancelled' ? '—' : <Dot on={g.friday} />}
               </td>
               <td className="admin-td-center">
-                <Dot on={g.saturday} />
+                {status === 'cancelled' ? '—' : <Dot on={g.saturday} />}
               </td>
               <td>{g.allergies}</td>
               <td className="admin-td-nowrap">{g.phone}</td>
@@ -200,10 +207,11 @@ function AdminRsvpsInner() {
     }
   }, [password])
 
-  const { current, superseded } = rows
+  const { active, cancelled, superseded } = rows
     ? splitByEmail(rows)
-    : { current: [], superseded: [] }
-  const currentGuests = toGuestRows(current)
+    : { active: [], cancelled: [], superseded: [] }
+  const activeGuests = toGuestRows(active)
+  const cancelledGuests = toGuestRows(cancelled)
   const supersededGuests = toGuestRows(superseded)
 
   return (
@@ -234,14 +242,15 @@ function AdminRsvpsInner() {
       {!error && rows && rows.length > 0 && (
         <>
           <p className="page-lead">
-            {currentGuests.length}{' '}
-            {currentGuests.length === 1 ? 'person' : 'people'} ·{' '}
-            {current.length}{' '}
-            {current.length === 1 ? 'submission' : 'submissions'}
+            {activeGuests.length}{' '}
+            {activeGuests.length === 1 ? 'person' : 'people'} ·{' '}
+            {active.length}{' '}
+            {active.length === 1 ? 'submission' : 'submissions'}
+            {cancelled.length > 0 && ` · ${cancelled.length} cancelled`}
           </p>
 
           <div className="admin-summary">
-            {daySummary(currentGuests).map((d) => (
+            {daySummary(activeGuests).map((d) => (
               <div className="admin-day-card" key={d.label}>
                 <span className="admin-day-card__name">{d.label}</span>
                 <div className="admin-day-card__stats">
@@ -262,7 +271,14 @@ function AdminRsvpsInner() {
             ))}
           </div>
 
-          <GuestTable rows={currentGuests} status="active" />
+          <GuestTable rows={activeGuests} status="active" />
+
+          {cancelled.length > 0 && (
+            <div className="admin-history">
+              <h2 className="admin-subheading">Cancelled ({cancelled.length})</h2>
+              <GuestTable rows={cancelledGuests} status="cancelled" muted />
+            </div>
+          )}
 
           {superseded.length > 0 && (
             <div className="admin-history">
