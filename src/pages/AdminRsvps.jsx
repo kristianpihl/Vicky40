@@ -116,22 +116,59 @@ const Dot = ({ on }) => (
   />
 )
 
+const svgProps = {
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 2,
+  strokeLinecap: 'round',
+  strokeLinejoin: 'round',
+  'aria-hidden': true,
+}
+
 const PencilIcon = () => (
-  <svg
-    width="15"
-    height="15"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
+  <svg width="15" height="15" viewBox="0 0 24 24" {...svgProps}>
     <path d="M12 20h9" />
     <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
   </svg>
 )
+
+const IconInbox = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" {...svgProps}>
+    <path d="M22 12h-6l-2 3h-4l-2-3H2" />
+    <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
+  </svg>
+)
+
+const IconUsers = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" {...svgProps}>
+    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  </svg>
+)
+
+const IconUserX = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" {...svgProps}>
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <line x1="17" y1="8" x2="22" y2="13" />
+    <line x1="22" y1="8" x2="17" y2="13" />
+  </svg>
+)
+
+function KpiCard({ label, value, sub, icon }) {
+  return (
+    <div className="admin-kpi">
+      <div className="admin-kpi__body">
+        <span className="admin-kpi__label">{label}</span>
+        <span className="admin-kpi__value">{value}</span>
+        <span className="admin-kpi__sub">{sub}</span>
+      </div>
+      <span className="admin-kpi__icon">{icon}</span>
+    </div>
+  )
+}
 
 // Active   = the current answer.
 // Removed  = the admin took this person off the active list (undoable).
@@ -505,13 +542,26 @@ function AdminRsvpsInner() {
 
       {!error && rows && rows.length > 0 && (
         <>
-          <p className="page-lead">
-            {activeGuests.length}{' '}
-            {activeGuests.length === 1 ? 'person' : 'people'} ·{' '}
-            {active.length}{' '}
-            {active.length === 1 ? 'submission' : 'submissions'}
-            {notComing.length > 0 && ` · ${notComing.length} not coming`}
-          </p>
+          <div className="admin-kpis">
+            <KpiCard
+              label="Submissions"
+              value={active.length}
+              sub="RSVPs received"
+              icon={<IconInbox />}
+            />
+            <KpiCard
+              label="Active guests"
+              value={activeGuests.length}
+              sub="coming to the party"
+              icon={<IconUsers />}
+            />
+            <KpiCard
+              label="Cancellations"
+              value={cancelled.length}
+              sub="guests who pulled out"
+              icon={<IconUserX />}
+            />
+          </div>
 
           <div className="admin-summary">
             {daySummary(activeGuests).map((d) => (

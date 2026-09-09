@@ -755,6 +755,62 @@ a.list-item:hover {
   margin-inline: auto;
 }
 
+/* KPI cards at the very top of the RSVP admin page */
+.admin-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 1.25rem;
+}
+
+.admin-kpi {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1.15rem 1.25rem;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: 0 14px 32px -20px rgba(38, 34, 35, 0.3);
+}
+
+.admin-kpi__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.admin-kpi__label {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.admin-kpi__value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-text);
+}
+
+.admin-kpi__sub {
+  margin-top: 0.1rem;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.admin-kpi__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: rgba(224, 122, 95, 0.12);
+  color: var(--color-primary-dark);
+}
+
 /* Per-day guest summary above the table */
 .admin-summary {
   display: grid;
