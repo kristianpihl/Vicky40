@@ -16,6 +16,9 @@
   --color-accent: #81b29a;      /* matte sage green – secondary colour */
   --color-accent-dark: #4f8574; /* stronger sage for the "Upload photos" button */
   --color-accent-darker: #437060;/* its hover/active state */
+
+  --color-yes: #2e9e4f;         /* admin table: coming that day */
+  --color-no: #d64545;          /* admin table: not coming that day */
   --color-highlight: #f2cc8f;   /* matte warm yellow – small details */
 
   /* --- Wire the palette into Bootstrap's variables --- */
@@ -795,9 +798,20 @@ a.list-item:hover {
   text-align: center;
 }
 
-.admin-check {
-  color: var(--color-primary-dark);
-  font-weight: 700;
+.admin-dot {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.admin-dot--yes {
+  background-color: var(--color-yes);
+}
+
+.admin-dot--no {
+  background-color: var(--color-no);
 }
 
 .admin-td-comment {

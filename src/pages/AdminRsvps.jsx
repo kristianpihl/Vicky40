@@ -67,7 +67,14 @@ function toGuestRows(submissions) {
   return out
 }
 
-const Check = ({ on }) => (on ? <span className="admin-check">✓</span> : null)
+// Green filled dot when they're coming that day, red when they're not.
+const Dot = ({ on }) => (
+  <span
+    role="img"
+    aria-label={on ? 'Coming' : 'Not coming'}
+    className={`admin-dot ${on ? 'admin-dot--yes' : 'admin-dot--no'}`}
+  />
+)
 
 function AdminRsvpsInner() {
   const { password, logout } = useAdminAuth()
@@ -147,13 +154,13 @@ function AdminRsvpsInner() {
                     <td className="admin-td-name">{g.name}</td>
                     <td className="admin-td-center">{g.cabin}</td>
                     <td className="admin-td-center">
-                      <Check on={g.thursday} />
+                      <Dot on={g.thursday} />
                     </td>
                     <td className="admin-td-center">
-                      <Check on={g.friday} />
+                      <Dot on={g.friday} />
                     </td>
                     <td className="admin-td-center">
-                      <Check on={g.saturday} />
+                      <Dot on={g.saturday} />
                     </td>
                     <td>{g.allergies}</td>
                     <td className="admin-td-nowrap">{g.phone}</td>
