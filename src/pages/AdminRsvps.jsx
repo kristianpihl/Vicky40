@@ -600,7 +600,11 @@ function AdminRsvpsInner() {
       {error && (
         <Alert variant="danger">
           Could not load the RSVPs.{' '}
-          <Button variant="link" className="p-0 align-baseline" onClick={logout}>
+          <Button
+            variant="link"
+            className="p-0 align-baseline"
+            onClick={() => logout()}
+          >
             Log in again
           </Button>
           .

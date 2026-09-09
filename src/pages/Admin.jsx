@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Container, Form, Button, Alert } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import { useAdminAuth } from '../components/AdminAuthProvider.jsx'
+import { useAdminAuth, takeLogoutReason } from '../components/AdminAuthProvider.jsx'
 
 export default function Admin() {
   const { isAuthed, login, logout } = useAdminAuth()
@@ -9,6 +9,13 @@ export default function Admin() {
   const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
   const [status, setStatus] = useState('idle') // idle | checking | error
+  const [notice, setNotice] = useState('')
+
+  // Show the "you were signed out automatically" message once, if there is one.
+  useEffect(() => {
+    const r = takeLogoutReason()
+    if (r) setNotice(r)
+  }, [])
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -19,6 +26,7 @@ export default function Admin() {
       return
     }
     setStatus('idle')
+    setNotice('')
     setEmail('')
     setPass('')
   }
@@ -39,7 +47,7 @@ export default function Admin() {
         <Button
           variant="link"
           className="admin-logout"
-          onClick={logout}
+          onClick={() => logout()}
         >
           Log out
         </Button>
@@ -53,6 +61,8 @@ export default function Admin() {
       <p className="page-lead">
         Enter your username and password to see RSVPs and photos.
       </p>
+
+      {notice && <Alert variant="info">{notice}</Alert>}
 
       <Form onSubmit={handleSubmit} className="admin-login-form">
         <Form.Group className="mb-3" controlId="admin-email">

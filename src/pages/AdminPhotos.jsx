@@ -177,7 +177,11 @@ function AdminPhotosInner() {
       {error && (
         <Alert variant="danger">
           Could not load the photos.{' '}
-          <Button variant="link" className="p-0 align-baseline" onClick={logout}>
+          <Button
+            variant="link"
+            className="p-0 align-baseline"
+            onClick={() => logout()}
+          >
             Log in again
           </Button>
           .
