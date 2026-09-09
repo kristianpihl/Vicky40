@@ -465,13 +465,23 @@ h4 {
   white-space: nowrap;
 }
 
-/* "Recently changed" bell + red count on a subpage button */
+/* "Recently changed" bell (in a soft circle) + red count on a subpage button */
 .subpage-bell {
   position: relative;
   display: inline-flex;
   align-items: center;
   margin-left: 0.5rem;
   vertical-align: middle;
+}
+
+.subpage-bell__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: rgba(232, 165, 63, 0.16);
   color: var(--color-bell);
 }
 
@@ -481,8 +491,8 @@ h4 {
 
 .subpage-bell__count {
   position: absolute;
-  top: -7px;
-  right: -9px;
+  top: -6px;
+  right: -7px;
   min-width: 16px;
   height: 16px;
   padding: 0 3px;

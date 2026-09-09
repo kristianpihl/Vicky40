@@ -11,16 +11,15 @@ function ChangeBell({ count }) {
       className="subpage-bell"
       aria-label={`${count} update${count === 1 ? '' : 's'} in the last 24 hours`}
     >
-      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-        <path
-          fill="currentColor"
-          d="M12 2a6 6 0 0 0-6 6c0 3.09-.79 5.2-1.63 6.6-.5.82.1 1.9 1.05 1.9h13.16c.95 0 1.55-1.08 1.05-1.9C18.79 13.2 18 11.09 18 8a6 6 0 0 0-6-6Z"
-        />
-        <path
-          fill="currentColor"
-          d="M10 19a2 2 0 0 0 4 0h-4Z"
-        />
-      </svg>
+      <span className="subpage-bell__icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M12 2a6 6 0 0 0-6 6c0 3.09-.79 5.2-1.63 6.6-.5.82.1 1.9 1.05 1.9h13.16c.95 0 1.55-1.08 1.05-1.9C18.79 13.2 18 11.09 18 8a6 6 0 0 0-6-6Z"
+          />
+          <path fill="currentColor" d="M10 19a2 2 0 0 0 4 0h-4Z" />
+        </svg>
+      </span>
       <span className="subpage-bell__count">{count}</span>
     </span>
   )
