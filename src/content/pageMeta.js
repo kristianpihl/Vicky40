@@ -11,7 +11,10 @@ export const pageMeta = {
   '/program': { title: 'Programme', description: "What's happening, when and where, day by day." },
   '/guests': { title: 'Guests', description: "Get to know who you'll meet during the weekend." },
   '/who-is-coming-when': { title: "Who's coming when" },
-  '/venue': { title: 'The venue' },
+  '/venue': {
+    title: 'The venue',
+    description: 'Solstua at Voksenkollen – a 1905 villa in the forest above Oslo.',
+  },
   '/oslo': { title: 'About Oslo' },
   '/oslo/bars': { title: 'Bars in Oslo' },
   '/faq': { title: 'Practical info' },
