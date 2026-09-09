@@ -7,7 +7,7 @@ export const site = {
   tagline: 'Come celebrate – a weekend in Oslo.',
 
   // The dates shown on the front page (free text).
-  dateLabel: '05-06.02.2027',
+  dateLabel: '04-06.02.2027',
 
   // What the countdown on the front page counts down to.
   // Order: year, month (0 = January, 1 = February ...), day, hour, minute.
