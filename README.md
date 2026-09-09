@@ -35,6 +35,38 @@ Run these once in Supabase → SQL Editor:
 RSVPs are read in the Table editor (`rsvp`). Uploaded photos only appear in the
 gallery once `approved` is set to `true` on the row in `photos`.
 
+## RSVP confirmation emails
+
+When a guest submits the form, they get a summary email at the address they
+entered. This uses a small serverless function (`api/rsvp-confirmation.js`) that
+Supabase calls whenever a new RSVP row is inserted, and [Resend](https://resend.com)
+to actually send the mail. All free tier.
+
+Setup (once):
+
+1. **Resend** – create an account, add the sending domain (e.g.
+   `kristianpihl.no` or a subdomain like `send.kristianpihl.no`), add the DNS
+   records it shows you, and wait for it to verify. Then create an API key.
+2. **Vercel** – Project Settings → Environment Variables, add:
+
+   | Variable              | Value                                              |
+   | --------------------- | -------------------------------------------------- |
+   | `RESEND_API_KEY`      | the key from Resend                                |
+   | `RSVP_WEBHOOK_SECRET` | any long random string (make one up)               |
+   | `RSVP_FROM`           | e.g. `Vickie 40 <fest@kristianpihl.no>`            |
+   | `RSVP_REPLY_TO`       | (optional) where guest replies should go           |
+
+   Redeploy after adding them.
+3. **Supabase** – Database → Webhooks → Create a new hook:
+   - Table `public.rsvp`, event **Insert**
+   - Type **HTTP Request**, method **POST**
+   - URL `https://vicky40.vercel.app/api/rsvp-confirmation`
+   - Add an HTTP header: name `x-webhook-secret`, value = the same string you
+     used for `RSVP_WEBHOOK_SECRET`
+
+Re-submissions send a fresh summary; cancellations send a short "cancellation
+received" note. Admin edits do not trigger an email.
+
 ## Folder structure
 
 ```
