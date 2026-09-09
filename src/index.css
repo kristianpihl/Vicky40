@@ -141,6 +141,89 @@ h4 {
   margin-bottom: 0;
 }
 
+/* "Latest update" card in the front-page right column */
+.latest-update {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+
+.latest-update:hover {
+  border-color: var(--color-primary);
+}
+
+.latest-update--new {
+  border-color: var(--color-primary);
+  background-color: rgba(224, 122, 95, 0.08);
+}
+
+.latest-update__head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.latest-update__badge {
+  padding: 0.05rem 0.4rem 0.1rem;
+  border-radius: 999px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+}
+
+.latest-update__text {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.latest-update__meta {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+/* /updates page */
+.updates-page {
+  max-width: 640px;
+}
+
+.updates-list {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.updates-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-bg);
+}
+
+.updates-item__date {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+}
+
 .front-dates {
   margin: 2.25rem 0 0;
   text-align: center;

@@ -17,6 +17,7 @@ export const pageMeta = {
   '/faq': { title: 'Practical info' },
   '/photos': { title: 'Upload photos' },
   '/promo-video': { title: 'Promo video' },
+  '/updates': { title: 'Updates', description: "What's changed on the site." },
   '/admin': { title: 'Admin' },
   '/admin/rsvps': { title: 'RSVPs' },
   '/admin/photos': { title: 'Photos' },

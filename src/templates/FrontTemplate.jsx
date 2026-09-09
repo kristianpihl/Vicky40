@@ -2,6 +2,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import Countdown from '../components/Countdown.jsx'
 import SubpageButtons from '../components/SubpageButtons.jsx'
+import LatestUpdate from '../components/LatestUpdate.jsx'
 
 // Front-page template: two columns on desktop, stacked on mobile.
 //   Left:   heading, then a large image.
@@ -28,6 +29,8 @@ export default function FrontTemplate({
         {/* Right column */}
         <Col lg={6} className="front-right">
           <div className="front-intro">{intro}</div>
+
+          <LatestUpdate />
 
           <Countdown />
 

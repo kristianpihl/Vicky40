@@ -11,6 +11,7 @@ import OsloBars from './pages/OsloBars.jsx'
 import Faq from './pages/Faq.jsx'
 import Gallery from './pages/Gallery.jsx'
 import PromoVideo from './pages/PromoVideo.jsx'
+import Updates from './pages/Updates.jsx'
 import Admin from './pages/Admin.jsx'
 import AdminRsvps from './pages/AdminRsvps.jsx'
 import AdminPhotos from './pages/AdminPhotos.jsx'
@@ -32,6 +33,7 @@ export default function AppRoutes() {
       <Route path="/faq" element={<Faq />} />
       <Route path="/photos" element={<Gallery />} />
       <Route path="/promo-video" element={<PromoVideo />} />
+      <Route path="/updates" element={<Updates />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/admin/rsvps" element={<AdminRsvps />} />
       <Route path="/admin/photos" element={<AdminPhotos />} />
