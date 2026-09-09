@@ -11,19 +11,19 @@
   --color-muted: #6b6560;       /* muted text */
   --color-border: #e7e0d6;      /* subtle dividers */
 
-  --color-primary: #e07a5f;     /* warm terracotta – friendly and playful */
-  --color-primary-dark: #c9634a;/* darker variant for hover */
-  --color-accent: #81b29a;      /* matte sage green – secondary colour */
-  --color-accent-dark: #4f8574; /* stronger sage for the "Upload photos" button */
-  --color-accent-darker: #437060;/* its hover/active state */
+  --color-primary: #2a8069;     /* matte teal-green – friendly and a bit playful */
+  --color-primary-dark: #1f6152;/* deeper green – hover, links, countdown */
+  --color-accent: #93c1a3;      /* pale eucalyptus – subtle accents */
+  --color-accent-dark: #6a9a62; /* grassy matte green for the "Upload photos" button */
+  --color-accent-darker: #57813f;/* its hover/active state */
 
   --color-yes: #2e9e4f;         /* admin table: coming that day */
   --color-no: #d64545;          /* admin table: not coming that day */
-  --color-highlight: #f2cc8f;   /* matte warm yellow – small details */
+  --color-highlight: #f2cc8f;   /* matte warm yellow – small playful details */
 
   /* --- Wire the palette into Bootstrap's variables --- */
   --bs-primary: var(--color-primary);
-  --bs-primary-rgb: 224, 122, 95;
+  --bs-primary-rgb: 42, 128, 105;
   --bs-body-color: var(--color-text);
   --bs-body-bg: var(--color-bg);
   --bs-border-color: var(--color-border);
@@ -117,7 +117,7 @@ h4 {
 /* --- Front page --- */
 .front-heading {
   font-size: clamp(1.8rem, 4vw, 2.6rem);
-  margin-bottom: 1.25rem;
+  margin-bottom: 0;
 }
 
 .front-image {
@@ -135,6 +135,16 @@ h4 {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+}
+
+/* A little extra breathing room between the countdown and the buttons,
+   and between the two button groups. */
+.front-cta {
+  margin-top: 0.5rem;
+}
+
+.subpage-buttons {
+  margin-top: 0.5rem;
 }
 
 .front-intro p:last-child {
@@ -161,7 +171,7 @@ h4 {
 
 .latest-update--new {
   border-color: var(--color-primary);
-  background-color: rgba(224, 122, 95, 0.08);
+  background-color: rgba(42, 128, 105, 0.10);
 }
 
 .latest-update__head {
@@ -221,15 +231,6 @@ h4 {
 .updates-item__date {
   font-size: 0.78rem;
   font-weight: 600;
-  color: var(--color-primary-dark);
-}
-
-.front-dates {
-  margin: 2.25rem 0 0;
-  text-align: center;
-  font-size: clamp(1.4rem, 4vw, 2rem);
-  font-weight: 700;
-  letter-spacing: 0.02em;
   color: var(--color-primary-dark);
 }
 
@@ -296,26 +297,22 @@ h4 {
   font-weight: 600;
 }
 
-/* A locked "Coming soon" button: the button is disabled, with a small
-   banner floating over its top edge. */
-.subpage-locked {
-  position: relative;
-  display: grid;
-  margin-top: 0.75rem;
+/* A locked "Coming soon" button: disabled, with a small badge sitting
+   just after the label so it lines up with the other buttons. */
+.subpage-button--locked {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
   cursor: not-allowed;
 }
 
 .subpage-badge {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, -55%);
-  z-index: 1;
-  padding: 0.15rem 0.65rem;
+  padding: 0.15rem 0.6rem;
   border-radius: 999px;
   background-color: var(--color-highlight);
   color: var(--color-text);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -890,7 +887,7 @@ a.list-item:hover {
   height: 42px;
   flex-shrink: 0;
   border-radius: 50%;
-  background-color: rgba(224, 122, 95, 0.12);
+  background-color: rgba(42, 128, 105, 0.14);
   color: var(--color-primary-dark);
 }
 

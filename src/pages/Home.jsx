@@ -4,7 +4,7 @@ import { site } from '../content/site.js'
 // ---------------------------------------------------------------
 // Front-page content – edit the text here.
 // ---------------------------------------------------------------
-const heading = `We're celebrating ${site.personName}'s 40th birthday!`
+const heading = `We're celebrating ${site.personName}'s 40th birthday ${site.dateLabel} in Oslo!`
 
 // The front-page photo. Save the file as public/images/forside.jpg
 // (or change the name/path here).
@@ -32,7 +32,6 @@ export default function Home() {
       imageSrc={imageSrc}
       imageAlt={imageAlt}
       intro={intro}
-      dates={site.dateLabel}
     />
   )
 }

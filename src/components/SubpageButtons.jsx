@@ -6,7 +6,7 @@ import { site } from '../content/site.js'
 // Uses the same list as the top bar (site.navLinks) – pass your own list
 // via a prop if you want different buttons here later.
 //   `hidden: true`     -> left out
-//   `comingSoon: true` -> shown locked with a "Coming soon" banner
+//   `comingSoon: true` -> shown locked, with a "Coming soon" badge after the label
 export default function SubpageButtons({ links = site.navLinks }) {
   return (
     <nav className="subpage-buttons d-grid gap-2" aria-label="Other pages">
@@ -14,18 +14,17 @@ export default function SubpageButtons({ links = site.navLinks }) {
         .filter((link) => !link.hidden)
         .map((link) =>
           link.comingSoon ? (
-            <div className="subpage-locked" key={link.to}>
+            <Button
+              key={link.to}
+              variant="outline-primary"
+              size="lg"
+              className="subpage-button subpage-button--locked"
+              disabled
+              aria-disabled="true"
+            >
+              {link.label}
               <span className="subpage-badge">Coming soon</span>
-              <Button
-                variant="outline-primary"
-                size="lg"
-                className="subpage-button"
-                disabled
-                aria-disabled="true"
-              >
-                {link.label}
-              </Button>
-            </div>
+            </Button>
           ) : (
             <Button
               key={link.to}

@@ -5,36 +5,28 @@ import SubpageButtons from '../components/SubpageButtons.jsx'
 import LatestUpdate from '../components/LatestUpdate.jsx'
 
 // Front-page template: two columns on desktop, stacked on mobile.
-//   Left:   heading, then a large image.
-//   Right:  text, countdown, the two main buttons (RSVP + Upload photos),
-//           then buttons to the other pages.
-//   Below both columns: the dates.
-// The content itself (heading, image, text, dates) is passed in as props.
-export default function FrontTemplate({
-  heading,
-  imageSrc,
-  imageAlt,
-  intro,
-  dates,
-}) {
+//   Left:   the large image.
+//   Right:  heading (date is part of it now), intro text, countdown,
+//           all the buttons, and the "latest update" feed at the bottom.
+// The content itself (heading, image, text) is passed in as props.
+export default function FrontTemplate({ heading, imageSrc, imageAlt, intro }) {
   return (
     <Container className="front page">
       <Row className="g-4 g-lg-5 align-items-start">
-        {/* Left column */}
+        {/* Left column: image only */}
         <Col lg={6} className="front-left">
-          <h1 className="front-heading">{heading}</h1>
           <img className="front-image" src={imageSrc} alt={imageAlt} />
         </Col>
 
-        {/* Right column */}
+        {/* Right column: heading, text, countdown, buttons, then the feed */}
         <Col lg={6} className="front-right">
-          <div className="front-intro">{intro}</div>
+          <h1 className="front-heading">{heading}</h1>
 
-          <LatestUpdate />
+          <div className="front-intro">{intro}</div>
 
           <Countdown />
 
-          {/* The two prominent actions, grouped together right below the countdown. */}
+          {/* The two prominent actions, grouped together below the countdown. */}
           <div className="front-cta d-grid gap-2">
             <Button
               as={Link}
@@ -57,10 +49,11 @@ export default function FrontTemplate({
           </div>
 
           <SubpageButtons />
+
+          {/* "What's new" feed, at the very bottom of the column. */}
+          <LatestUpdate />
         </Col>
       </Row>
-
-      {dates && <p className="front-dates">{dates}</p>}
     </Container>
   )
 }
