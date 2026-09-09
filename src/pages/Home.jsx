@@ -6,10 +6,10 @@ import { site } from '../content/site.js'
 // ---------------------------------------------------------------
 const heading = `We're celebrating ${site.personName}'s 40th birthday!`
 
-// Put your own image file in public/images/ and point to it here.
-// (e.g. '/images/forside.jpg')
-const imageSrc = '/images/forside.svg'
-const imageAlt = 'Photo from the celebration'
+// The front-page photo. Save the file as public/images/forside.jpg
+// (or change the name/path here).
+const imageSrc = '/images/forside.jpg'
+const imageAlt = 'Vickie in Oslo'
 
 const intro = (
   <>

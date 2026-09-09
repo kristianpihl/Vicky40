@@ -120,6 +120,9 @@ h4 {
 .front-image {
   width: 100%;
   height: auto;
+  max-height: 700px;
+  object-fit: cover;
+  object-position: center top;
   display: block;
   border-radius: 16px;
   border: 1px solid var(--color-border);
