@@ -1186,13 +1186,48 @@ a.list-item:hover {
 }
 
 .admin-stat--total {
-  background-color: rgba(242, 204, 143, 0.4);
-  border-color: rgba(242, 204, 143, 0.6);
+  background-color: rgba(242, 204, 143, 0.22);
+  border-color: rgba(242, 204, 143, 0.5);
+}
+
+/* Ring gauge with the count centred inside it */
+.admin-stat__gauge {
+  position: relative;
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 0.1rem auto 0;
+}
+
+.admin-stat__ring {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.admin-stat__ring-track,
+.admin-stat__ring-fill {
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.admin-stat__ring-track {
+  stroke: var(--color-border);
+}
+
+.admin-stat__ring-fill {
+  stroke: var(--color-primary);
+  transition: stroke-dasharray 0.25s ease;
 }
 
 .admin-stat__num {
-  display: block;
-  font-size: 1.55rem;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
   font-weight: 700;
   line-height: 1;
 }
@@ -1209,6 +1244,38 @@ a.list-item:hover {
   text-transform: uppercase;
   white-space: nowrap;
   color: var(--color-muted);
+}
+
+.admin-stat__max {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.66rem;
+  color: var(--color-muted);
+  opacity: 0.85;
+}
+
+/* From 90% of the max: yellow ring */
+.admin-stat--near {
+  border-color: rgba(232, 165, 63, 0.6);
+}
+
+.admin-stat--near .admin-stat__ring-fill {
+  stroke: var(--color-bell);
+}
+
+/* Over the max: red ring, red border, red number */
+.admin-stat--over {
+  border-color: var(--color-no);
+  background-color: rgba(214, 69, 69, 0.08);
+}
+
+.admin-stat--over .admin-stat__ring-fill {
+  stroke: var(--color-no);
+}
+
+.admin-stat--over .admin-stat__num,
+.admin-stat--total.admin-stat--over .admin-stat__num {
+  color: var(--color-no);
 }
 
 .admin-table-wrap {

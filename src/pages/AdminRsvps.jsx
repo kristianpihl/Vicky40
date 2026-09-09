@@ -190,6 +190,65 @@ const StatusPill = ({ status }) => {
 // Guest count per day, split by cabin / not cabin.
 // The three days are Thursday–Saturday leading up to (and including) site.partyStart:
 // Saturday = the party day, Friday = day before, Thursday = two days before.
+// Capacity, shown as "max N" + a ring gauge under each per-day count.
+const CAP_CABIN = 15 // beds in the cabin
+const CAP_TOTAL = 80 // max guests the venue holds
+const CAP_NON_CABIN = CAP_TOTAL - CAP_CABIN // everyone else = 65
+
+// Ring gauge geometry: an almost-full circle with a gap at the bottom.
+const GAUGE_ARC = 300 // degrees actually drawn (60° gap at the bottom)
+const GAUGE_ROT = 90 + (360 - GAUGE_ARC) / 2 // rotation so the gap sits at the bottom
+const GAUGE_LEN = (100 * GAUGE_ARC) / 360 // dash length when pathLength = 100
+
+// One cell in a day card: the count sitting inside a ring gauge, then its label
+// and "max N". The ring is green normally, turns yellow from 90% of the max,
+// and red once the count passes the max; the number itself goes red when over.
+function StatCell({ num, max, label, total }) {
+  const ratio = max > 0 ? num / max : 0
+  const over = num > max
+  const near = !over && ratio >= 0.9
+  const className = [
+    'admin-stat',
+    total && 'admin-stat--total',
+    near && 'admin-stat--near',
+    over && 'admin-stat--over',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
+  const rotate = `rotate(${GAUGE_ROT} 32 32)`
+
+  return (
+    <div className={className}>
+      <span className="admin-stat__gauge">
+        <svg className="admin-stat__ring" viewBox="0 0 64 64" aria-hidden="true">
+          <circle
+            className="admin-stat__ring-track"
+            cx="32"
+            cy="32"
+            r="25"
+            pathLength="100"
+            transform={rotate}
+            style={{ strokeDasharray: `${GAUGE_LEN} 100` }}
+          />
+          <circle
+            className="admin-stat__ring-fill"
+            cx="32"
+            cy="32"
+            r="25"
+            pathLength="100"
+            transform={rotate}
+            style={{ strokeDasharray: `${GAUGE_LEN * Math.min(1, ratio)} 100` }}
+          />
+        </svg>
+        <span className="admin-stat__num">{num}</span>
+      </span>
+      <span className="admin-stat__label">{label}</span>
+      <span className="admin-stat__max">max {max}</span>
+    </div>
+  )
+}
+
 function daySummary(guests) {
   const days = [
     ['Thursday', 'thursday'],
@@ -588,18 +647,13 @@ function AdminRsvpsInner() {
                   {d.label} {d.date}
                 </span>
                 <div className="admin-day-card__stats">
-                  <div className="admin-stat">
-                    <span className="admin-stat__num">{d.cabin}</span>
-                    <span className="admin-stat__label">Cabin</span>
-                  </div>
-                  <div className="admin-stat">
-                    <span className="admin-stat__num">{d.nonCabin}</span>
-                    <span className="admin-stat__label">Non-cabin</span>
-                  </div>
-                  <div className="admin-stat admin-stat--total">
-                    <span className="admin-stat__num">{d.total}</span>
-                    <span className="admin-stat__label">Total</span>
-                  </div>
+                  <StatCell num={d.cabin} max={CAP_CABIN} label="Cabin" />
+                  <StatCell
+                    num={d.nonCabin}
+                    max={CAP_NON_CABIN}
+                    label="Non-cabin"
+                  />
+                  <StatCell num={d.total} max={CAP_TOTAL} label="Total" total />
                 </div>
               </div>
             ))}
