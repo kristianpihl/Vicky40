@@ -32,6 +32,7 @@ export default function Home() {
       imageSrc={imageSrc}
       imageAlt={imageAlt}
       intro={intro}
+      dates={site.dateLabel}
     />
   )
 }

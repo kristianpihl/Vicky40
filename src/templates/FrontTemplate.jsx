@@ -7,8 +7,15 @@ import SubpageButtons from '../components/SubpageButtons.jsx'
 //   Left:   heading, then a large image.
 //   Right:  text, countdown, the two main buttons (RSVP + Upload photos),
 //           then buttons to the other pages.
-// The content itself (heading, image, text) is passed in as props from the page.
-export default function FrontTemplate({ heading, imageSrc, imageAlt, intro }) {
+//   Below both columns: the dates.
+// The content itself (heading, image, text, dates) is passed in as props.
+export default function FrontTemplate({
+  heading,
+  imageSrc,
+  imageAlt,
+  intro,
+  dates,
+}) {
   return (
     <Container className="front page">
       <Row className="g-4 g-lg-5 align-items-start">
@@ -49,6 +56,8 @@ export default function FrontTemplate({ heading, imageSrc, imageAlt, intro }) {
           <SubpageButtons />
         </Col>
       </Row>
+
+      {dates && <p className="front-dates">{dates}</p>}
     </Container>
   )
 }

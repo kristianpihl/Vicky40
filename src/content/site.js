@@ -6,9 +6,12 @@ export const site = {
   title: 'Vickie turns 40!',
   tagline: 'Come celebrate – a weekend in Oslo.',
 
-  // When the party starts. Used by the countdown on the front page.
+  // The dates shown on the front page (free text).
+  dateLabel: '05-06.02.2027',
+
+  // What the countdown on the front page counts down to.
   // Order: year, month (0 = January, 1 = February ...), day, hour, minute.
-  partyStart: new Date(2027, 1, 20, 18, 0, 0),
+  partyStart: new Date(2027, 1, 6, 18, 0, 0),
 
   // RSVP form options.
   // arrivalDays: when someone sleeping at the cabin can arrive (pick one).
