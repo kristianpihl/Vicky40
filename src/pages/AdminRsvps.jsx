@@ -9,7 +9,6 @@ function formatDate(iso) {
     return new Date(iso).toLocaleString('en-GB', {
       day: '2-digit',
       month: 'short',
-      year: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
     })
@@ -68,6 +67,7 @@ function toGuestRows(submissions) {
   for (const s of submissions) {
     const people = Array.isArray(s.people) ? s.people : []
     const registeredBy = people[0]?.name || '—'
+    const registeredByEmail = s.contact_email || ''
     const flags = dayFlags(s)
     const cabin =
       s.sleeping_at_cabin === true
@@ -86,6 +86,7 @@ function toGuestRows(submissions) {
         allergies: p.allergies || '',
         phone: p.phone || '',
         registeredBy,
+        registeredByEmail,
         comment: s.comment || '',
       })
     })
@@ -135,12 +136,13 @@ function GuestTable({ rows, muted, status }) {
             <th>Date</th>
             <th>Full name</th>
             <th className="admin-th-center">Cabin</th>
-            <th className="admin-th-center">Thursday</th>
-            <th className="admin-th-center">Friday</th>
-            <th className="admin-th-center">Saturday</th>
+            <th className="admin-th-center">Thu</th>
+            <th className="admin-th-center">Fri</th>
+            <th className="admin-th-center">Sat</th>
             <th>Allergies</th>
             <th>Phone number</th>
-            <th>Registered by</th>
+            <th>Registered by name</th>
+            <th>Registered by e-mail</th>
             <th>Comments</th>
             <th className="admin-th-center">Status</th>
           </tr>
@@ -163,6 +165,7 @@ function GuestTable({ rows, muted, status }) {
               <td>{g.allergies}</td>
               <td className="admin-td-nowrap">{g.phone}</td>
               <td className="admin-td-nowrap">{g.registeredBy}</td>
+              <td className="admin-td-email">{g.registeredByEmail}</td>
               <td className="admin-td-comment">{g.comment}</td>
               <td className="admin-td-center">
                 <StatusPill status={status} />
@@ -204,7 +207,7 @@ function AdminRsvpsInner() {
   const supersededGuests = toGuestRows(superseded)
 
   return (
-    <Container className="page admin-page admin-page--wide">
+    <Container fluid className="page admin-page admin-page--wide">
       <div className="admin-header">
         <h1>RSVPs</h1>
         <Link to="/admin" className="admin-back">

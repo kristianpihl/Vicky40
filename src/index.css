@@ -737,9 +737,10 @@ a.list-item:hover {
   padding: 1rem 0;
 }
 
-/* RSVP table */
+/* RSVP table – full width so the 12 columns fit without a horizontal scrollbar */
 .admin-page--wide {
-  max-width: 1200px;
+  max-width: 1600px;
+  margin-inline: auto;
 }
 
 /* Per-day guest summary above the table */
@@ -846,7 +847,7 @@ a.list-item:hover {
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   background-color: var(--color-bg);
 }
 
@@ -855,7 +856,7 @@ a.list-item:hover {
   color: #f3ede4;
   font-weight: 600;
   text-align: left;
-  padding: 0.85rem 0.9rem;
+  padding: 0.7rem 0.7rem;
   white-space: nowrap;
 }
 
@@ -864,7 +865,7 @@ a.list-item:hover {
 }
 
 .admin-table tbody td {
-  padding: 0.7rem 0.9rem;
+  padding: 0.55rem 0.7rem;
   border-top: 1px solid var(--color-border);
   vertical-align: top;
 }
@@ -908,7 +909,14 @@ a.list-item:hover {
 }
 
 .admin-td-comment {
-  min-width: 200px;
+  min-width: 150px;
+  max-width: 240px;
+  color: var(--color-muted);
+}
+
+.admin-td-email {
+  max-width: 200px;
+  overflow-wrap: anywhere;
   color: var(--color-muted);
 }
 
