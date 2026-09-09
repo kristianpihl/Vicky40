@@ -198,6 +198,32 @@ h4 {
   font-weight: 600;
 }
 
+/* A locked "Coming soon" button: the button is disabled, with a small
+   banner floating over its top edge. */
+.subpage-locked {
+  position: relative;
+  display: grid;
+  margin-top: 0.75rem;
+  cursor: not-allowed;
+}
+
+.subpage-badge {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  z-index: 1;
+  padding: 0.15rem 0.65rem;
+  border-radius: 999px;
+  background-color: var(--color-highlight);
+  color: var(--color-text);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 /* --- Article template --- */
 .article {
   max-width: 820px;
