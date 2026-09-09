@@ -76,7 +76,7 @@ function KpiCard({ label, value, sub, icon, foot }) {
 }
 
 function AdminPhotosInner() {
-  const { password, logout } = useAdminAuth()
+  const { email, password, logout } = useAdminAuth()
   const [rows, setRows] = useState(null)
   const [stats, setStats] = useState(null) // { file_count, total_bytes } | null
   const [error, setError] = useState(false)
@@ -85,7 +85,7 @@ function AdminPhotosInner() {
   // Storage total is a nice-to-have – if it fails, the page still works.
   function fetchStats() {
     supabase
-      .rpc('admin_storage_stats', { pass: password })
+      .rpc('admin_storage_stats', { email, pass: password })
       .then(({ data, error }) => {
         if (error) {
           console.error('admin_storage_stats failed:', error)
@@ -98,15 +98,17 @@ function AdminPhotosInner() {
   useEffect(() => {
     let cancelled = false
 
-    supabase.rpc('admin_photos', { pass: password }).then(({ data, error }) => {
-      if (cancelled) return
-      if (error) {
-        console.error('admin_photos failed:', error)
-        setError(true)
-        return
-      }
-      setRows(data || [])
-    })
+    supabase
+      .rpc('admin_photos', { email, pass: password })
+      .then(({ data, error }) => {
+        if (cancelled) return
+        if (error) {
+          console.error('admin_photos failed:', error)
+          setError(true)
+          return
+        }
+        setRows(data || [])
+      })
 
     fetchStats()
 
@@ -114,7 +116,7 @@ function AdminPhotosInner() {
       cancelled = true
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [password])
+  }, [email, password])
 
   async function handleDelete(row) {
     const ok = window.confirm(
@@ -124,6 +126,7 @@ function AdminPhotosInner() {
 
     setDeletingId(row.id)
     const { error } = await supabase.rpc('admin_delete_photo', {
+      email,
       pass: password,
       photo_id: row.id,
     })

@@ -6,18 +6,20 @@ import { useAdminAuth } from '../components/AdminAuthProvider.jsx'
 export default function Admin() {
   const { isAuthed, login, logout } = useAdminAuth()
 
+  const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
   const [status, setStatus] = useState('idle') // idle | checking | error
 
   async function handleSubmit(event) {
     event.preventDefault()
     setStatus('checking')
-    const ok = await login(pass.trim())
+    const ok = await login(email.trim(), pass.trim())
     if (!ok) {
       setStatus('error')
       return
     }
     setStatus('idle')
+    setEmail('')
     setPass('')
   }
 
@@ -48,22 +50,39 @@ export default function Admin() {
   return (
     <Container className="page admin-page admin-login-page">
       <h1>Admin</h1>
-      <p className="page-lead">Enter the password to see RSVPs and photos.</p>
+      <p className="page-lead">
+        Enter your username and password to see RSVPs and photos.
+      </p>
 
       <Form onSubmit={handleSubmit} className="admin-login-form">
+        <Form.Group className="mb-3" controlId="admin-email">
+          <Form.Label>Username</Form.Label>
+          <Form.Control
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+            autoComplete="username"
+            autoFocus
+            required
+          />
+        </Form.Group>
+
         <Form.Group className="mb-3" controlId="admin-pass">
           <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
             value={pass}
             onChange={(e) => setPass(e.target.value)}
-            autoFocus
+            autoComplete="current-password"
             required
           />
         </Form.Group>
 
         {status === 'error' && (
-          <Alert variant="warning">Wrong password. Try again.</Alert>
+          <Alert variant="warning">
+            Wrong username or password. Try again.
+          </Alert>
         )}
 
         <Button

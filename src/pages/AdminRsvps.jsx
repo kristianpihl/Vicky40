@@ -446,14 +446,17 @@ function GuestTable({ rows, muted, onRemove, onRestore, onSave, busy }) {
 }
 
 function AdminRsvpsInner() {
-  const { password, logout } = useAdminAuth()
+  const { email, password, logout } = useAdminAuth()
   const [rows, setRows] = useState(null)
   const [error, setError] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
   const [busy, setBusy] = useState(false)
 
   const load = useCallback(async () => {
-    const { data, error } = await supabase.rpc('admin_rsvps', { pass: password })
+    const { data, error } = await supabase.rpc('admin_rsvps', {
+      email,
+      pass: password,
+    })
     if (error) {
       console.error('admin_rsvps failed:', error)
       setError(true)
@@ -461,7 +464,7 @@ function AdminRsvpsInner() {
     }
     setError(false)
     setRows(data || [])
-  }, [password])
+  }, [email, password])
 
   useEffect(() => {
     load()
@@ -470,6 +473,7 @@ function AdminRsvpsInner() {
   async function setPersonRemoved(g, removed) {
     setBusy(true)
     const { error } = await supabase.rpc('admin_set_person_removed', {
+      email,
       pass: password,
       rsvp_id: g.submissionId,
       person_index: g.personIndex,
@@ -488,6 +492,7 @@ function AdminRsvpsInner() {
     setBusy(true)
     const cabinYes = v.cabin === 'Yes'
     const { error } = await supabase.rpc('admin_update_rsvp_person', {
+      email,
       pass: password,
       rsvp_id: g.submissionId,
       person_index: g.personIndex,

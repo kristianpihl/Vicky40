@@ -8,23 +8,31 @@ const AdminAuthContext = createContext(null)
 
 function readStored() {
   try {
-    return sessionStorage.getItem(STORAGE_KEY) || null
+    const raw = sessionStorage.getItem(STORAGE_KEY)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    if (parsed && parsed.email && parsed.password) return parsed
+    return null
   } catch {
     return null
   }
 }
 
 export function AdminAuthProvider({ children }) {
-  // We keep the typed password in memory (and sessionStorage for the tab)
-  // because each admin request has to send it to Supabase.
-  const [password, setPassword] = useState(readStored)
+  // Username (an email) + password are kept in memory (and sessionStorage for
+  // the tab) because each admin request has to send them to Supabase.
+  const [creds, setCreds] = useState(readStored)
 
-  const login = useCallback(async (pass) => {
-    const { data, error } = await supabase.rpc('admin_login', { pass })
+  const login = useCallback(async (email, password) => {
+    const { data, error } = await supabase.rpc('admin_login', {
+      email,
+      pass: password,
+    })
     if (error || data !== true) return false
-    setPassword(pass)
+    const next = { email, password }
+    setCreds(next)
     try {
-      sessionStorage.setItem(STORAGE_KEY, pass)
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(next))
     } catch {
       /* ignore */
     }
@@ -32,7 +40,7 @@ export function AdminAuthProvider({ children }) {
   }, [])
 
   const logout = useCallback(() => {
-    setPassword(null)
+    setCreds(null)
     try {
       sessionStorage.removeItem(STORAGE_KEY)
     } catch {
@@ -40,7 +48,13 @@ export function AdminAuthProvider({ children }) {
     }
   }, [])
 
-  const value = { isAuthed: !!password, password, login, logout }
+  const value = {
+    isAuthed: !!(creds && creds.email && creds.password),
+    email: creds?.email || null,
+    password: creds?.password || null,
+    login,
+    logout,
+  }
   return (
     <AdminAuthContext.Provider value={value}>
       {children}
