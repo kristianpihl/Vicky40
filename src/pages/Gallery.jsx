@@ -11,8 +11,8 @@ export default function Gallery() {
       <h1>Upload photos</h1>
       <p className="page-lead">
         Share your photos for {site.personName}'s 40th. They won't be shown here
-        on the site, but they may be used for the party in different ways – a
-        slideshow, a photo book, a montage, and so on.
+        on the site, but they may be used for the celebration in different ways:
+        a slideshow, a photo book, a montage, and so on.
       </p>
 
       <section className="gallery-upload">

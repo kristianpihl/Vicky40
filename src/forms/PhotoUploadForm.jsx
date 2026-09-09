@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { Form, Button, Alert } from 'react-bootstrap'
 import { supabase } from '../lib/supabaseClient.js'
+import { resizeImage } from '../lib/resizeImage.js'
 
-const MAX_FILES = 5
-const MAX_TOTAL_MB = 5
+const MAX_FILES = 10
+const MAX_FILE_MB = 25
 
 export default function PhotoUploadForm() {
   const [uploadedBy, setUploadedBy] = useState('')
@@ -11,8 +12,6 @@ export default function PhotoUploadForm() {
   const [status, setStatus] = useState('idle') // idle | uploading | success | error
   const [progress, setProgress] = useState({ done: 0, total: 0 })
   const [message, setMessage] = useState('')
-
-  const totalMb = files.reduce((sum, f) => sum + f.size, 0) / (1024 * 1024)
 
   function handleFileChange(event) {
     setFiles(Array.from(event.target.files || []))
@@ -28,9 +27,9 @@ export default function PhotoUploadForm() {
     }
     for (const file of files) {
       if (!file.type.startsWith('image/')) return `"${file.name}" is not an image.`
-    }
-    if (totalMb > MAX_TOTAL_MB) {
-      return `The photos add up to ${totalMb.toFixed(1)} MB. The total can't be more than ${MAX_TOTAL_MB} MB – pick fewer or smaller photos.`
+      if (file.size > MAX_FILE_MB * 1024 * 1024) {
+        return `"${file.name}" is larger than ${MAX_FILE_MB} MB.`
+      }
     }
     return ''
   }
@@ -51,7 +50,10 @@ export default function PhotoUploadForm() {
     let ok = 0
     const failed = []
 
-    for (const file of files) {
+    for (const original of files) {
+      // Shrink the photo in the browser before uploading (see lib/resizeImage.js).
+      const file = await resizeImage(original)
+
       const ext = file.name.includes('.')
         ? file.name.split('.').pop().toLowerCase()
         : file.type.split('/')[1] || 'jpg'
@@ -62,16 +64,16 @@ export default function PhotoUploadForm() {
         .upload(path, file, { contentType: file.type, upsert: false })
 
       if (uploadError) {
-        console.error('Upload failed:', file.name, uploadError)
-        failed.push(file.name)
+        console.error('Upload failed:', original.name, uploadError)
+        failed.push(original.name)
       } else {
         const { error: dbError } = await supabase.from('photos').insert({
           storage_path: path,
           uploaded_by: uploadedBy.trim(),
         })
         if (dbError) {
-          console.error('Saving to database failed:', file.name, dbError)
-          failed.push(file.name)
+          console.error('Saving to database failed:', original.name, dbError)
+          failed.push(original.name)
         } else {
           ok += 1
         }
@@ -121,6 +123,11 @@ export default function PhotoUploadForm() {
 
   return (
     <Form className="upload-form" onSubmit={handleSubmit} noValidate>
+      <p className="upload-intro">
+        Old and new photos are equally welcome – pictures from over the years,
+        and pictures taken during the party itself.
+      </p>
+
       <Form.Group className="mb-3" controlId="upload-by">
         <Form.Label>Who are the photos from?</Form.Label>
         <Form.Control
@@ -141,26 +148,22 @@ export default function PhotoUploadForm() {
           onChange={handleFileChange}
         />
         <Form.Text>
-          Up to {MAX_FILES} photos at a time, {MAX_TOTAL_MB} MB in total.
+          Up to {MAX_FILES} photos at a time. Large photos are resized
+          automatically before upload.
         </Form.Text>
       </Form.Group>
 
       {files.length > 0 && (
-        <>
-          <ul className="upload-list">
-            {files.map((file, i) => (
-              <li key={i}>
-                {file.name}{' '}
-                <span className="text-muted">
-                  ({(file.size / (1024 * 1024)).toFixed(1)} MB)
-                </span>
-              </li>
-            ))}
-          </ul>
-          <p className="upload-total text-muted">
-            Total: {totalMb.toFixed(1)} MB of {MAX_TOTAL_MB} MB
-          </p>
-        </>
+        <ul className="upload-list">
+          {files.map((file, i) => (
+            <li key={i}>
+              {file.name}{' '}
+              <span className="text-muted">
+                ({(file.size / (1024 * 1024)).toFixed(1)} MB)
+              </span>
+            </li>
+          ))}
+        </ul>
       )}
 
       {message && (
