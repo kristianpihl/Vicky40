@@ -80,6 +80,20 @@ function AdminPhotosInner() {
   const [rows, setRows] = useState(null)
   const [stats, setStats] = useState(null) // { file_count, total_bytes } | null
   const [error, setError] = useState(false)
+  const [deletingId, setDeletingId] = useState(null)
+
+  // Storage total is a nice-to-have – if it fails, the page still works.
+  function fetchStats() {
+    supabase
+      .rpc('admin_storage_stats', { pass: password })
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('admin_storage_stats failed:', error)
+          return
+        }
+        setStats(Array.isArray(data) ? data[0] : data)
+      })
+  }
 
   useEffect(() => {
     let cancelled = false
@@ -94,22 +108,36 @@ function AdminPhotosInner() {
       setRows(data || [])
     })
 
-    // Storage total is a nice-to-have – if it fails, the page still works.
-    supabase
-      .rpc('admin_storage_stats', { pass: password })
-      .then(({ data, error }) => {
-        if (cancelled) return
-        if (error) {
-          console.error('admin_storage_stats failed:', error)
-          return
-        }
-        setStats(Array.isArray(data) ? data[0] : data)
-      })
+    fetchStats()
 
     return () => {
       cancelled = true
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [password])
+
+  async function handleDelete(row) {
+    const ok = window.confirm(
+      'Are you sure you want to delete this image? It will be deleted from the database.',
+    )
+    if (!ok) return
+
+    setDeletingId(row.id)
+    const { error } = await supabase.rpc('admin_delete_photo', {
+      pass: password,
+      photo_id: row.id,
+    })
+    setDeletingId(null)
+
+    if (error) {
+      console.error('admin_delete_photo failed:', error)
+      window.alert('Could not delete the photo. Please try again.')
+      return
+    }
+
+    setRows((cur) => (cur ? cur.filter((r) => r.id !== row.id) : cur))
+    fetchStats()
+  }
 
   const totalBytes = stats ? Number(stats.total_bytes) || 0 : null
   const pct =
@@ -208,9 +236,22 @@ function AdminPhotosInner() {
                   {row.caption && (
                     <span className="admin-photo-caption">{row.caption}</span>
                   )}
-                  <a className="admin-photo-dl" href={downloadUrl(row.storage_path)}>
-                    Download
-                  </a>
+                  <span className="admin-photo-actions">
+                    <a
+                      className="admin-photo-dl"
+                      href={downloadUrl(row.storage_path)}
+                    >
+                      Download
+                    </a>
+                    <button
+                      type="button"
+                      className="admin-photo-del"
+                      onClick={() => handleDelete(row)}
+                      disabled={deletingId === row.id}
+                    >
+                      {deletingId === row.id ? 'Deleting …' : 'Delete'}
+                    </button>
+                  </span>
                 </figcaption>
               </figure>
             ))}

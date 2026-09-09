@@ -177,9 +177,35 @@ begin
 end;
 $$;
 
+-- 8) Delete one uploaded photo: removes the file from the bucket AND the
+--    row from the photos table. Password-checked, nothing is recoverable.
+create or replace function public.admin_delete_photo(pass text, photo_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  p text;
+begin
+  if pass is distinct from (select password from public.admin_config where id = 1) then
+    raise exception 'Wrong password';
+  end if;
+
+  select storage_path into p from public.photos where id = photo_id;
+  if p is null then
+    raise exception 'Photo not found';
+  end if;
+
+  delete from storage.objects where bucket_id = 'photos' and name = p;
+  delete from public.photos where id = photo_id;
+end;
+$$;
+
 grant execute on function public.admin_login(text) to anon;
 grant execute on function public.admin_rsvps(text) to anon;
 grant execute on function public.admin_photos(text) to anon;
 grant execute on function public.admin_storage_stats(text) to anon;
+grant execute on function public.admin_delete_photo(text, uuid) to anon;
 grant execute on function public.admin_set_person_removed(text, uuid, int, boolean) to anon;
 grant execute on function public.admin_update_rsvp_person(text, uuid, int, text, text, text, boolean, text, jsonb, text, text) to anon;

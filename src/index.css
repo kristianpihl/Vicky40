@@ -1229,11 +1229,36 @@ a.list-item:hover {
   color: var(--color-muted);
 }
 
-.admin-photo-dl {
+.admin-photo-actions {
   margin-top: 0.15rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-photo-dl {
   font-weight: 600;
   color: var(--color-primary-dark);
   text-decoration: none;
+}
+
+.admin-photo-del {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-no);
+  cursor: pointer;
+}
+
+.admin-photo-del:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.admin-photo-del:disabled {
+  color: var(--color-muted);
+  cursor: default;
 }
 
 /* --- Footer --- */
