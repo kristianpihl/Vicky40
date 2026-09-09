@@ -106,7 +106,57 @@ begin
 end;
 $$;
 
+-- 6) Let the admin edit one person row inline.
+--    Person-level fields (name/phone/allergies) change just that person;
+--    the rest are submission-level and apply to the whole group.
+create or replace function public.admin_update_rsvp_person(
+  pass text,
+  rsvp_id uuid,
+  person_index int,
+  new_name text,
+  new_phone text,
+  new_allergies text,
+  new_sleeping_at_cabin boolean,
+  new_arrival_day text,
+  new_events jsonb,
+  new_contact_email text,
+  new_comment text
+)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  pi text := person_index::text;
+  p jsonb;
+begin
+  if pass is distinct from (select password from public.admin_config where id = 1) then
+    raise exception 'Wrong password';
+  end if;
+
+  select people into p from public.rsvp where id = rsvp_id;
+  if p is null then
+    raise exception 'RSVP not found';
+  end if;
+
+  p := jsonb_set(p, array[pi, 'name'], coalesce(to_jsonb(new_name), '""'::jsonb));
+  p := jsonb_set(p, array[pi, 'phone'], coalesce(to_jsonb(new_phone), 'null'::jsonb));
+  p := jsonb_set(p, array[pi, 'allergies'], coalesce(to_jsonb(new_allergies), 'null'::jsonb));
+
+  update public.rsvp
+  set people = p,
+      sleeping_at_cabin = new_sleeping_at_cabin,
+      arrival_day = new_arrival_day,
+      events = new_events,
+      contact_email = new_contact_email,
+      comment = new_comment
+  where id = rsvp_id;
+end;
+$$;
+
 grant execute on function public.admin_login(text) to anon;
 grant execute on function public.admin_rsvps(text) to anon;
 grant execute on function public.admin_photos(text) to anon;
 grant execute on function public.admin_set_person_removed(text, uuid, int, boolean) to anon;
+grant execute on function public.admin_update_rsvp_person(text, uuid, int, text, text, text, boolean, text, jsonb, text, text) to anon;

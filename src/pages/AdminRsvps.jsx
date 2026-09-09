@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Container, Button, Alert } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient.js'
+import { site } from '../content/site.js'
 import { useAdminAuth, RequireAdmin } from '../components/AdminAuthProvider.jsx'
 
 function formatDate(iso) {
@@ -81,7 +82,6 @@ function toGuestRows(submissions, status) {
           ? 'No'
           : '—'
     people.forEach((p, i) => {
-      // On active submissions, a person the admin has removed gets its own status.
       const rowStatus =
         status === 'active' && removedIdx.includes(i) ? 'removed' : status
       out.push({
@@ -90,9 +90,11 @@ function toGuestRows(submissions, status) {
         personIndex: i,
         status: rowStatus,
         date: s.created_at,
-        name: p.name || '—',
+        name: p.name || '',
         cabin,
         sleepsAtCabin: s.sleeping_at_cabin,
+        arrivalDay: s.arrival_day || '',
+        events: Array.isArray(s.events) ? s.events : [],
         ...flags,
         allergies: p.allergies || '',
         phone: p.phone || '',
@@ -112,6 +114,23 @@ const Dot = ({ on }) => (
     aria-label={on ? 'Coming' : 'Not coming'}
     className={`admin-dot ${on ? 'admin-dot--yes' : 'admin-dot--no'}`}
   />
+)
+
+const PencilIcon = () => (
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M12 20h9" />
+    <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+  </svg>
 )
 
 // Active   = the current answer.
@@ -146,7 +165,200 @@ function daySummary(guests) {
   })
 }
 
-function GuestTable({ rows, muted, onRemove, onRestore, busy }) {
+function GuestRow({ g, editing, onEdit, onSave, onCancel, onRemove, onRestore, busy }) {
+  const [v, setV] = useState(null)
+  const set = (field, val) => setV((prev) => ({ ...prev, [field]: val }))
+  const toggleEvent = (day) =>
+    setV((prev) => ({
+      ...prev,
+      events: prev.events.includes(day)
+        ? prev.events.filter((d) => d !== day)
+        : [...prev.events, day],
+    }))
+
+  function begin() {
+    setV({
+      name: g.name,
+      cabin: g.cabin === 'Yes' ? 'Yes' : 'No',
+      arrivalDay: g.arrivalDay || site.arrivalDays[1],
+      events: [...g.events],
+      allergies: g.allergies,
+      phone: g.phone,
+      email: g.registeredByEmail,
+      comment: g.comment,
+    })
+    onEdit(g.key)
+  }
+
+  function commit() {
+    if (!v.name.trim()) {
+      window.alert('Name cannot be empty.')
+      return
+    }
+    onSave(g, v)
+  }
+
+  const noDots = g.status === 'cancelled' || g.status === 'removed'
+
+  if (editing && v) {
+    const cabinYes = v.cabin === 'Yes'
+    return (
+      <tr className="admin-row-editing">
+        <td className="admin-td-date">{formatDate(g.date)}</td>
+        <td>
+          <input
+            className="admin-edit-input"
+            value={v.name}
+            onChange={(e) => set('name', e.target.value)}
+          />
+        </td>
+        <td className="admin-td-center">
+          <select
+            className="admin-edit-input"
+            value={v.cabin}
+            onChange={(e) => set('cabin', e.target.value)}
+          >
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </td>
+        {['Thursday', 'Friday', 'Saturday'].map((day) => (
+          <td className="admin-td-center" key={day}>
+            {cabinYes ? (
+              <input
+                type="radio"
+                name={`arr-${g.key}`}
+                checked={v.arrivalDay === day}
+                onChange={() => set('arrivalDay', day)}
+              />
+            ) : day === 'Thursday' ? (
+              '—'
+            ) : (
+              <input
+                type="checkbox"
+                checked={v.events.includes(day)}
+                onChange={() => toggleEvent(day)}
+              />
+            )}
+          </td>
+        ))}
+        <td>
+          <input
+            className="admin-edit-input"
+            value={v.allergies}
+            onChange={(e) => set('allergies', e.target.value)}
+          />
+        </td>
+        <td>
+          <input
+            className="admin-edit-input"
+            value={v.phone}
+            onChange={(e) => set('phone', e.target.value)}
+          />
+        </td>
+        <td className="admin-td-nowrap">{g.registeredBy}</td>
+        <td>
+          <input
+            className="admin-edit-input"
+            type="email"
+            value={v.email}
+            onChange={(e) => set('email', e.target.value)}
+          />
+        </td>
+        <td>
+          <input
+            className="admin-edit-input"
+            value={v.comment}
+            onChange={(e) => set('comment', e.target.value)}
+          />
+        </td>
+        <td className="admin-td-status">
+          <StatusPill status={g.status} />
+        </td>
+        <td className="admin-td-center admin-td-nowrap">
+          <button
+            type="button"
+            className="admin-row-action"
+            onClick={commit}
+            disabled={busy}
+          >
+            Save
+          </button>
+          <button
+            type="button"
+            className="admin-row-action admin-row-action--muted"
+            onClick={onCancel}
+            disabled={busy}
+          >
+            Cancel
+          </button>
+        </td>
+      </tr>
+    )
+  }
+
+  return (
+    <tr>
+      <td className="admin-td-date">{formatDate(g.date)}</td>
+      <td className="admin-td-name">{g.name}</td>
+      <td className="admin-td-center">{g.cabin}</td>
+      <td className="admin-td-center">{noDots ? '—' : <Dot on={g.thursday} />}</td>
+      <td className="admin-td-center">{noDots ? '—' : <Dot on={g.friday} />}</td>
+      <td className="admin-td-center">{noDots ? '—' : <Dot on={g.saturday} />}</td>
+      <td>{g.allergies}</td>
+      <td className="admin-td-nowrap">{g.phone}</td>
+      <td className="admin-td-nowrap">{g.registeredBy}</td>
+      <td className="admin-td-email">{g.registeredByEmail}</td>
+      <td className="admin-td-comment">{g.comment}</td>
+      <td className="admin-td-status">
+        <StatusPill status={g.status} />
+        {onRemove && g.status === 'active' && (
+          <button
+            type="button"
+            className="admin-row-action"
+            onClick={() => onRemove(g)}
+            disabled={busy}
+          >
+            Remove
+          </button>
+        )}
+        {onRestore && g.status === 'removed' && (
+          <button
+            type="button"
+            className="admin-row-action"
+            onClick={() => onRestore(g)}
+            disabled={busy}
+          >
+            Undo
+          </button>
+        )}
+      </td>
+      {onSave && (
+        <td className="admin-td-center">
+          <button
+            type="button"
+            className="admin-icon-btn"
+            onClick={begin}
+            disabled={busy}
+            title="Edit row"
+            aria-label="Edit row"
+          >
+            <PencilIcon />
+          </button>
+        </td>
+      )}
+    </tr>
+  )
+}
+
+function GuestTable({ rows, muted, onRemove, onRestore, onSave, busy }) {
+  const [editKey, setEditKey] = useState(null)
+
+  async function handleSave(g, values) {
+    const ok = await onSave(g, values)
+    if (ok) setEditKey(null)
+  }
+
   return (
     <div className={`admin-table-wrap${muted ? ' admin-table-wrap--muted' : ''}`}>
       <table className="admin-table">
@@ -164,56 +376,23 @@ function GuestTable({ rows, muted, onRemove, onRestore, busy }) {
             <th>Registered by e-mail</th>
             <th>Comments</th>
             <th className="admin-th-center">Status</th>
+            {onSave && <th className="admin-th-center">Edit</th>}
           </tr>
         </thead>
         <tbody>
-          {rows.map((g) => {
-            const noDots = g.status === 'cancelled' || g.status === 'removed'
-            return (
-              <tr key={g.key}>
-                <td className="admin-td-date">{formatDate(g.date)}</td>
-                <td className="admin-td-name">{g.name}</td>
-                <td className="admin-td-center">{g.cabin}</td>
-                <td className="admin-td-center">
-                  {noDots ? '—' : <Dot on={g.thursday} />}
-                </td>
-                <td className="admin-td-center">
-                  {noDots ? '—' : <Dot on={g.friday} />}
-                </td>
-                <td className="admin-td-center">
-                  {noDots ? '—' : <Dot on={g.saturday} />}
-                </td>
-                <td>{g.allergies}</td>
-                <td className="admin-td-nowrap">{g.phone}</td>
-                <td className="admin-td-nowrap">{g.registeredBy}</td>
-                <td className="admin-td-email">{g.registeredByEmail}</td>
-                <td className="admin-td-comment">{g.comment}</td>
-                <td className="admin-td-status">
-                  <StatusPill status={g.status} />
-                  {onRemove && g.status === 'active' && (
-                    <button
-                      type="button"
-                      className="admin-row-action"
-                      onClick={() => onRemove(g)}
-                      disabled={busy}
-                    >
-                      Remove
-                    </button>
-                  )}
-                  {onRestore && g.status === 'removed' && (
-                    <button
-                      type="button"
-                      className="admin-row-action"
-                      onClick={() => onRestore(g)}
-                      disabled={busy}
-                    >
-                      Undo
-                    </button>
-                  )}
-                </td>
-              </tr>
-            )
-          })}
+          {rows.map((g) => (
+            <GuestRow
+              key={g.key}
+              g={g}
+              editing={editKey === g.key}
+              busy={busy}
+              onEdit={setEditKey}
+              onCancel={() => setEditKey(null)}
+              onSave={onSave ? handleSave : undefined}
+              onRemove={onRemove}
+              onRestore={onRestore}
+            />
+          ))}
         </tbody>
       </table>
     </div>
@@ -257,6 +436,32 @@ function AdminRsvpsInner() {
       await load()
     }
     setBusy(false)
+  }
+
+  async function saveRow(g, v) {
+    setBusy(true)
+    const cabinYes = v.cabin === 'Yes'
+    const { error } = await supabase.rpc('admin_update_rsvp_person', {
+      pass: password,
+      rsvp_id: g.submissionId,
+      person_index: g.personIndex,
+      new_name: v.name.trim(),
+      new_phone: v.phone.trim() || null,
+      new_allergies: v.allergies.trim() || null,
+      new_sleeping_at_cabin: cabinYes,
+      new_arrival_day: cabinYes ? v.arrivalDay || null : null,
+      new_events: cabinYes ? null : v.events,
+      new_contact_email: v.email.trim() || null,
+      new_comment: v.comment.trim() || null,
+    })
+    setBusy(false)
+    if (error) {
+      console.error('admin_update_rsvp_person failed:', error)
+      window.alert('Could not save the row. Try again.')
+      return false
+    }
+    await load()
+    return true
   }
 
   const { active, cancelled, superseded } = rows
@@ -334,6 +539,7 @@ function AdminRsvpsInner() {
             rows={activeGuests}
             busy={busy}
             onRemove={(g) => setPersonRemoved(g, true)}
+            onSave={saveRow}
           />
 
           {notComing.length > 0 && (
