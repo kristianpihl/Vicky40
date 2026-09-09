@@ -2,7 +2,14 @@
 //
 // Add a line here whenever you change something guests should notice –
 // the programme, practical info, the venue, and so on.
-// Date format: YYYY-MM-DD.
+//
+//   date: 'YYYY-MM-DD'   (required)
+//   text: 'What changed' (required)
+//   page: '/program'     (optional) – the subpage this change is about.
+//         When set, that page's button on the front page shows a small bell
+//         with a count for as long as the entry is less than 24 hours old.
+//         Use the same paths as in src/content/site.js, e.g.
+//         '/program', '/venue', '/faq'.
 
 export const updates = [
   {

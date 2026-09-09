@@ -246,3 +246,6 @@ grant execute on function public.admin_delete_photo(text, text, uuid) to anon;
 grant execute on function public.admin_set_person_removed(text, text, uuid, int, boolean) to anon;
 grant execute on function public.admin_update_rsvp_person(
   text, text, uuid, int, text, text, text, boolean, text, jsonb, text, text) to anon;
+
+-- Tell the API layer to pick up the new function signatures right away.
+notify pgrst, 'reload schema';

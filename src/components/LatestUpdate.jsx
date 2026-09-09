@@ -33,6 +33,18 @@ export function formatUpdateDate(iso) {
   }
 }
 
+// How many feed entries tagged with this page were added in the last `hours`
+// hours. Used for the little bell on the front-page subpage buttons.
+export function recentChangeCount(pathname, hours = 24) {
+  const windowMs = hours * 60 * 60 * 1000
+  const now = Date.now()
+  return updates.filter((u) => {
+    if (u.page !== pathname) return false
+    const t = new Date(u.date).getTime()
+    return !Number.isNaN(t) && now - t <= windowMs
+  }).length
+}
+
 // Small card on the front page showing the newest site update.
 // Highlights itself when there's something newer than the guest has seen.
 export default function LatestUpdate() {

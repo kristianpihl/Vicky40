@@ -20,6 +20,7 @@
   --color-yes: #2e9e4f;         /* admin table: coming that day */
   --color-no: #d64545;          /* admin table: not coming that day */
   --color-highlight: #f2cc8f;   /* matte warm yellow – small playful details */
+  --color-bell: #e8a53f;        /* amber – the "recently changed" bell */
 
   /* --- Wire the palette into Bootstrap's variables --- */
   --bs-primary: var(--color-primary);
@@ -317,6 +318,36 @@ h4 {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+/* "Recently changed" bell + red count on a subpage button */
+.subpage-bell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  color: var(--color-bell);
+}
+
+.subpage-bell svg {
+  display: block;
+}
+
+.subpage-bell__count {
+  position: absolute;
+  top: -7px;
+  right: -9px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: 999px;
+  background-color: var(--color-no);
+  color: #ffffff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
 }
 
 /* --- Page with a side image (same idea as the front page) --- */
