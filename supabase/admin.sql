@@ -155,8 +155,31 @@ begin
 end;
 $$;
 
+-- 7) Storage usage for the photos bucket (file count + total bytes).
+--    Read straight from storage.objects so it covers every file actually
+--    stored, not just rows in the photos table.
+create or replace function public.admin_storage_stats(pass text)
+returns table (file_count bigint, total_bytes bigint)
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if pass is distinct from (select password from public.admin_config where id = 1) then
+    raise exception 'Wrong password';
+  end if;
+  return query
+    select count(*)::bigint,
+           coalesce(sum((metadata->>'size')::bigint), 0)::bigint
+    from storage.objects
+    where bucket_id = 'photos'
+      and name <> '.emptyFolderPlaceholder';
+end;
+$$;
+
 grant execute on function public.admin_login(text) to anon;
 grant execute on function public.admin_rsvps(text) to anon;
 grant execute on function public.admin_photos(text) to anon;
+grant execute on function public.admin_storage_stats(text) to anon;
 grant execute on function public.admin_set_person_removed(text, uuid, int, boolean) to anon;
 grant execute on function public.admin_update_rsvp_person(text, uuid, int, text, text, text, boolean, text, jsonb, text, text) to anon;

@@ -891,6 +891,23 @@ a.list-item:hover {
   color: var(--color-primary-dark);
 }
 
+/* Thin usage bar shown inside a KPI card (e.g. storage used) */
+.admin-kpi__bar {
+  display: block;
+  margin-top: 0.55rem;
+  height: 6px;
+  border-radius: 999px;
+  background-color: var(--color-border);
+  overflow: hidden;
+}
+
+.admin-kpi__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background-color: var(--color-primary);
+}
+
 /* Per-day guest summary above the table */
 .admin-section-title {
   margin: 0 0 0.6rem;
