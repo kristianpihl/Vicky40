@@ -27,7 +27,7 @@ export const site = {
     { label: "Who's coming when", to: '/who-is-coming-when', hidden: true },
     { label: 'The venue', to: '/venue' },
     { label: "Vickie's Oslo", to: '/oslo', comingSoon: true },
-    { label: 'Practical info', to: '/faq' },
+    { label: "F&Q's", to: '/faq' },
     // Photos has its own "Upload photos" button on the front page (and in the
     // mobile menu), so it is kept out of the link lists here.
     { label: 'Photos', to: '/photos', hidden: true },
