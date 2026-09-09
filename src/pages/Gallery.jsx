@@ -1,28 +1,22 @@
-import { useState } from 'react'
 import { Container } from 'react-bootstrap'
 import PhotoUploadForm from '../forms/PhotoUploadForm.jsx'
-import GalleryTemplate from '../templates/GalleryTemplate.jsx'
+import { site } from '../content/site.js'
 
+// This page is upload-only. The photos are not shown on the site.
+// (The gallery view lives in templates/GalleryTemplate.jsx if it is ever
+// wanted again.)
 export default function Gallery() {
-  // Bumped when an upload finishes, so the gallery reloads.
-  const [refreshKey, setRefreshKey] = useState(0)
-
   return (
     <Container className="page gallery-page">
-      <h1>Photos</h1>
+      <h1>Upload photos</h1>
       <p className="page-lead">
-        Upload your own photos from the weekend, and see the ones others have
-        shared.
+        Share your photos for {site.personName}'s 40th. They won't be shown here
+        on the site, but they may be used for the party in different ways – a
+        slideshow, a photo book, a montage, and so on.
       </p>
 
       <section className="gallery-upload">
-        <h2>Upload photos</h2>
-        <PhotoUploadForm onUploaded={() => setRefreshKey((k) => k + 1)} />
-      </section>
-
-      <section className="gallery-list">
-        <h2>Shared photos</h2>
-        <GalleryTemplate refreshKey={refreshKey} />
+        <PhotoUploadForm />
       </section>
     </Container>
   )

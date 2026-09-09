@@ -2,16 +2,17 @@ import { useState } from 'react'
 import { Form, Button, Alert } from 'react-bootstrap'
 import { supabase } from '../lib/supabaseClient.js'
 
-const MAX_FILE_MB = 10
-const MAX_FILES = 20
+const MAX_FILES = 5
+const MAX_TOTAL_MB = 5
 
-export default function PhotoUploadForm({ onUploaded }) {
+export default function PhotoUploadForm() {
   const [uploadedBy, setUploadedBy] = useState('')
-  const [caption, setCaption] = useState('')
   const [files, setFiles] = useState([])
   const [status, setStatus] = useState('idle') // idle | uploading | success | error
   const [progress, setProgress] = useState({ done: 0, total: 0 })
   const [message, setMessage] = useState('')
+
+  const totalMb = files.reduce((sum, f) => sum + f.size, 0) / (1024 * 1024)
 
   function handleFileChange(event) {
     setFiles(Array.from(event.target.files || []))
@@ -22,12 +23,14 @@ export default function PhotoUploadForm({ onUploaded }) {
   function validate() {
     if (!uploadedBy.trim()) return 'Enter who the photos are from.'
     if (files.length === 0) return 'Choose at least one photo.'
-    if (files.length > MAX_FILES) return `Max ${MAX_FILES} photos at a time.`
+    if (files.length > MAX_FILES) {
+      return `You can upload up to ${MAX_FILES} photos at a time.`
+    }
     for (const file of files) {
       if (!file.type.startsWith('image/')) return `"${file.name}" is not an image.`
-      if (file.size > MAX_FILE_MB * 1024 * 1024) {
-        return `"${file.name}" is larger than ${MAX_FILE_MB} MB.`
-      }
+    }
+    if (totalMb > MAX_TOTAL_MB) {
+      return `The photos add up to ${totalMb.toFixed(1)} MB. The total can't be more than ${MAX_TOTAL_MB} MB – pick fewer or smaller photos.`
     }
     return ''
   }
@@ -65,7 +68,6 @@ export default function PhotoUploadForm({ onUploaded }) {
         const { error: dbError } = await supabase.from('photos').insert({
           storage_path: path,
           uploaded_by: uploadedBy.trim(),
-          caption: caption.trim() || null,
         })
         if (dbError) {
           console.error('Saving to database failed:', file.name, dbError)
@@ -93,15 +95,12 @@ export default function PhotoUploadForm({ onUploaded }) {
         : `${ok} uploaded, but ${failed.length} failed. Try the rest again.`,
     )
     setFiles([])
-    setCaption('')
-    if (onUploaded) onUploaded()
   }
 
   function reset() {
     setStatus('idle')
     setMessage('')
     setFiles([])
-    setCaption('')
     setProgress({ done: 0, total: 0 })
   }
 
@@ -110,7 +109,8 @@ export default function PhotoUploadForm({ onUploaded }) {
       <div className="upload-done">
         <p className="mb-2">{message}</p>
         <p className="text-muted mb-3">
-          The photos appear in the gallery once they've been approved.
+          The photos won't be shown on the site, but they may be used for the
+          celebration in different ways.
         </p>
         <Button variant="outline-primary" onClick={reset}>
           Upload more
@@ -132,16 +132,6 @@ export default function PhotoUploadForm({ onUploaded }) {
         />
       </Form.Group>
 
-      <Form.Group className="mb-3" controlId="upload-caption">
-        <Form.Label>Caption for the photos (optional)</Form.Label>
-        <Form.Control
-          type="text"
-          value={caption}
-          onChange={(e) => setCaption(e.target.value)}
-          placeholder='E.g. "From lunch on Friday"'
-        />
-      </Form.Group>
-
       <Form.Group className="mb-3" controlId="upload-files">
         <Form.Label>Choose photos</Form.Label>
         <Form.Control
@@ -151,22 +141,26 @@ export default function PhotoUploadForm({ onUploaded }) {
           onChange={handleFileChange}
         />
         <Form.Text>
-          Several at a time is fine. Max {MAX_FILES} photos, {MAX_FILE_MB} MB per
-          photo.
+          Up to {MAX_FILES} photos at a time, {MAX_TOTAL_MB} MB in total.
         </Form.Text>
       </Form.Group>
 
       {files.length > 0 && (
-        <ul className="upload-list">
-          {files.map((file, i) => (
-            <li key={i}>
-              {file.name}{' '}
-              <span className="text-muted">
-                ({(file.size / (1024 * 1024)).toFixed(1)} MB)
-              </span>
-            </li>
-          ))}
-        </ul>
+        <>
+          <ul className="upload-list">
+            {files.map((file, i) => (
+              <li key={i}>
+                {file.name}{' '}
+                <span className="text-muted">
+                  ({(file.size / (1024 * 1024)).toFixed(1)} MB)
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="upload-total text-muted">
+            Total: {totalMb.toFixed(1)} MB of {MAX_TOTAL_MB} MB
+          </p>
+        </>
       )}
 
       {message && (

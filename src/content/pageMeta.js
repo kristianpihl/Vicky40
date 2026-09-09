@@ -15,6 +15,6 @@ export const pageMeta = {
   '/oslo': { title: 'About Oslo' },
   '/oslo/bars': { title: 'Bars in Oslo' },
   '/faq': { title: 'Practical info' },
-  '/photos': { title: 'Photos' },
+  '/photos': { title: 'Upload photos' },
   '/promo-video': { title: 'Promo video' },
 }
