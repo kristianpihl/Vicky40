@@ -676,6 +676,166 @@ a.list-item:hover {
   color: #f3ede4;
 }
 
+/* --- Admin --- */
+.topbar-admin {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.topbar-admin:hover,
+.topbar-admin.active {
+  color: var(--color-primary-dark);
+}
+
+.admin-page {
+  max-width: 900px;
+}
+
+.admin-login-page {
+  max-width: 420px;
+}
+
+.admin-login-form {
+  margin-top: 1rem;
+}
+
+.admin-links {
+  max-width: 320px;
+  margin-top: 1.5rem;
+}
+
+.admin-logout {
+  padding: 0;
+  margin-top: 1rem;
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.admin-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.admin-back {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.admin-status {
+  color: var(--color-muted);
+  padding: 1rem 0;
+}
+
+.admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.admin-card {
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 1rem 1.15rem;
+  background-color: var(--color-bg);
+}
+
+.admin-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.admin-attendance {
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+.admin-date {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.admin-people {
+  margin: 0 0 0.5rem;
+  padding-left: 1.1rem;
+}
+
+.admin-people li {
+  margin-bottom: 0.2rem;
+}
+
+.admin-allergy {
+  color: var(--color-muted);
+}
+
+.admin-meta {
+  margin: 0.15rem 0 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.admin-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.admin-photo {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: var(--color-bg);
+}
+
+.admin-photo > a {
+  display: block;
+}
+
+.admin-photo img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+.admin-photo figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.6rem 0.7rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+.admin-photo-by {
+  font-weight: 600;
+}
+
+.admin-photo-caption {
+  color: var(--color-muted);
+}
+
+.admin-photo-dl {
+  margin-top: 0.15rem;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  text-decoration: none;
+}
+
 /* --- Footer --- */
 .footer {
   flex-shrink: 0;

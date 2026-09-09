@@ -8,11 +8,14 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
 
 import App from './App.jsx'
+import { AdminAuthProvider } from './components/AdminAuthProvider.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <AdminAuthProvider>
+        <App />
+      </AdminAuthProvider>
     </BrowserRouter>
   </React.StrictMode>,
 )
