@@ -102,6 +102,15 @@ const Dot = ({ on }) => (
   />
 )
 
+// "Active" = the current answer. "Replaced" = an older answer from the same
+// email that a newer submission has replaced.
+const StatusPill = ({ status }) =>
+  status === 'active' ? (
+    <span className="admin-pill admin-pill--active">Active</span>
+  ) : (
+    <span className="admin-pill admin-pill--replaced">Replaced</span>
+  )
+
 // Guest count per day, split by cabin / not cabin.
 function daySummary(guests) {
   const days = [
@@ -117,7 +126,7 @@ function daySummary(guests) {
   })
 }
 
-function GuestTable({ rows, muted }) {
+function GuestTable({ rows, muted, status }) {
   return (
     <div className={`admin-table-wrap${muted ? ' admin-table-wrap--muted' : ''}`}>
       <table className="admin-table">
@@ -133,6 +142,7 @@ function GuestTable({ rows, muted }) {
             <th>Phone number</th>
             <th>Registered by</th>
             <th>Comments</th>
+            <th className="admin-th-center">Status</th>
           </tr>
         </thead>
         <tbody>
@@ -154,6 +164,9 @@ function GuestTable({ rows, muted }) {
               <td className="admin-td-nowrap">{g.phone}</td>
               <td className="admin-td-nowrap">{g.registeredBy}</td>
               <td className="admin-td-comment">{g.comment}</td>
+              <td className="admin-td-center">
+                <StatusPill status={status} />
+              </td>
             </tr>
           ))}
         </tbody>
@@ -246,7 +259,7 @@ function AdminRsvpsInner() {
             ))}
           </div>
 
-          <GuestTable rows={currentGuests} />
+          <GuestTable rows={currentGuests} status="active" />
 
           {superseded.length > 0 && (
             <div className="admin-history">
@@ -264,7 +277,7 @@ function AdminRsvpsInner() {
                   <p className="admin-status">
                     These were replaced by a newer submission from the same email.
                   </p>
-                  <GuestTable rows={supersededGuests} muted />
+                  <GuestTable rows={supersededGuests} muted status="replaced" />
                 </>
               )}
             </div>

@@ -912,6 +912,24 @@ a.list-item:hover {
   color: var(--color-muted);
 }
 
+.admin-pill {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.admin-pill--active {
+  background-color: var(--color-yes);
+}
+
+.admin-pill--replaced {
+  background-color: var(--color-no);
+}
+
 .admin-photo-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
