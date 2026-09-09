@@ -6,8 +6,8 @@ import { site } from '../content/site.js'
 // (The gallery view lives in templates/GalleryTemplate.jsx if it is ever
 // wanted again.)
 //
-// Swap in your own image file, e.g. '/images/photos.jpg'
-const image = { src: '/images/artikkel.svg', alt: 'Photos' }
+// Save the file as public/images/photos.jpg (or change the name/path here).
+const image = { src: '/images/photos.jpg', alt: 'Young Vickie' }
 
 export default function Gallery() {
   return (

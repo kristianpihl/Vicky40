@@ -240,6 +240,9 @@ h4 {
 .side-image {
   width: 100%;
   height: auto;
+  max-height: 640px;
+  object-fit: cover;
+  object-position: center top;
   display: block;
   border-radius: 16px;
   border: 1px solid var(--color-border);

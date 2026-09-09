@@ -1,8 +1,8 @@
 import RsvpForm from '../forms/RsvpForm.jsx'
 import PageWithImage from '../components/PageWithImage.jsx'
 
-// Swap in your own image file, e.g. '/images/rsvp.jpg'
-const image = { src: '/images/artikkel.svg', alt: 'RSVP' }
+// Save the file as public/images/rsvp.jpg (or change the name/path here).
+const image = { src: '/images/rsvp.jpg', alt: 'Vickie as a child' }
 
 export default function Rsvp() {
   return (

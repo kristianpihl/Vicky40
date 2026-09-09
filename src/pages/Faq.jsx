@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom'
 import ArticleTemplate from '../templates/ArticleTemplate.jsx'
 
 // Practical info / frequently asked questions. Image on the left (like the front page).
-// Swap in your own image file, e.g. '/images/faq.jpg'
-const image = { src: '/images/artikkel.svg', alt: 'Practical info' }
+// Save the file as public/images/faq.jpg (or change the name/path here).
+const image = { src: '/images/faq.jpg', alt: 'Vickie as a baby' }
 
 export default function Faq() {
   return (
