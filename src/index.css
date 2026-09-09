@@ -734,54 +734,74 @@ a.list-item:hover {
   padding: 1rem 0;
 }
 
-.admin-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 1rem;
+/* RSVP table */
+.admin-page--wide {
+  max-width: 1200px;
 }
 
-.admin-card {
+.admin-table-wrap {
+  margin-top: 1rem;
+  overflow: auto;
   border: 1px solid var(--color-border);
   border-radius: 14px;
-  padding: 1rem 1.15rem;
+  box-shadow: 0 12px 30px -14px rgba(224, 122, 95, 0.28);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
   background-color: var(--color-bg);
 }
 
-.admin-card-top {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-bottom: 0.5rem;
+.admin-table thead th {
+  background-color: #2e2a33;
+  color: #f3ede4;
+  font-weight: 600;
+  text-align: left;
+  padding: 0.85rem 0.9rem;
+  white-space: nowrap;
 }
 
-.admin-attendance {
-  font-weight: 700;
+.admin-table thead th.admin-th-center {
+  text-align: center;
+}
+
+.admin-table tbody td {
+  padding: 0.7rem 0.9rem;
+  border-top: 1px solid var(--color-border);
+  vertical-align: top;
+}
+
+.admin-table tbody tr:hover td {
+  background-color: var(--color-surface);
+}
+
+.admin-td-date {
+  white-space: nowrap;
+  color: var(--color-muted);
+}
+
+.admin-td-name {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.admin-td-nowrap {
+  white-space: nowrap;
+}
+
+.admin-td-center {
+  text-align: center;
+}
+
+.admin-check {
   color: var(--color-primary-dark);
+  font-weight: 700;
 }
 
-.admin-date {
-  font-size: 0.85rem;
-  color: var(--color-muted);
-}
-
-.admin-people {
-  margin: 0 0 0.5rem;
-  padding-left: 1.1rem;
-}
-
-.admin-people li {
-  margin-bottom: 0.2rem;
-}
-
-.admin-allergy {
-  color: var(--color-muted);
-}
-
-.admin-meta {
-  margin: 0.15rem 0 0;
-  font-size: 0.9rem;
+.admin-td-comment {
+  min-width: 200px;
   color: var(--color-muted);
 }
 
