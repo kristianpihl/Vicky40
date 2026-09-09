@@ -25,8 +25,14 @@ export default function Topbar() {
               ))}
           </Nav>
 
-          {/* This can become a dedicated "Upload photos" button later. */}
-          <Button as={NavLink} to="/photos" variant="primary" className="topbar-cta">
+          {/* Only shown inside the mobile menu (d-lg-none). On desktop the
+              "Upload photos" button lives on the front page instead. */}
+          <Button
+            as={NavLink}
+            to="/photos"
+            variant="accent"
+            className="topbar-cta d-lg-none"
+          >
             Upload photos
           </Button>
         </Navbar.Collapse>

@@ -5,7 +5,8 @@ import SubpageButtons from '../components/SubpageButtons.jsx'
 
 // Front-page template: two columns on desktop, stacked on mobile.
 //   Left:   heading, then a large image.
-//   Right:  text, countdown, RSVP button, and buttons to the other pages.
+//   Right:  text, countdown, the two main buttons (RSVP + Upload photos),
+//           then buttons to the other pages.
 // The content itself (heading, image, text) is passed in as props from the page.
 export default function FrontTemplate({ heading, imageSrc, imageAlt, intro }) {
   return (
@@ -23,15 +24,27 @@ export default function FrontTemplate({ heading, imageSrc, imageAlt, intro }) {
 
           <Countdown />
 
-          <Button
-            as={Link}
-            to="/rsvp"
-            variant="primary"
-            size="lg"
-            className="front-rsvp w-100"
-          >
-            RSVP
-          </Button>
+          {/* The two prominent actions, grouped together right below the countdown. */}
+          <div className="front-cta d-grid gap-2">
+            <Button
+              as={Link}
+              to="/rsvp"
+              variant="primary"
+              size="lg"
+              className="front-rsvp"
+            >
+              RSVP
+            </Button>
+            <Button
+              as={Link}
+              to="/photos"
+              variant="accent"
+              size="lg"
+              className="front-upload"
+            >
+              Upload photos
+            </Button>
+          </div>
 
           <SubpageButtons />
         </Col>

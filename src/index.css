@@ -14,6 +14,8 @@
   --color-primary: #e07a5f;     /* warm terracotta – friendly and playful */
   --color-primary-dark: #c9634a;/* darker variant for hover */
   --color-accent: #81b29a;      /* matte sage green – secondary colour */
+  --color-accent-dark: #4f8574; /* stronger sage for the "Upload photos" button */
+  --color-accent-darker: #437060;/* its hover/active state */
   --color-highlight: #f2cc8f;   /* matte warm yellow – small details */
 
   /* --- Wire the palette into Bootstrap's variables --- */
@@ -83,14 +85,10 @@ h4 {
   color: var(--color-primary-dark);
 }
 
+/* The CTA only shows inside the mobile menu, stacked under the links. */
 .topbar-cta {
   white-space: nowrap;
-}
-
-@media (min-width: 992px) {
-  .topbar-cta {
-    margin-left: 1rem;
-  }
+  margin-top: 0.5rem;
 }
 
 /* --- Buttons (use the palette via Bootstrap 5.3 variables) --- */
@@ -101,6 +99,18 @@ h4 {
   --bs-btn-hover-border-color: var(--color-primary-dark);
   --bs-btn-active-bg: var(--color-primary-dark);
   --bs-btn-active-border-color: var(--color-primary-dark);
+  --bs-btn-color: #ffffff;
+  --bs-btn-hover-color: #ffffff;
+}
+
+/* "Upload photos" button – sage green, a step calmer than the RSVP button. */
+.btn-accent {
+  --bs-btn-bg: var(--color-accent-dark);
+  --bs-btn-border-color: var(--color-accent-dark);
+  --bs-btn-hover-bg: var(--color-accent-darker);
+  --bs-btn-hover-border-color: var(--color-accent-darker);
+  --bs-btn-active-bg: var(--color-accent-darker);
+  --bs-btn-active-border-color: var(--color-accent-darker);
   --bs-btn-color: #ffffff;
   --bs-btn-hover-color: #ffffff;
 }

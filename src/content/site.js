@@ -24,7 +24,9 @@ export const site = {
     { label: 'The venue', to: '/venue' },
     { label: 'Oslo', to: '/oslo' },
     { label: 'Practical info', to: '/faq' },
-    { label: 'Photos', to: '/photos' },
+    // Photos has its own "Upload photos" button on the front page (and in the
+    // mobile menu), so it is kept out of the link lists here.
+    { label: 'Photos', to: '/photos', hidden: true },
     { label: 'Promo video', to: '/promo-video', hidden: true },
   ],
 }
