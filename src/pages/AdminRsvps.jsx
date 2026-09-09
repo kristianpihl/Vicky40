@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Container, Button, Alert } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient.js'
@@ -65,11 +65,12 @@ function splitByEmail(submissions) {
   return { active, cancelled, superseded }
 }
 
-// One table row per person.
-function toGuestRows(submissions) {
+// One table row per person, tagged with a status.
+function toGuestRows(submissions, status) {
   const out = []
   for (const s of submissions) {
     const people = Array.isArray(s.people) ? s.people : []
+    const removedIdx = Array.isArray(s.removed_people) ? s.removed_people : []
     const registeredBy = people[0]?.name || '—'
     const registeredByEmail = s.contact_email || ''
     const flags = dayFlags(s)
@@ -80,8 +81,14 @@ function toGuestRows(submissions) {
           ? 'No'
           : '—'
     people.forEach((p, i) => {
+      // On active submissions, a person the admin has removed gets its own status.
+      const rowStatus =
+        status === 'active' && removedIdx.includes(i) ? 'removed' : status
       out.push({
         key: `${s.id}-${i}`,
+        submissionId: s.id,
+        personIndex: i,
+        status: rowStatus,
         date: s.created_at,
         name: p.name || '—',
         cabin,
@@ -107,9 +114,14 @@ const Dot = ({ on }) => (
   />
 )
 
-// "Active" = the current answer. "Cancelled" = the guest called it off.
-// "Replaced" = an older answer that a newer submission from the same email replaced.
+// Active   = the current answer.
+// Removed  = the admin took this person off the active list (undoable).
+// Cancelled = the guest called the whole RSVP off.
+// Replaced = an older answer a newer submission from the same email replaced.
 const StatusPill = ({ status }) => {
+  if (status === 'removed') {
+    return <span className="admin-pill admin-pill--removed">Removed</span>
+  }
   if (status === 'cancelled') {
     return <span className="admin-pill admin-pill--cancelled">Cancelled</span>
   }
@@ -134,7 +146,7 @@ function daySummary(guests) {
   })
 }
 
-function GuestTable({ rows, muted, status }) {
+function GuestTable({ rows, muted, onRemove, onRestore, busy }) {
   return (
     <div className={`admin-table-wrap${muted ? ' admin-table-wrap--muted' : ''}`}>
       <table className="admin-table">
@@ -155,30 +167,53 @@ function GuestTable({ rows, muted, status }) {
           </tr>
         </thead>
         <tbody>
-          {rows.map((g) => (
-            <tr key={g.key}>
-              <td className="admin-td-date">{formatDate(g.date)}</td>
-              <td className="admin-td-name">{g.name}</td>
-              <td className="admin-td-center">{g.cabin}</td>
-              <td className="admin-td-center">
-                {status === 'cancelled' ? '—' : <Dot on={g.thursday} />}
-              </td>
-              <td className="admin-td-center">
-                {status === 'cancelled' ? '—' : <Dot on={g.friday} />}
-              </td>
-              <td className="admin-td-center">
-                {status === 'cancelled' ? '—' : <Dot on={g.saturday} />}
-              </td>
-              <td>{g.allergies}</td>
-              <td className="admin-td-nowrap">{g.phone}</td>
-              <td className="admin-td-nowrap">{g.registeredBy}</td>
-              <td className="admin-td-email">{g.registeredByEmail}</td>
-              <td className="admin-td-comment">{g.comment}</td>
-              <td className="admin-td-center">
-                <StatusPill status={status} />
-              </td>
-            </tr>
-          ))}
+          {rows.map((g) => {
+            const noDots = g.status === 'cancelled' || g.status === 'removed'
+            return (
+              <tr key={g.key}>
+                <td className="admin-td-date">{formatDate(g.date)}</td>
+                <td className="admin-td-name">{g.name}</td>
+                <td className="admin-td-center">{g.cabin}</td>
+                <td className="admin-td-center">
+                  {noDots ? '—' : <Dot on={g.thursday} />}
+                </td>
+                <td className="admin-td-center">
+                  {noDots ? '—' : <Dot on={g.friday} />}
+                </td>
+                <td className="admin-td-center">
+                  {noDots ? '—' : <Dot on={g.saturday} />}
+                </td>
+                <td>{g.allergies}</td>
+                <td className="admin-td-nowrap">{g.phone}</td>
+                <td className="admin-td-nowrap">{g.registeredBy}</td>
+                <td className="admin-td-email">{g.registeredByEmail}</td>
+                <td className="admin-td-comment">{g.comment}</td>
+                <td className="admin-td-status">
+                  <StatusPill status={g.status} />
+                  {onRemove && g.status === 'active' && (
+                    <button
+                      type="button"
+                      className="admin-row-action"
+                      onClick={() => onRemove(g)}
+                      disabled={busy}
+                    >
+                      Remove
+                    </button>
+                  )}
+                  {onRestore && g.status === 'removed' && (
+                    <button
+                      type="button"
+                      className="admin-row-action"
+                      onClick={() => onRestore(g)}
+                      disabled={busy}
+                    >
+                      Undo
+                    </button>
+                  )}
+                </td>
+              </tr>
+            )
+          })}
         </tbody>
       </table>
     </div>
@@ -190,29 +225,53 @@ function AdminRsvpsInner() {
   const [rows, setRows] = useState(null)
   const [error, setError] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
+  const [busy, setBusy] = useState(false)
+
+  const load = useCallback(async () => {
+    const { data, error } = await supabase.rpc('admin_rsvps', { pass: password })
+    if (error) {
+      console.error('admin_rsvps failed:', error)
+      setError(true)
+      return
+    }
+    setError(false)
+    setRows(data || [])
+  }, [password])
 
   useEffect(() => {
-    let cancelled = false
-    supabase.rpc('admin_rsvps', { pass: password }).then(({ data, error }) => {
-      if (cancelled) return
-      if (error) {
-        console.error('admin_rsvps failed:', error)
-        setError(true)
-        return
-      }
-      setRows(data || [])
+    load()
+  }, [load])
+
+  async function setPersonRemoved(g, removed) {
+    setBusy(true)
+    const { error } = await supabase.rpc('admin_set_person_removed', {
+      pass: password,
+      rsvp_id: g.submissionId,
+      person_index: g.personIndex,
+      removed,
     })
-    return () => {
-      cancelled = true
+    if (error) {
+      console.error('admin_set_person_removed failed:', error)
+      window.alert('Could not save the change. Try again.')
+    } else {
+      await load()
     }
-  }, [password])
+    setBusy(false)
+  }
 
   const { active, cancelled, superseded } = rows
     ? splitByEmail(rows)
     : { active: [], cancelled: [], superseded: [] }
-  const activeGuests = toGuestRows(active)
-  const cancelledGuests = toGuestRows(cancelled)
-  const supersededGuests = toGuestRows(superseded)
+
+  const activeAll = toGuestRows(active, 'active')
+  const activeGuests = activeAll.filter((g) => g.status === 'active')
+  const removedGuests = activeAll.filter((g) => g.status === 'removed')
+  const cancelledGuests = toGuestRows(cancelled, 'cancelled')
+  const supersededGuests = toGuestRows(superseded, 'replaced')
+
+  const notComing = [...cancelledGuests, ...removedGuests].sort(
+    (a, b) => new Date(b.date) - new Date(a.date),
+  )
 
   return (
     <Container fluid className="page admin-page admin-page--wide">
@@ -246,7 +305,7 @@ function AdminRsvpsInner() {
             {activeGuests.length === 1 ? 'person' : 'people'} ·{' '}
             {active.length}{' '}
             {active.length === 1 ? 'submission' : 'submissions'}
-            {cancelled.length > 0 && ` · ${cancelled.length} cancelled`}
+            {notComing.length > 0 && ` · ${notComing.length} not coming`}
           </p>
 
           <div className="admin-summary">
@@ -271,12 +330,23 @@ function AdminRsvpsInner() {
             ))}
           </div>
 
-          <GuestTable rows={activeGuests} status="active" />
+          <GuestTable
+            rows={activeGuests}
+            busy={busy}
+            onRemove={(g) => setPersonRemoved(g, true)}
+          />
 
-          {cancelled.length > 0 && (
+          {notComing.length > 0 && (
             <div className="admin-history">
-              <h2 className="admin-subheading">Cancelled ({cancelled.length})</h2>
-              <GuestTable rows={cancelledGuests} status="cancelled" muted />
+              <h2 className="admin-subheading">
+                Not coming ({notComing.length})
+              </h2>
+              <GuestTable
+                rows={notComing}
+                muted
+                busy={busy}
+                onRestore={(g) => setPersonRemoved(g, false)}
+              />
             </div>
           )}
 
@@ -296,7 +366,7 @@ function AdminRsvpsInner() {
                   <p className="admin-status">
                     These were replaced by a newer submission from the same email.
                   </p>
-                  <GuestTable rows={supersededGuests} muted status="replaced" />
+                  <GuestTable rows={supersededGuests} muted />
                 </>
               )}
             </div>

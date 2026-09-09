@@ -932,6 +932,29 @@ a.list-item:hover {
   color: var(--color-muted);
 }
 
+.admin-td-status {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.admin-row-action {
+  display: block;
+  margin: 0.3rem auto 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.admin-row-action:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 .admin-td-email {
   max-width: 200px;
   overflow-wrap: anywhere;
@@ -954,6 +977,10 @@ a.list-item:hover {
 
 .admin-pill--cancelled {
   background-color: var(--color-muted);
+}
+
+.admin-pill--removed {
+  background-color: #a1743f;
 }
 
 .admin-pill--replaced {

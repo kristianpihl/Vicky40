@@ -64,6 +64,49 @@ begin
 end;
 $$;
 
+-- 5) Let the admin set aside / restore a single person inside an RSVP.
+--    "removed_people" holds the indexes (into that row's people array) that the
+--    admin has removed from the active list. Nothing is deleted – it's undoable.
+alter table public.rsvp
+  add column if not exists removed_people jsonb not null default '[]'::jsonb;
+
+create or replace function public.admin_set_person_removed(
+  pass text,
+  rsvp_id uuid,
+  person_index int,
+  removed boolean
+)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if pass is distinct from (select password from public.admin_config where id = 1) then
+    raise exception 'Wrong password';
+  end if;
+
+  if removed then
+    update public.rsvp
+    set removed_people =
+      case
+        when removed_people @> to_jsonb(person_index) then removed_people
+        else removed_people || to_jsonb(person_index)
+      end
+    where id = rsvp_id;
+  else
+    update public.rsvp
+    set removed_people = coalesce(
+      (select jsonb_agg(e)
+         from jsonb_array_elements(removed_people) e
+        where e <> to_jsonb(person_index)),
+      '[]'::jsonb)
+    where id = rsvp_id;
+  end if;
+end;
+$$;
+
 grant execute on function public.admin_login(text) to anon;
 grant execute on function public.admin_rsvps(text) to anon;
 grant execute on function public.admin_photos(text) to anon;
+grant execute on function public.admin_set_person_removed(text, uuid, int, boolean) to anon;
