@@ -1,19 +1,23 @@
-// "What's new" for guests. Newest entry first.
+// "What's new" for guests – a log of changes to the subpages.
 //
-// Add a line here whenever you change something guests should notice –
-// the programme, practical info, the venue, and so on.
+// One entry per change to a subpage (Programme, The venue, F&Q's, and any
+// new subpages added later). Newest entry first.
 //
-//   date: 'YYYY-MM-DD'   (required)
-//   text: 'What changed' (required)
-//   page: '/program'     (optional) – the subpage this change is about.
-//         When set, that page's button on the front page shows a small bell
-//         with a count for as long as the entry is less than 24 hours old.
-//         Use the same paths as in src/content/site.js, e.g.
-//         '/program', '/venue', '/faq'.
+//   date: 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:MM' – when it changed. Add the time
+//         part if you want a clock time on the updates page, e.g.
+//         '2026-09-09T14:30'.
+//   page: '/program'     – which subpage changed. Use the paths from
+//                          src/content/site.js: '/program', '/venue', '/faq'.
+//   text: 'What changed' – short note on what was added or changed
+//
+// Only entries pointing at a real, visible subpage are shown. If such an
+// entry is less than 24 hours old, that page's button on the front page
+// also gets a bell with a count.
 
 export const updates = [
   {
-    date: '2026-09-09',
-    text: 'The site is up. Programme and practical info will be filled in soon.',
+    date: '2026-09-09T18:00',
+    page: '/program',
+    text: 'Programme page started – the weekend plan will be filled in here.',
   },
 ]
