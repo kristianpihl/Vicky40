@@ -10,8 +10,11 @@ export const site = {
   // Order: year, month (0 = January, 1 = February ...), day, hour, minute.
   partyStart: new Date(2027, 1, 20, 18, 0, 0),
 
-  // The days people can sign up for. Used by the RSVP form.
-  partyDays: ['Thursday', 'Friday', 'Saturday', 'Sunday'],
+  // RSVP form options.
+  // arrivalDays: when someone sleeping at the cabin can arrive (pick one).
+  // eventDays:   which events a day guest can join (pick any).
+  arrivalDays: ['Thursday', 'Friday', 'Saturday'],
+  eventDays: ['Friday', 'Saturday'],
 
   // The links in the top bar and the front-page buttons.
   // Add `hidden: true` to a link to take it out of both places without

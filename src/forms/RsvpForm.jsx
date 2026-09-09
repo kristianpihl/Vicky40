@@ -3,10 +3,13 @@ import { Form, Button, Row, Col, Card, Alert } from 'react-bootstrap'
 import { supabase } from '../lib/supabaseClient.js'
 import { site } from '../content/site.js'
 
-const emptyPerson = () => ({ name: '', days: [], allergies: '' })
+const emptyPerson = () => ({ name: '', phone: '', allergies: '' })
 
 export default function RsvpForm() {
   const [people, setPeople] = useState([emptyPerson()])
+  const [sleeping, setSleeping] = useState('') // '' | 'yes' | 'no'
+  const [arrivalDay, setArrivalDay] = useState('') // one of site.arrivalDays
+  const [events, setEvents] = useState([]) // subset of site.eventDays
   const [email, setEmail] = useState('')
   const [comment, setComment] = useState('')
   const [status, setStatus] = useState('idle') // idle | submitting | success | error
@@ -17,26 +20,35 @@ export default function RsvpForm() {
       prev.map((p, i) => (i === index ? { ...p, [field]: value } : p)),
     )
 
-  const toggleDay = (index, day) =>
-    setPeople((prev) =>
-      prev.map((p, i) => {
-        if (i !== index) return p
-        const has = p.days.includes(day)
-        return {
-          ...p,
-          days: has ? p.days.filter((d) => d !== day) : [...p.days, day],
-        }
-      }),
-    )
-
   const addPerson = () => setPeople((prev) => [...prev, emptyPerson()])
   const removePerson = (index) =>
     setPeople((prev) => prev.filter((_, i) => i !== index))
 
+  // Switching the "sleeping at the cabin?" answer clears the other branch.
+  function chooseSleeping(value) {
+    setSleeping(value)
+    if (value === 'yes') setEvents([])
+    if (value === 'no') setArrivalDay('')
+  }
+
+  const toggleEvent = (day) =>
+    setEvents((prev) =>
+      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day],
+    )
+
   function validate() {
     for (const p of people) {
       if (!p.name.trim()) return 'Everyone needs a name.'
-      if (p.days.length === 0) return 'Pick at least one day for each person.'
+      if (!p.phone.trim()) return 'Everyone needs a phone number.'
+    }
+    if (sleeping !== 'yes' && sleeping !== 'no') {
+      return 'Please answer whether you are sleeping at the cabin.'
+    }
+    if (sleeping === 'yes' && !arrivalDay) {
+      return 'Please choose when you are arriving.'
+    }
+    if (sleeping === 'no' && events.length === 0) {
+      return 'Please choose at least one event.'
     }
     if (email && !email.includes('@')) {
       return 'Please check that the email address looks right.'
@@ -58,9 +70,12 @@ export default function RsvpForm() {
     const payload = {
       contact_email: email.trim() || null,
       comment: comment.trim() || null,
+      sleeping_at_cabin: sleeping === 'yes',
+      arrival_day: sleeping === 'yes' ? arrivalDay : null,
+      events: sleeping === 'no' ? events : null,
       people: people.map((p) => ({
         name: p.name.trim(),
-        days: p.days,
+        phone: p.phone.trim(),
         allergies: p.allergies.trim() || null,
       })),
     }
@@ -76,6 +91,9 @@ export default function RsvpForm() {
 
   function reset() {
     setPeople([emptyPerson()])
+    setSleeping('')
+    setArrivalDay('')
+    setEvents([])
     setEmail('')
     setComment('')
     setStatus('idle')
@@ -115,7 +133,7 @@ export default function RsvpForm() {
             </div>
 
             <Form.Group className="mb-3" controlId={`rsvp-name-${index}`}>
-              <Form.Label>Full name</Form.Label>
+              <Form.Label>Write in your full name</Form.Label>
               <Form.Control
                 type="text"
                 value={person.name}
@@ -125,25 +143,19 @@ export default function RsvpForm() {
               />
             </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Which days?</Form.Label>
-              <div className="rsvp-days">
-                {site.partyDays.map((day) => (
-                  <Form.Check
-                    inline
-                    key={day}
-                    type="checkbox"
-                    id={`rsvp-day-${index}-${day}`}
-                    label={day}
-                    checked={person.days.includes(day)}
-                    onChange={() => toggleDay(index, day)}
-                  />
-                ))}
-              </div>
+            <Form.Group className="mb-3" controlId={`rsvp-phone-${index}`}>
+              <Form.Label>Phone number</Form.Label>
+              <Form.Control
+                type="tel"
+                value={person.phone}
+                onChange={(e) => updatePerson(index, 'phone', e.target.value)}
+                placeholder="+47 900 00 000"
+                required
+              />
             </Form.Group>
 
             <Form.Group controlId={`rsvp-allergies-${index}`}>
-              <Form.Label>Allergies or dietary needs (optional)</Form.Label>
+              <Form.Label>Do you have any allergies?</Form.Label>
               <Form.Control
                 as="textarea"
                 rows={2}
@@ -151,7 +163,7 @@ export default function RsvpForm() {
                 onChange={(e) =>
                   updatePerson(index, 'allergies', e.target.value)
                 }
-                placeholder="E.g. nut allergy, vegetarian, lactose intolerant"
+                placeholder="E.g. nut allergy, vegetarian, lactose intolerant – leave blank if none"
               />
             </Form.Group>
           </Card.Body>
@@ -166,6 +178,71 @@ export default function RsvpForm() {
       >
         + Add a person
       </Button>
+
+      <div className="rsvp-section">
+        <Form.Group className="mb-3">
+          <Form.Label>Are you sleeping at the cabin?</Form.Label>
+          <div className="rsvp-days">
+            <Form.Check
+              inline
+              type="radio"
+              name="sleeping"
+              id="rsvp-sleeping-yes"
+              label="Yes"
+              checked={sleeping === 'yes'}
+              onChange={() => chooseSleeping('yes')}
+            />
+            <Form.Check
+              inline
+              type="radio"
+              name="sleeping"
+              id="rsvp-sleeping-no"
+              label="No"
+              checked={sleeping === 'no'}
+              onChange={() => chooseSleeping('no')}
+            />
+          </div>
+        </Form.Group>
+
+        {sleeping === 'yes' && (
+          <Form.Group className="mb-3">
+            <Form.Label>When are you arriving?</Form.Label>
+            <div className="rsvp-days">
+              {site.arrivalDays.map((day) => (
+                <Form.Check
+                  inline
+                  key={day}
+                  type="radio"
+                  name="arrivalDay"
+                  id={`rsvp-arrival-${day}`}
+                  label={day}
+                  checked={arrivalDay === day}
+                  onChange={() => setArrivalDay(day)}
+                />
+              ))}
+            </div>
+          </Form.Group>
+        )}
+
+        {sleeping === 'no' && (
+          <Form.Group className="mb-3">
+            <Form.Label>Which events are you joining?</Form.Label>
+            <div className="rsvp-days">
+              {site.eventDays.map((day) => (
+                <Form.Check
+                  inline
+                  key={day}
+                  type="checkbox"
+                  id={`rsvp-event-${day}`}
+                  label={day}
+                  checked={events.includes(day)}
+                  onChange={() => toggleEvent(day)}
+                />
+              ))}
+            </div>
+          </Form.Group>
+        )}
+      </div>
 
       <Row className="g-3 mt-2">
         <Col xs={12}>
@@ -201,8 +278,8 @@ export default function RsvpForm() {
       {status === 'error' && (
         <Alert variant="danger" className="mt-3">
           Something went wrong while submitting. Try again in a moment. If it
-          keeps happening, check that the <code>rsvp</code> table has been
-          created in Supabase (see <code>supabase/rsvp.sql</code>).
+          keeps happening, check that the <code>rsvp</code> table in Supabase has
+          the latest columns (run <code>supabase/rsvp.sql</code> again).
         </Alert>
       )}
 

@@ -465,6 +465,13 @@ a.list-item:hover {
   padding-top: 0.25rem;
 }
 
+/* The single questions after the people section (cabin / arrival / events). */
+.rsvp-section {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
 .rsvp-add {
   margin-bottom: 0.5rem;
 }

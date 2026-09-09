@@ -6,8 +6,8 @@ export default function Rsvp() {
     <Container className="page rsvp-page">
       <h1>RSVP</h1>
       <p className="page-lead">
-        Enter your name and which days you're joining. You can sign up several
-        people in the same form.
+        Let us know who's coming and when. You can sign up several people in the
+        same form.
       </p>
       <RsvpForm />
     </Container>
