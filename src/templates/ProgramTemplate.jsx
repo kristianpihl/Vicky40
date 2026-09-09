@@ -1,11 +1,14 @@
 import { Container } from 'react-bootstrap'
 import { program } from '../content/program.js'
+import PageWithImage from '../components/PageWithImage.jsx'
 
 // Programme view: one section per day, with a timeline of events beneath.
 // Data comes from src/content/program.js (can be overridden with a prop).
-export default function ProgramTemplate({ days = program }) {
-  return (
-    <Container className="page program-page">
+// Pass `sideImage={{ src, alt }}` to show a picture in a left column,
+// like the front page (it moves above the content on mobile).
+export default function ProgramTemplate({ days = program, sideImage }) {
+  const content = (
+    <>
       <h1 className="program-title">Programme</h1>
       <p className="page-lead">
         Here's what's happening, when and where, day by day.
@@ -40,6 +43,12 @@ export default function ProgramTemplate({ days = program }) {
           )}
         </section>
       ))}
-    </Container>
+    </>
   )
+
+  if (sideImage) {
+    return <PageWithImage image={sideImage}>{content}</PageWithImage>
+  }
+
+  return <Container className="page program-page">{content}</Container>
 }

@@ -233,6 +233,15 @@ h4 {
   white-space: nowrap;
 }
 
+/* --- Page with a side image (same idea as the front page) --- */
+.side-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+}
+
 /* --- Article template --- */
 .article {
   max-width: 820px;

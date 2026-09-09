@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom'
 import ArticleTemplate from '../templates/ArticleTemplate.jsx'
 
-// Practical info / frequently asked questions. Uses the article template with no top image.
+// Practical info / frequently asked questions. Image on the left (like the front page).
+// Swap in your own image file, e.g. '/images/faq.jpg'
+const image = { src: '/images/artikkel.svg', alt: 'Practical info' }
+
 export default function Faq() {
   return (
-    <ArticleTemplate title="Practical info">
+    <ArticleTemplate title="Practical info" sideImage={image}>
       <h2>When and where is the party?</h2>
       <p>
         [Date] from [time], at [venue/address]. See the{' '}
