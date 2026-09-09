@@ -13,16 +13,18 @@ export const site = {
   // The days people can sign up for. Used by the RSVP form.
   partyDays: ['Thursday', 'Friday', 'Saturday', 'Sunday'],
 
-  // The links in the top bar. Add or remove as you like –
-  // keep the list short; the rest is reachable from the front page anyway.
+  // The links in the top bar and the front-page buttons.
+  // Add `hidden: true` to a link to take it out of both places without
+  // removing the page (you can still reach it by URL). Delete the flag to
+  // bring the link back.
   navLinks: [
     { label: 'Programme', to: '/program' },
-    { label: 'Guests', to: '/guests' },
-    { label: "Who's coming when", to: '/who-is-coming-when' },
+    { label: 'Guests', to: '/guests', hidden: true },
+    { label: "Who's coming when", to: '/who-is-coming-when', hidden: true },
     { label: 'The venue', to: '/venue' },
     { label: 'Oslo', to: '/oslo' },
     { label: 'Practical info', to: '/faq' },
     { label: 'Photos', to: '/photos' },
-    { label: 'Promo video', to: '/promo-video' },
+    { label: 'Promo video', to: '/promo-video', hidden: true },
   ],
 }

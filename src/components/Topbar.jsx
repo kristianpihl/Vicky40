@@ -16,11 +16,13 @@ export default function Topbar() {
 
         <Navbar.Collapse id="main-menu">
           <Nav className="me-auto">
-            {site.navLinks.map((link) => (
-              <Nav.Link key={link.to} as={NavLink} to={link.to}>
-                {link.label}
-              </Nav.Link>
-            ))}
+            {site.navLinks
+              .filter((link) => !link.hidden)
+              .map((link) => (
+                <Nav.Link key={link.to} as={NavLink} to={link.to}>
+                  {link.label}
+                </Nav.Link>
+              ))}
           </Nav>
 
           {/* This can become a dedicated "Upload photos" button later. */}
