@@ -44,6 +44,37 @@ create policy "Anyone can upload to photos"
   on storage.objects for insert to anon
   with check (bucket_id = 'photos');
 
+-- Admin photo deletion. The admin_delete_photo RPC (see admin.sql) removes the
+-- public.photos row first; the app then deletes the file here. This policy only
+-- allows deleting a 'photos' file that has NO matching photos row, so the anon
+-- key on its own can't wipe real photos. photo_exists() is SECURITY DEFINER so
+-- it sees every row, not just approved ones.
+create or replace function public.photo_exists(path text)
+returns boolean
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select exists (select 1 from public.photos where storage_path = path);
+$$;
+
+grant execute on function public.photo_exists(text) to anon;
+
+grant delete on storage.objects to anon;
+
+-- The Storage API needs to be able to SELECT an object before it can remove it.
+-- The 'photos' bucket is public anyway, so this exposes nothing new.
+drop policy if exists "Read photos objects" on storage.objects;
+create policy "Read photos objects"
+  on storage.objects for select to anon
+  using (bucket_id = 'photos');
+
+drop policy if exists "Delete orphaned photos" on storage.objects;
+create policy "Delete orphaned photos"
+  on storage.objects for delete to anon
+  using (bucket_id = 'photos' and not public.photo_exists(name));
+
 -- --------------------------------------------------------------------
 -- How to approve photos for the gallery:
 --   In the Table editor: set "approved" to true on the rows you want to show.

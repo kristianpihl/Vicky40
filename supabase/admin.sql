@@ -213,27 +213,22 @@ begin
 end;
 $$;
 
--- 9) Delete one uploaded photo: removes the file from the bucket AND the
---    row from the photos table. Password-checked, nothing is recoverable.
+-- 9) Delete one uploaded photo's metadata row. Password-checked.
+--    The actual file is removed from the bucket by the app afterwards, via the
+--    Storage API (Postgres blocks a direct DELETE on storage.objects). The
+--    "Delete orphaned photos" storage policy in photos.sql then allows it,
+--    because the row this function deletes is gone by that point.
 create or replace function public.admin_delete_photo(email text, pass text, photo_id uuid)
 returns void
 language plpgsql
 security definer
 set search_path = public
 as $$
-declare
-  p text;
 begin
   if not public.admin_ok(email, pass) then
     raise exception 'Wrong username or password';
   end if;
 
-  select storage_path into p from public.photos where id = photo_id;
-  if p is null then
-    raise exception 'Photo not found';
-  end if;
-
-  delete from storage.objects where bucket_id = 'photos' and name = p;
   delete from public.photos where id = photo_id;
 end;
 $$;

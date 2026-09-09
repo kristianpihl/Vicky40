@@ -125,19 +125,30 @@ function AdminPhotosInner() {
     if (!ok) return
 
     setDeletingId(row.id)
+
+    // 1) Remove the metadata row (password-checked, server side).
     const { error } = await supabase.rpc('admin_delete_photo', {
       email,
       pass: password,
       photo_id: row.id,
     })
-    setDeletingId(null)
-
     if (error) {
+      setDeletingId(null)
       console.error('admin_delete_photo failed:', error)
       window.alert('Could not delete the photo. Please try again.')
       return
     }
 
+    // 2) Now the file has no row, so it can be removed from the bucket.
+    //    Best effort – if this fails the file is just an unused leftover.
+    const { error: fileError } = await supabase.storage
+      .from('photos')
+      .remove([row.storage_path])
+    if (fileError) {
+      console.error('storage remove failed (row already deleted):', fileError)
+    }
+
+    setDeletingId(null)
     setRows((cur) => (cur ? cur.filter((r) => r.id !== row.id) : cur))
     fetchStats()
   }
