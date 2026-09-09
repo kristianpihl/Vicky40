@@ -1,41 +1,16 @@
-import { Navbar, Nav, Container, Button } from 'react-bootstrap'
+import { Navbar, Container } from 'react-bootstrap'
 import { NavLink } from 'react-router-dom'
 import { site } from '../content/site.js'
 
-// Top bar that stays in view when you scroll. Collapses to a "hamburger" menu
-// on mobile. The links are controlled from src/content/site.js.
+// Minimal top bar: just the name, sticky at the top. No menu.
+// All navigation lives on the front page (the name links back there).
 export default function Topbar() {
   return (
-    <Navbar expand="lg" sticky="top" className="topbar">
+    <Navbar sticky="top" className="topbar">
       <Container>
         <Navbar.Brand as={NavLink} to="/" className="topbar-brand">
           {site.personName} <span className="topbar-brand-age">40</span>
         </Navbar.Brand>
-
-        <Navbar.Toggle aria-controls="main-menu" />
-
-        <Navbar.Collapse id="main-menu">
-          <Nav className="me-auto">
-            {site.navLinks
-              .filter((link) => !link.hidden)
-              .map((link) => (
-                <Nav.Link key={link.to} as={NavLink} to={link.to}>
-                  {link.label}
-                </Nav.Link>
-              ))}
-          </Nav>
-
-          {/* Only shown inside the mobile menu (d-lg-none). On desktop the
-              "Upload photos" button lives on the front page instead. */}
-          <Button
-            as={NavLink}
-            to="/photos"
-            variant="accent"
-            className="topbar-cta d-lg-none"
-          >
-            Upload photos
-          </Button>
-        </Navbar.Collapse>
       </Container>
     </Navbar>
   )

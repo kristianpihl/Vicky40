@@ -76,21 +76,6 @@ h4 {
   color: var(--color-primary);
 }
 
-.topbar .nav-link {
-  color: var(--color-text);
-  font-weight: 500;
-}
-
-.topbar .nav-link.active {
-  color: var(--color-primary-dark);
-}
-
-/* The CTA only shows inside the mobile menu, stacked under the links. */
-.topbar-cta {
-  white-space: nowrap;
-  margin-top: 0.5rem;
-}
-
 /* --- Buttons (use the palette via Bootstrap 5.3 variables) --- */
 .btn-primary {
   --bs-btn-bg: var(--color-primary);
