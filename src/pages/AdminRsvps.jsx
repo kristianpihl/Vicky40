@@ -188,17 +188,26 @@ const StatusPill = ({ status }) => {
 }
 
 // Guest count per day, split by cabin / not cabin.
+// The three days are Thursday–Saturday leading up to (and including) site.partyStart:
+// Saturday = the party day, Friday = day before, Thursday = two days before.
 function daySummary(guests) {
   const days = [
     ['Thursday', 'thursday'],
     ['Friday', 'friday'],
     ['Saturday', 'saturday'],
   ]
-  return days.map(([label, key]) => {
+  return days.map(([label, key], i) => {
+    const d = new Date(site.partyStart)
+    d.setDate(d.getDate() + (i - 2))
+    const dd = String(d.getDate()).padStart(2, '0')
+    const mm = String(d.getMonth() + 1).padStart(2, '0')
+    const yy = String(d.getFullYear()).slice(-2)
+    const date = `${dd}.${mm}.${yy}`
+
     const present = guests.filter((g) => g[key])
     const cabin = present.filter((g) => g.sleepsAtCabin === true).length
     const nonCabin = present.filter((g) => g.sleepsAtCabin === false).length
-    return { label, cabin, nonCabin, total: cabin + nonCabin }
+    return { label, date, cabin, nonCabin, total: cabin + nonCabin }
   })
 }
 
@@ -563,10 +572,16 @@ function AdminRsvpsInner() {
             />
           </div>
 
+          <h2 className="admin-section-title">
+            Guests per day and choice of stay
+          </h2>
+
           <div className="admin-summary">
             {daySummary(activeGuests).map((d) => (
               <div className="admin-day-card" key={d.label}>
-                <span className="admin-day-card__name">{d.label}</span>
+                <span className="admin-day-card__name">
+                  {d.label} {d.date}
+                </span>
                 <div className="admin-day-card__stats">
                   <div className="admin-stat">
                     <span className="admin-stat__num">{d.cabin}</span>
@@ -585,12 +600,17 @@ function AdminRsvpsInner() {
             ))}
           </div>
 
-          <GuestTable
-            rows={activeGuests}
-            busy={busy}
-            onRemove={(g) => setPersonRemoved(g, true)}
-            onSave={saveRow}
-          />
+          <div className="admin-history">
+            <h2 className="admin-subheading">
+              Coming ({activeGuests.length})
+            </h2>
+            <GuestTable
+              rows={activeGuests}
+              busy={busy}
+              onRemove={(g) => setPersonRemoved(g, true)}
+              onSave={saveRow}
+            />
+          </div>
 
           {notComing.length > 0 && (
             <div className="admin-history">
