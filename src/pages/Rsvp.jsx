@@ -10,7 +10,8 @@ export default function Rsvp() {
       <h1>RSVP</h1>
       <p className="page-lead">
         Let us know who's coming and when. You can sign up several people in the
-        same form.
+        same form. Already signed up and something changed? Just submit again –
+        we'll use your most recent answer.
       </p>
       <RsvpForm />
     </PageWithImage>

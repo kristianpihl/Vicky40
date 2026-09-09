@@ -37,6 +37,31 @@ function dayFlags(row) {
   return { thursday: false, friday: false, saturday: false }
 }
 
+// If the same email sends the form more than once, the newest submission is the
+// valid one ("current"); the earlier ones are kept as history ("superseded").
+// Submissions without an email can't be matched, so each stands on its own.
+function splitByEmail(submissions) {
+  const groups = new Map()
+  for (const s of submissions) {
+    const email = (s.contact_email || '').trim().toLowerCase()
+    const key = email || `__id__${s.id}`
+    if (!groups.has(key)) groups.set(key, [])
+    groups.get(key).push(s)
+  }
+
+  const byDateDesc = (a, b) => new Date(b.created_at) - new Date(a.created_at)
+  const current = []
+  const superseded = []
+  for (const list of groups.values()) {
+    list.sort(byDateDesc)
+    current.push(list[0])
+    superseded.push(...list.slice(1))
+  }
+  current.sort(byDateDesc)
+  superseded.sort(byDateDesc)
+  return { current, superseded }
+}
+
 // One table row per person.
 function toGuestRows(submissions) {
   const out = []
@@ -92,10 +117,56 @@ function daySummary(guests) {
   })
 }
 
+function GuestTable({ rows, muted }) {
+  return (
+    <div className={`admin-table-wrap${muted ? ' admin-table-wrap--muted' : ''}`}>
+      <table className="admin-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Full name</th>
+            <th className="admin-th-center">Cabin</th>
+            <th className="admin-th-center">Thursday</th>
+            <th className="admin-th-center">Friday</th>
+            <th className="admin-th-center">Saturday</th>
+            <th>Allergies</th>
+            <th>Phone number</th>
+            <th>Registered by</th>
+            <th>Comments</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((g) => (
+            <tr key={g.key}>
+              <td className="admin-td-date">{formatDate(g.date)}</td>
+              <td className="admin-td-name">{g.name}</td>
+              <td className="admin-td-center">{g.cabin}</td>
+              <td className="admin-td-center">
+                <Dot on={g.thursday} />
+              </td>
+              <td className="admin-td-center">
+                <Dot on={g.friday} />
+              </td>
+              <td className="admin-td-center">
+                <Dot on={g.saturday} />
+              </td>
+              <td>{g.allergies}</td>
+              <td className="admin-td-nowrap">{g.phone}</td>
+              <td className="admin-td-nowrap">{g.registeredBy}</td>
+              <td className="admin-td-comment">{g.comment}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
 function AdminRsvpsInner() {
   const { password, logout } = useAdminAuth()
   const [rows, setRows] = useState(null)
   const [error, setError] = useState(false)
+  const [showHistory, setShowHistory] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -113,7 +184,11 @@ function AdminRsvpsInner() {
     }
   }, [password])
 
-  const guests = rows ? toGuestRows(rows) : []
+  const { current, superseded } = rows
+    ? splitByEmail(rows)
+    : { current: [], superseded: [] }
+  const currentGuests = toGuestRows(current)
+  const supersededGuests = toGuestRows(superseded)
 
   return (
     <Container className="page admin-page admin-page--wide">
@@ -143,12 +218,14 @@ function AdminRsvpsInner() {
       {!error && rows && rows.length > 0 && (
         <>
           <p className="page-lead">
-            {rows.length} {rows.length === 1 ? 'submission' : 'submissions'} ·{' '}
-            {guests.length} {guests.length === 1 ? 'person' : 'people'} in total
+            {currentGuests.length}{' '}
+            {currentGuests.length === 1 ? 'person' : 'people'} ·{' '}
+            {current.length}{' '}
+            {current.length === 1 ? 'submission' : 'submissions'}
           </p>
 
           <div className="admin-summary">
-            {daySummary(guests).map((d) => (
+            {daySummary(currentGuests).map((d) => (
               <div className="admin-day-card" key={d.label}>
                 <span className="admin-day-card__name">{d.label}</span>
                 <div className="admin-day-card__stats">
@@ -169,46 +246,29 @@ function AdminRsvpsInner() {
             ))}
           </div>
 
-          <div className="admin-table-wrap">
-            <table className="admin-table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Full name</th>
-                  <th className="admin-th-center">Cabin</th>
-                  <th className="admin-th-center">Thursday</th>
-                  <th className="admin-th-center">Friday</th>
-                  <th className="admin-th-center">Saturday</th>
-                  <th>Allergies</th>
-                  <th>Phone number</th>
-                  <th>Registered by</th>
-                  <th>Comments</th>
-                </tr>
-              </thead>
-              <tbody>
-                {guests.map((g) => (
-                  <tr key={g.key}>
-                    <td className="admin-td-date">{formatDate(g.date)}</td>
-                    <td className="admin-td-name">{g.name}</td>
-                    <td className="admin-td-center">{g.cabin}</td>
-                    <td className="admin-td-center">
-                      <Dot on={g.thursday} />
-                    </td>
-                    <td className="admin-td-center">
-                      <Dot on={g.friday} />
-                    </td>
-                    <td className="admin-td-center">
-                      <Dot on={g.saturday} />
-                    </td>
-                    <td>{g.allergies}</td>
-                    <td className="admin-td-nowrap">{g.phone}</td>
-                    <td className="admin-td-nowrap">{g.registeredBy}</td>
-                    <td className="admin-td-comment">{g.comment}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <GuestTable rows={currentGuests} />
+
+          {superseded.length > 0 && (
+            <div className="admin-history">
+              <button
+                type="button"
+                className="admin-history-toggle"
+                onClick={() => setShowHistory((v) => !v)}
+              >
+                {showHistory ? 'Hide' : 'Show'} earlier versions (
+                {superseded.length})
+              </button>
+
+              {showHistory && (
+                <>
+                  <p className="admin-status">
+                    These were replaced by a newer submission from the same email.
+                  </p>
+                  <GuestTable rows={supersededGuests} muted />
+                </>
+              )}
+            </div>
+          )}
         </>
       )}
     </Container>

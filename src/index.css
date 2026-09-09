@@ -814,6 +814,35 @@ a.list-item:hover {
   box-shadow: 0 12px 30px -14px rgba(224, 122, 95, 0.28);
 }
 
+/* Earlier (replaced) submissions – shown dimmer behind a toggle. */
+.admin-history {
+  margin-top: 1.25rem;
+}
+
+.admin-history-toggle {
+  padding: 0.5rem 0.95rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background-color: var(--color-bg);
+  color: var(--color-primary-dark);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-history-toggle:hover {
+  border-color: var(--color-primary);
+}
+
+.admin-table-wrap--muted {
+  box-shadow: none;
+  opacity: 0.72;
+}
+
+.admin-table-wrap--muted .admin-table thead th {
+  background-color: #55505c;
+}
+
 .admin-table {
   width: 100%;
   border-collapse: collapse;
