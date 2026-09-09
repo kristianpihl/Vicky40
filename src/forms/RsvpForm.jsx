@@ -50,7 +50,10 @@ export default function RsvpForm() {
     if (sleeping === 'no' && events.length === 0) {
       return 'Please choose at least one event.'
     }
-    if (email && !email.includes('@')) {
+    if (!email.trim()) {
+      return 'Please enter your email.'
+    }
+    if (!email.includes('@')) {
       return 'Please check that the email address looks right.'
     }
     return ''
@@ -68,7 +71,7 @@ export default function RsvpForm() {
     setStatus('submitting')
 
     const payload = {
-      contact_email: email.trim() || null,
+      contact_email: email.trim(),
       comment: comment.trim() || null,
       sleeping_at_cabin: sleeping === 'yes',
       arrival_day: sleeping === 'yes' ? arrivalDay : null,
@@ -247,12 +250,13 @@ export default function RsvpForm() {
       <Row className="g-3 mt-2">
         <Col xs={12}>
           <Form.Group controlId="rsvp-email">
-            <Form.Label>Email (optional)</Form.Label>
+            <Form.Label>Email</Form.Label>
             <Form.Control
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="so we can reach you with questions"
+              required
             />
           </Form.Group>
         </Col>
