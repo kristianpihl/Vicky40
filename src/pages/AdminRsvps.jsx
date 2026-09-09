@@ -56,6 +56,7 @@ function toGuestRows(submissions) {
         date: s.created_at,
         name: p.name || '—',
         cabin,
+        sleepsAtCabin: s.sleeping_at_cabin,
         ...flags,
         allergies: p.allergies || '',
         phone: p.phone || '',
@@ -75,6 +76,21 @@ const Dot = ({ on }) => (
     className={`admin-dot ${on ? 'admin-dot--yes' : 'admin-dot--no'}`}
   />
 )
+
+// Guest count per day, split by cabin / not cabin.
+function daySummary(guests) {
+  const days = [
+    ['Thursday', 'thursday'],
+    ['Friday', 'friday'],
+    ['Saturday', 'saturday'],
+  ]
+  return days.map(([label, key]) => {
+    const present = guests.filter((g) => g[key])
+    const cabin = present.filter((g) => g.sleepsAtCabin === true).length
+    const nonCabin = present.filter((g) => g.sleepsAtCabin === false).length
+    return { label, cabin, nonCabin, total: cabin + nonCabin }
+  })
+}
 
 function AdminRsvpsInner() {
   const { password, logout } = useAdminAuth()
@@ -130,6 +146,28 @@ function AdminRsvpsInner() {
             {rows.length} {rows.length === 1 ? 'submission' : 'submissions'} ·{' '}
             {guests.length} {guests.length === 1 ? 'person' : 'people'} in total
           </p>
+
+          <div className="admin-summary">
+            {daySummary(guests).map((d) => (
+              <div className="admin-day-card" key={d.label}>
+                <span className="admin-day-card__name">{d.label}</span>
+                <div className="admin-day-card__stats">
+                  <div className="admin-stat">
+                    <span className="admin-stat__num">{d.cabin}</span>
+                    <span className="admin-stat__label">Cabin</span>
+                  </div>
+                  <div className="admin-stat">
+                    <span className="admin-stat__num">{d.nonCabin}</span>
+                    <span className="admin-stat__label">Non-cabin</span>
+                  </div>
+                  <div className="admin-stat admin-stat--total">
+                    <span className="admin-stat__num">{d.total}</span>
+                    <span className="admin-stat__label">Total</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
 
           <div className="admin-table-wrap">
             <table className="admin-table">
