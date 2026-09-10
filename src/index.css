@@ -1219,64 +1219,122 @@ a.oslo-card:hover {
 }
 
 .admin-nav {
-  flex: 0 0 12rem;
+  flex: 0 0 13.5rem;
   position: sticky;
   top: 1.75rem;
   display: flex;
   flex-direction: column;
+  min-height: calc(100vh - 3.5rem);
+  padding: 0 0 0.75rem;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: 0 12px 34px -20px rgba(38, 34, 35, 0.3);
+  overflow: hidden;
 }
 
-.admin-nav__title {
-  padding: 0 0.75rem 0.55rem;
-  font-size: 0.72rem;
+.admin-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.05rem 1.1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-nav__mark {
+  display: grid;
+  place-items: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 9px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.admin-nav__brandname {
+  font-size: 0.98rem;
   font-weight: 700;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: var(--color-muted);
+  color: var(--color-text);
 }
 
 .admin-nav__list {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0.55rem;
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 0.1rem;
 }
 
 .admin-nav__link {
-  display: block;
-  padding: 0.5rem 0.75rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.58rem 0.7rem;
   border-radius: 9px;
   font-size: 0.92rem;
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--color-muted);
   text-decoration: none;
+}
+
+.admin-nav__icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--color-muted);
 }
 
 .admin-nav__link:hover {
   background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
+.admin-nav__link:hover .admin-nav__icon {
+  color: var(--color-primary);
 }
 
 .admin-nav__link.is-active {
+  background-color: rgba(42, 128, 105, 0.1);
+  color: var(--color-primary-dark);
+}
+
+.admin-nav__link.is-active .admin-nav__icon {
+  color: var(--color-primary);
+}
+
+.admin-nav__link.is-active::before {
+  content: '';
+  position: absolute;
+  left: -0.55rem;
+  top: 0.3rem;
+  bottom: 0.3rem;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
   background-color: var(--color-primary);
-  color: #ffffff;
 }
 
 .admin-nav__logout {
-  margin: 1rem 0 0 0.75rem;
-  align-self: flex-start;
-  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: auto 0.55rem 0;
+  padding: 0.85rem 0.7rem 0.2rem;
   border: 0;
+  border-top: 1px solid var(--color-border);
+  text-align: left;
   background: none;
   font: inherit;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--color-muted);
   cursor: pointer;
 }
 
-.admin-nav__logout:hover {
+.admin-nav__logout:hover,
+.admin-nav__logout:hover .admin-nav__icon {
   color: var(--color-primary-dark);
 }
 
@@ -1318,15 +1376,7 @@ a.oslo-card:hover {
     position: static;
     flex: none;
     width: 100%;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .admin-nav__title {
-    width: 100%;
-    padding: 0 0 0.15rem;
+    min-height: 0;
   }
 
   .admin-nav__list {
@@ -1336,7 +1386,7 @@ a.oslo-card:hover {
   }
 
   .admin-nav__link {
-    padding: 0.35rem 0.7rem;
+    padding: 0.38rem 0.7rem;
     font-size: 0.85rem;
     border: 1px solid var(--color-border);
     border-radius: 999px;
@@ -1346,8 +1396,14 @@ a.oslo-card:hover {
     border-color: var(--color-primary);
   }
 
+  .admin-nav__link.is-active::before {
+    display: none;
+  }
+
   .admin-nav__logout {
-    margin: 0 0 0 auto;
+    margin: 0.1rem 0.55rem 0.55rem auto;
+    padding: 0.38rem 0.6rem;
+    border-top: 0;
   }
 }
 
