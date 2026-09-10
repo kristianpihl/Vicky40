@@ -1312,6 +1312,131 @@ a.list-item:hover {
   border-color: var(--color-primary);
 }
 
+/* --- Content editor (programme / F&Q admin pages) --- */
+.pe-day {
+  margin-top: 1.75rem;
+}
+
+.pe-date {
+  font-weight: 400;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.pe-row {
+  margin: 0.6rem 0;
+  padding: 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.pe-row--draft {
+  border-style: dashed;
+  background-color: var(--color-surface);
+}
+
+.pe-row-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.pe-row-fields .pe-time {
+  width: 6rem;
+  flex: 0 0 auto;
+}
+
+.pe-row-fields .pe-title {
+  flex: 2 1 12rem;
+}
+
+.pe-row-fields .pe-loc {
+  flex: 1 1 8rem;
+}
+
+.pe-desc {
+  width: 100%;
+}
+
+.pe-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.pe-spacer {
+  flex: 1 1 auto;
+}
+
+.pe-icon,
+.pe-delete {
+  padding: 0.1rem 0.35rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.pe-icon {
+  color: var(--color-primary-dark);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.pe-delete {
+  color: var(--color-no);
+}
+
+.pe-add {
+  margin-top: 0.35rem;
+}
+
+.pe-hint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--color-muted);
+}
+
+.pe-hint code {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 0 0.25rem;
+  font-size: 0.9em;
+}
+
+.pe-link-btn {
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  cursor: pointer;
+}
+
+.pe-preview {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 0.6rem 0.85rem;
+  background-color: var(--color-bg);
+}
+
+.pe-preview > :first-child {
+  margin-top: 0;
+}
+
+.pe-preview > :last-child {
+  margin-bottom: 0;
+}
+
 .admin-table-wrap--muted {
   box-shadow: none;
   opacity: 0.72;

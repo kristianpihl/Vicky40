@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Container } from 'react-bootstrap'
+import { useUpdates } from '../components/UpdatesProvider.jsx'
 import {
-  visibleUpdates,
   subpageLabel,
   markUpdatesSeen,
   formatUpdateDate,
   formatUpdateTime,
   getUpdatesSeen,
-} from '../components/LatestUpdate.jsx'
+} from '../lib/updatesFeed.js'
 
 function BellIcon() {
   return (
@@ -22,7 +22,7 @@ function BellIcon() {
 }
 
 function relativeLabel(iso) {
-  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || '')
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || ''))
   if (!m) return ''
   const then = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]))
   const today = new Date()
@@ -36,15 +36,17 @@ function relativeLabel(iso) {
 }
 
 export default function Updates() {
+  const { items } = useUpdates()
+
   // Capture what the guest had already seen BEFORE marking this visit as seen.
   const [seen] = useState(getUpdatesSeen)
   useEffect(() => {
-    markUpdatesSeen()
-  }, [])
+    if (items.length > 0) markUpdatesSeen(items[0].date)
+  }, [items])
 
   const unreadCount = useMemo(
-    () => visibleUpdates.filter((u) => u.date > seen).length,
-    [seen],
+    () => items.filter((u) => String(u.date) > seen).length,
+    [items, seen],
   )
 
   return (
@@ -60,17 +62,16 @@ export default function Updates() {
         first.
       </p>
 
-      {visibleUpdates.length === 0 ? (
+      {items.length === 0 ? (
         <p>No updates yet.</p>
       ) : (
         <ol className="updates-timeline">
-          {visibleUpdates.map((u, i) => {
-            const unread = u.date > seen
+          {items.map((u, i) => {
+            const unread = String(u.date) > seen
             const dateText = formatUpdateDate(u.date)
-            const timeText = formatUpdateTime(u.date)
+            const timeText = formatUpdateTime(String(u.date))
             const showDate =
-              i === 0 ||
-              formatUpdateDate(visibleUpdates[i - 1].date) !== dateText
+              i === 0 || formatUpdateDate(items[i - 1].date) !== dateText
             return (
               <li
                 className={`updates-row${unread ? ' updates-row--unread' : ''}`}

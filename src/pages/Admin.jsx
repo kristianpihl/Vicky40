@@ -43,6 +43,12 @@ export default function Admin() {
           <Button as={Link} to="/admin/photos" variant="primary" size="lg">
             Uploaded photos
           </Button>
+          <Button as={Link} to="/admin/program" variant="primary" size="lg">
+            Edit programme
+          </Button>
+          <Button as={Link} to="/admin/faq" variant="primary" size="lg">
+            Edit F&amp;Q
+          </Button>
         </nav>
         <Button
           variant="link"

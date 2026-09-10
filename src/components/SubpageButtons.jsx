@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 import { site } from '../content/site.js'
-import { recentChangeCount } from './LatestUpdate.jsx'
+import { useUpdates } from './UpdatesProvider.jsx'
+import { recentCountFor } from '../lib/updatesFeed.js'
 
 // Bell with a red count, shown on a subpage button when the feed has a
-// change for that page in the last 24 hours (see src/content/updates.js).
+// change for that page in the last 24 hours (a hand-written entry in
+// src/content/updates.js, or an edit to that page's content in the admin).
 function ChangeBell({ count }) {
   return (
     <span
@@ -31,6 +33,7 @@ function ChangeBell({ count }) {
 //   `hidden: true`     -> left out
 //   `comingSoon: true` -> shown locked, with a "Coming soon" badge after the label
 export default function SubpageButtons({ links = site.navLinks }) {
+  const { items } = useUpdates()
   return (
     <nav className="subpage-buttons d-grid gap-2" aria-label="Other pages">
       {links
@@ -52,7 +55,7 @@ export default function SubpageButtons({ links = site.navLinks }) {
             )
           }
 
-          const changes = recentChangeCount(link.to)
+          const changes = recentCountFor(items, link.to)
           return (
             <Button
               key={link.to}

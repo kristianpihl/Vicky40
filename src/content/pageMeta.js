@@ -24,4 +24,6 @@ export const pageMeta = {
   '/admin': { title: 'Admin' },
   '/admin/rsvps': { title: 'RSVPs' },
   '/admin/photos': { title: 'Photos' },
+  '/admin/program': { title: 'Edit programme' },
+  '/admin/faq': { title: 'Edit F&Q' },
 }

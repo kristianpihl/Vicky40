@@ -15,6 +15,8 @@ import Updates from './pages/Updates.jsx'
 import Admin from './pages/Admin.jsx'
 import AdminRsvps from './pages/AdminRsvps.jsx'
 import AdminPhotos from './pages/AdminPhotos.jsx'
+import AdminProgram from './pages/AdminProgram.jsx'
+import AdminFaq from './pages/AdminFaq.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 // All URLs in one place. To change a URL, do it here and in
@@ -37,6 +39,8 @@ export default function AppRoutes() {
       <Route path="/admin" element={<Admin />} />
       <Route path="/admin/rsvps" element={<AdminRsvps />} />
       <Route path="/admin/photos" element={<AdminPhotos />} />
+      <Route path="/admin/program" element={<AdminProgram />} />
+      <Route path="/admin/faq" element={<AdminFaq />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

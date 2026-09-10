@@ -3,6 +3,7 @@ import Footer from './components/Footer.jsx'
 import ScrollToTop from './components/ScrollToTop.jsx'
 import RouteMeta from './components/RouteMeta.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
+import { UpdatesProvider } from './components/UpdatesProvider.jsx'
 import AppRoutes from './routes.jsx'
 
 // Shared frame around every page: top bar on top, page content in the middle,
@@ -15,7 +16,9 @@ export default function App() {
       <Topbar />
       <main className="app-main">
         <ErrorBoundary>
-          <AppRoutes />
+          <UpdatesProvider>
+            <AppRoutes />
+          </UpdatesProvider>
         </ErrorBoundary>
       </main>
       <Footer />
