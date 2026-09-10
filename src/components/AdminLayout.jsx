@@ -70,6 +70,12 @@ const Icon = {
       <path d="m21 15-5-5L5 21" />
     </svg>
   ),
+  user: (
+    <svg {...svg}>
+      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
+    </svg>
+  ),
   logout: (
     <svg {...svg}>
       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
@@ -172,7 +178,7 @@ function AdminLogin() {
 }
 
 export default function AdminLayout() {
-  const { isAuthed, logout } = useAdminAuth()
+  const { isAuthed, logout, email } = useAdminAuth()
 
   if (!isAuthed) return <AdminLogin />
 
@@ -180,8 +186,10 @@ export default function AdminLayout() {
     <div className="admin-shell">
       <nav className="admin-nav" aria-label="Admin sections">
         <div className="admin-nav__brand">
-          <span className="admin-nav__mark">40</span>
-          <span className="admin-nav__brandname">Vickie 40</span>
+          <span className="admin-nav__icon">{Icon.user}</span>
+          <span className="admin-nav__brandname" title={email}>
+            {email}
+          </span>
         </div>
         <ul className="admin-nav__list">
           {NAV.map((n) => (
