@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 import { site } from '../content/site.js'
 import { useUpdates } from './UpdatesProvider.jsx'
+import { usePageContent } from './ContentProvider.jsx'
 import { recentCountFor } from '../lib/updatesFeed.js'
 
 // Bell with a red count, shown on a subpage button when the feed has a
@@ -34,12 +35,19 @@ function ChangeBell({ count }) {
 //   `comingSoon: true` -> shown locked, with a "Coming soon" badge after the label
 export default function SubpageButtons({ links = site.navLinks }) {
   const { items } = useUpdates()
+  const { get } = usePageContent()
+  const osloUnlocked = get('oslo.unlocked') === 'true'
+
   return (
     <nav className="subpage-buttons d-grid gap-2" aria-label="Other pages">
       {links
         .filter((link) => !link.hidden)
         .map((link) => {
-          if (link.comingSoon) {
+          // The "Vickie's Oslo" button can be unlocked from the admin.
+          const locked =
+            link.comingSoon && !(link.to === '/oslo' && osloUnlocked)
+
+          if (locked) {
             return (
               <Button
                 key={link.to}

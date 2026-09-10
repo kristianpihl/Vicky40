@@ -665,6 +665,146 @@ a.list-item:hover {
   }
 }
 
+/* --- "Vickie's Oslo" article listing --- */
+.oslo-page {
+  max-width: 820px;
+}
+
+.oslo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.oslo-card {
+  display: flex;
+  gap: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+
+a.oslo-card:hover {
+  border-color: var(--color-primary);
+}
+
+.oslo-card__img {
+  width: 42%;
+  max-width: 280px;
+  flex-shrink: 0;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+
+.oslo-card__body {
+  padding: 1.1rem 1.2rem 1.1rem 0;
+  align-self: center;
+}
+
+.oslo-card__title {
+  font-size: 1.2rem;
+  margin: 0 0 0.35rem;
+}
+
+.oslo-card__excerpt {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  color: var(--color-muted);
+}
+
+.oslo-card__more {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+}
+
+@media (max-width: 560px) {
+  .oslo-card {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .oslo-card__img {
+    width: 100%;
+    max-width: none;
+    aspect-ratio: 16 / 9;
+  }
+
+  .oslo-card__body {
+    padding: 1rem 1.1rem 1.2rem;
+  }
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* article-row image field in the admin editor */
+.pe-article-top {
+  display: flex;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.pe-img {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.pe-img__thumb {
+  width: 120px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
+.pe-img__empty {
+  width: 120px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px dashed var(--color-border);
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.pe-img__actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.pe-article-fields {
+  flex: 1 1 14rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.pe-link-btn--danger {
+  color: var(--color-no);
+}
+
 /* --- Programme view --- */
 .program-page {
   max-width: 820px;

@@ -7,7 +7,7 @@ import Guests from './pages/Guests.jsx'
 import WhoWhichDay from './pages/WhoWhichDay.jsx'
 import Venue from './pages/Venue.jsx'
 import Oslo from './pages/Oslo.jsx'
-import OsloBars from './pages/OsloBars.jsx'
+import OsloArticle from './pages/OsloArticle.jsx'
 import Faq from './pages/Faq.jsx'
 import Gallery from './pages/Gallery.jsx'
 import PromoVideo from './pages/PromoVideo.jsx'
@@ -19,6 +19,7 @@ import AdminProgram from './pages/AdminProgram.jsx'
 import AdminFaq from './pages/AdminFaq.jsx'
 import AdminFront from './pages/AdminFront.jsx'
 import AdminVenue from './pages/AdminVenue.jsx'
+import AdminOslo from './pages/AdminOslo.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 // All URLs in one place. To change a URL, do it here and in
@@ -33,7 +34,7 @@ export default function AppRoutes() {
       <Route path="/who-is-coming-when" element={<WhoWhichDay />} />
       <Route path="/venue" element={<Venue />} />
       <Route path="/oslo" element={<Oslo />} />
-      <Route path="/oslo/bars" element={<OsloBars />} />
+      <Route path="/oslo/:id" element={<OsloArticle />} />
       <Route path="/faq" element={<Faq />} />
       <Route path="/photos" element={<Gallery />} />
       <Route path="/promo-video" element={<PromoVideo />} />
@@ -45,6 +46,7 @@ export default function AppRoutes() {
       <Route path="/admin/faq" element={<AdminFaq />} />
       <Route path="/admin/front" element={<AdminFront />} />
       <Route path="/admin/venue" element={<AdminVenue />} />
+      <Route path="/admin/oslo" element={<AdminOslo />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

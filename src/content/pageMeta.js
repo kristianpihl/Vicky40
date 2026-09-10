@@ -15,8 +15,7 @@ export const pageMeta = {
     title: 'The venue',
     description: 'Solstua at Voksenkollen – a 1905 villa in the forest above Oslo.',
   },
-  '/oslo': { title: 'About Oslo' },
-  '/oslo/bars': { title: 'Bars in Oslo' },
+  '/oslo': { title: "Vickie's Oslo" },
   '/faq': { title: 'Practical info' },
   '/photos': { title: 'Upload photos' },
   '/promo-video': { title: 'Promo video' },
@@ -28,4 +27,5 @@ export const pageMeta = {
   '/admin/faq': { title: 'Edit F&Q' },
   '/admin/front': { title: 'Edit front page' },
   '/admin/venue': { title: 'Edit venue page' },
+  '/admin/oslo': { title: "Edit Vickie's Oslo" },
 }
