@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabaseClient.js'
 import { buildFeed } from '../lib/updatesFeed.js'
+import { usePageContent } from './ContentProvider.jsx'
 
 const UpdatesContext = createContext({ items: [], loading: true })
 
@@ -8,6 +9,9 @@ const UpdatesContext = createContext({ items: [], loading: true })
 // hand-written updates.js entries, and provides the combined feed to the
 // front-page card, the subpage bells and the /updates page.
 export function UpdatesProvider({ children }) {
+  const { get } = usePageContent()
+  const osloUnlocked = get('oslo.unlocked') === 'true'
+  const guestsUnlocked = get('guests.unlocked') === 'true'
   const [contentTimes, setContentTimes] = useState(null)
 
   useEffect(() => {
@@ -27,8 +31,14 @@ export function UpdatesProvider({ children }) {
   }, [])
 
   const value = useMemo(
-    () => ({ items: buildFeed(contentTimes), loading: contentTimes === null }),
-    [contentTimes],
+    () => ({
+      items: buildFeed(contentTimes, {
+        '/oslo': osloUnlocked,
+        '/guests': guestsUnlocked,
+      }),
+      loading: contentTimes === null,
+    }),
+    [contentTimes, osloUnlocked, guestsUnlocked],
   )
 
   return (

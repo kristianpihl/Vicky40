@@ -400,9 +400,17 @@ end;
 $$;
 
 -- Latest change time per editable page, for the front-page "Latest update" feed.
+-- The oslo/guests columns need articles/guests to exist (run oslo.sql and
+-- guests.sql first); this whole file is safe to re-run afterwards.
 drop function if exists public.content_last_updated();
 create or replace function public.content_last_updated()
-returns table (program timestamptz, faq timestamptz, venue timestamptz)
+returns table (
+  program timestamptz,
+  faq timestamptz,
+  venue timestamptz,
+  oslo timestamptz,
+  guests timestamptz
+)
 language sql
 stable
 security definer
@@ -411,7 +419,9 @@ as $$
   select
     (select max(updated_at) from public.program_items where published),
     (select max(updated_at) from public.faq_items where published),
-    (select max(updated_at) from public.page_content where key like 'venue.%');
+    (select max(updated_at) from public.page_content where key like 'venue.%'),
+    (select max(updated_at) from public.articles where published),
+    (select max(updated_at) from public.guests where published);
 $$;
 
 -- =====================================================================
