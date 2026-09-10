@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Container, Form, Button, Alert } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient.js'
-import { useAdminAuth, RequireAdmin } from '../components/AdminAuthProvider.jsx'
+import { useAdminAuth } from '../components/AdminAuthProvider.jsx'
 import { renderMarkdown } from '../lib/markdown.jsx'
 
 function emptyItem() {
@@ -228,12 +228,7 @@ function AdminFaqInner() {
 
   return (
     <Container className="page admin-page">
-      <div className="admin-header">
-        <h1>Edit F&amp;Q</h1>
-        <Link to="/admin" className="admin-back">
-          ← Admin
-        </Link>
-      </div>
+      <h1 className="admin-page-title">Edit F&amp;Q</h1>
 
       <p className="page-lead">
         Entries that aren't <strong>Published</strong> stay hidden from guests
@@ -307,9 +302,5 @@ function AdminFaqInner() {
 }
 
 export default function AdminFaq() {
-  return (
-    <RequireAdmin>
-      <AdminFaqInner />
-    </RequireAdmin>
-  )
+  return <AdminFaqInner />
 }

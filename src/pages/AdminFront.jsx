@@ -1,4 +1,3 @@
-import { RequireAdmin } from '../components/AdminAuthProvider.jsx'
 import PageContentEditor from '../components/PageContentEditor.jsx'
 
 const FIELDS = [
@@ -8,12 +7,10 @@ const FIELDS = [
 
 export default function AdminFront() {
   return (
-    <RequireAdmin>
-      <PageContentEditor
-        title="Edit front page"
-        lead="The heading and the text just under it, on the home page. Changes go live right away (this doesn't show in the 'Latest update' feed)."
-        fields={FIELDS}
-      />
-    </RequireAdmin>
+    <PageContentEditor
+      title="Edit front page"
+      lead="The heading and the text just under it, on the home page. Changes go live right away (this doesn't show in the 'Latest update' feed)."
+      fields={FIELDS}
+    />
   )
 }

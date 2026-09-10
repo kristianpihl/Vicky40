@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Container, Form, Button, Alert } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient.js'
-import { useAdminAuth, RequireAdmin } from '../components/AdminAuthProvider.jsx'
+import { useAdminAuth } from '../components/AdminAuthProvider.jsx'
 import { renderMarkdown } from '../lib/markdown.jsx'
 import { resizeImage } from '../lib/resizeImage.js'
 import { articleImageUrl } from '../lib/articleImage.js'
@@ -357,12 +357,7 @@ function AdminOsloInner() {
 
   return (
     <Container className="page admin-page">
-      <div className="admin-header">
-        <h1>Edit Vickie's Oslo</h1>
-        <Link to="/admin" className="admin-back">
-          ← Admin
-        </Link>
-      </div>
+      <h1 className="admin-page-title">Edit Vickie's Oslo</h1>
 
       <p className="page-lead">
         Articles with an image, a title and a short text. The public page is{' '}
@@ -458,9 +453,5 @@ function AdminOsloInner() {
 }
 
 export default function AdminOslo() {
-  return (
-    <RequireAdmin>
-      <AdminOsloInner />
-    </RequireAdmin>
-  )
+  return <AdminOsloInner />
 }

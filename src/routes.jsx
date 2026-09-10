@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 
 import Home from './pages/Home.jsx'
 import Rsvp from './pages/Rsvp.jsx'
@@ -12,7 +12,7 @@ import Faq from './pages/Faq.jsx'
 import Gallery from './pages/Gallery.jsx'
 import PromoVideo from './pages/PromoVideo.jsx'
 import Updates from './pages/Updates.jsx'
-import Admin from './pages/Admin.jsx'
+import AdminLayout from './components/AdminLayout.jsx'
 import AdminRsvps from './pages/AdminRsvps.jsx'
 import AdminPhotos from './pages/AdminPhotos.jsx'
 import AdminProgram from './pages/AdminProgram.jsx'
@@ -40,15 +40,17 @@ export default function AppRoutes() {
       <Route path="/photos" element={<Gallery />} />
       <Route path="/promo-video" element={<PromoVideo />} />
       <Route path="/updates" element={<Updates />} />
-      <Route path="/admin" element={<Admin />} />
-      <Route path="/admin/rsvps" element={<AdminRsvps />} />
-      <Route path="/admin/photos" element={<AdminPhotos />} />
-      <Route path="/admin/program" element={<AdminProgram />} />
-      <Route path="/admin/faq" element={<AdminFaq />} />
-      <Route path="/admin/front" element={<AdminFront />} />
-      <Route path="/admin/venue" element={<AdminVenue />} />
-      <Route path="/admin/oslo" element={<AdminOslo />} />
-      <Route path="/admin/guests" element={<AdminGuests />} />
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<Navigate to="/admin/rsvps" replace />} />
+        <Route path="rsvps" element={<AdminRsvps />} />
+        <Route path="front" element={<AdminFront />} />
+        <Route path="program" element={<AdminProgram />} />
+        <Route path="venue" element={<AdminVenue />} />
+        <Route path="faq" element={<AdminFaq />} />
+        <Route path="oslo" element={<AdminOslo />} />
+        <Route path="guests" element={<AdminGuests />} />
+        <Route path="photos" element={<AdminPhotos />} />
+      </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

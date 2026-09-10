@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Container, Button, Alert } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient.js'
 import { site } from '../content/site.js'
-import { useAdminAuth, RequireAdmin } from '../components/AdminAuthProvider.jsx'
+import { useAdminAuth } from '../components/AdminAuthProvider.jsx'
 
 function formatDate(iso) {
   try {
@@ -590,12 +589,7 @@ function AdminRsvpsInner() {
 
   return (
     <Container fluid className="page admin-page admin-page--wide">
-      <div className="admin-header">
-        <h1>RSVPs</h1>
-        <Link to="/admin" className="admin-back">
-          ← Admin
-        </Link>
-      </div>
+      <h1 className="admin-page-title">RSVPs</h1>
 
       {error && (
         <Alert variant="danger">
@@ -717,9 +711,5 @@ function AdminRsvpsInner() {
 }
 
 export default function AdminRsvps() {
-  return (
-    <RequireAdmin>
-      <AdminRsvpsInner />
-    </RequireAdmin>
-  )
+  return <AdminRsvpsInner />
 }

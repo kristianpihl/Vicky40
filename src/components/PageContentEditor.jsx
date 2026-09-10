@@ -132,12 +132,7 @@ export default function PageContentEditor({ title, lead, fields }) {
 
   return (
     <Container className="page admin-page">
-      <div className="admin-header">
-        <h1>{title}</h1>
-        <Link to="/admin" className="admin-back">
-          ← Admin
-        </Link>
-      </div>
+      <h1 className="admin-page-title">{title}</h1>
 
       {lead && <p className="page-lead">{lead}</p>}
 

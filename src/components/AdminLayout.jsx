@@ -1,17 +1,27 @@
 import { useEffect, useState } from 'react'
 import { Container, Form, Button, Alert } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
-import { useAdminAuth, takeLogoutReason } from '../components/AdminAuthProvider.jsx'
+import { NavLink, Outlet } from 'react-router-dom'
+import { useAdminAuth, takeLogoutReason } from './AdminAuthProvider.jsx'
 
-export default function Admin() {
-  const { isAuthed, login, logout } = useAdminAuth()
+// Left-hand menu for the admin area. Order chosen by the birthday person.
+const NAV = [
+  { to: '/admin/rsvps', label: 'RSVPs' },
+  { to: '/admin/front', label: 'Front page' },
+  { to: '/admin/program', label: 'Programme' },
+  { to: '/admin/venue', label: 'Venue' },
+  { to: '/admin/faq', label: 'F&Q' },
+  { to: '/admin/oslo', label: "Vickie's Oslo" },
+  { to: '/admin/guests', label: 'Guest list' },
+  { to: '/admin/photos', label: 'Photos' },
+]
 
+function AdminLogin() {
+  const { login } = useAdminAuth()
   const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
   const [status, setStatus] = useState('idle') // idle | checking | error
   const [notice, setNotice] = useState('')
 
-  // Show the "you were signed out automatically" message once, if there is one.
   useEffect(() => {
     const r = takeLogoutReason()
     if (r) setNotice(r)
@@ -31,53 +41,11 @@ export default function Admin() {
     setPass('')
   }
 
-  if (isAuthed) {
-    return (
-      <Container className="page admin-page">
-        <h1>Admin</h1>
-        <p className="page-lead">You're logged in.</p>
-        <nav className="admin-links d-grid gap-2">
-          <Button as={Link} to="/admin/rsvps" variant="primary" size="lg">
-            RSVPs
-          </Button>
-          <Button as={Link} to="/admin/photos" variant="primary" size="lg">
-            Uploaded photos
-          </Button>
-          <Button as={Link} to="/admin/program" variant="primary" size="lg">
-            Edit programme
-          </Button>
-          <Button as={Link} to="/admin/faq" variant="primary" size="lg">
-            Edit F&amp;Q
-          </Button>
-          <Button as={Link} to="/admin/front" variant="primary" size="lg">
-            Edit front page
-          </Button>
-          <Button as={Link} to="/admin/venue" variant="primary" size="lg">
-            Edit venue page
-          </Button>
-          <Button as={Link} to="/admin/oslo" variant="primary" size="lg">
-            Edit Vickie&apos;s Oslo
-          </Button>
-          <Button as={Link} to="/admin/guests" variant="primary" size="lg">
-            Edit guest list
-          </Button>
-        </nav>
-        <Button
-          variant="link"
-          className="admin-logout"
-          onClick={() => logout()}
-        >
-          Log out
-        </Button>
-      </Container>
-    )
-  }
-
   return (
     <Container className="page admin-page admin-login-page">
       <h1>Admin</h1>
       <p className="page-lead">
-        Enter your username and password to see RSVPs and photos.
+        Enter your username and password to see RSVPs and edit the site.
       </p>
 
       {notice && <Alert variant="info">{notice}</Alert>}
@@ -124,5 +92,44 @@ export default function Admin() {
         </Button>
       </Form>
     </Container>
+  )
+}
+
+export default function AdminLayout() {
+  const { isAuthed, logout } = useAdminAuth()
+
+  if (!isAuthed) return <AdminLogin />
+
+  return (
+    <div className="admin-shell">
+      <nav className="admin-nav" aria-label="Admin sections">
+        <span className="admin-nav__title">Admin</span>
+        <ul className="admin-nav__list">
+          {NAV.map((n) => (
+            <li key={n.to}>
+              <NavLink
+                to={n.to}
+                className={({ isActive }) =>
+                  `admin-nav__link${isActive ? ' is-active' : ''}`
+                }
+              >
+                {n.label}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+        <button
+          type="button"
+          className="admin-nav__logout"
+          onClick={() => logout()}
+        >
+          Log out
+        </button>
+      </nav>
+
+      <div className="admin-main">
+        <Outlet />
+      </div>
+    </div>
   )
 }

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Container, Form, Button, Alert } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient.js'
-import { useAdminAuth, RequireAdmin } from '../components/AdminAuthProvider.jsx'
+import { useAdminAuth } from '../components/AdminAuthProvider.jsx'
 import { resizeImage } from '../lib/resizeImage.js'
 import { guestImageUrl } from '../lib/guestImage.js'
 
@@ -315,12 +315,7 @@ function AdminGuestsInner() {
 
   return (
     <Container className="page admin-page">
-      <div className="admin-header">
-        <h1>Edit guest list</h1>
-        <Link to="/admin" className="admin-back">
-          ← Admin
-        </Link>
-      </div>
+      <h1 className="admin-page-title">Edit guest list</h1>
 
       <p className="page-lead">
         A photo, a name and a short text for each guest. The public page is{' '}
@@ -416,9 +411,5 @@ function AdminGuestsInner() {
 }
 
 export default function AdminGuests() {
-  return (
-    <RequireAdmin>
-      <AdminGuestsInner />
-    </RequireAdmin>
-  )
+  return <AdminGuestsInner />
 }

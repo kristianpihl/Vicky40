@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Container, Form, Button, Alert } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient.js'
-import { useAdminAuth, RequireAdmin } from '../components/AdminAuthProvider.jsx'
+import { useAdminAuth } from '../components/AdminAuthProvider.jsx'
 import { PROGRAM_DAYS, programDayDate } from '../templates/ProgramTemplate.jsx'
 
 function emptyItem(day) {
@@ -238,12 +238,7 @@ function AdminProgramInner() {
 
   return (
     <Container className="page admin-page">
-      <div className="admin-header">
-        <h1>Edit programme</h1>
-        <Link to="/admin" className="admin-back">
-          ← Admin
-        </Link>
-      </div>
+      <h1 className="admin-page-title">Edit programme</h1>
 
       <p className="page-lead">
         Events that aren't <strong>Published</strong> stay hidden from guests
@@ -327,9 +322,5 @@ function AdminProgramInner() {
 }
 
 export default function AdminProgram() {
-  return (
-    <RequireAdmin>
-      <AdminProgramInner />
-    </RequireAdmin>
-  )
+  return <AdminProgramInner />
 }

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Container, Button, Alert } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient.js'
-import { useAdminAuth, RequireAdmin } from '../components/AdminAuthProvider.jsx'
+import { useAdminAuth } from '../components/AdminAuthProvider.jsx'
 
 // Supabase free tier gives 1 GB of file storage. Bump this if the
 // project is ever upgraded to a paid plan.
@@ -167,12 +166,7 @@ function AdminPhotosInner() {
 
   return (
     <Container className="page admin-page">
-      <div className="admin-header">
-        <h1>Uploaded photos</h1>
-        <Link to="/admin" className="admin-back">
-          ← Admin
-        </Link>
-      </div>
+      <h1 className="admin-page-title">Uploaded photos</h1>
 
       {error && (
         <Alert variant="danger">
@@ -281,9 +275,5 @@ function AdminPhotosInner() {
 }
 
 export default function AdminPhotos() {
-  return (
-    <RequireAdmin>
-      <AdminPhotosInner />
-    </RequireAdmin>
-  )
+  return <AdminPhotosInner />
 }
