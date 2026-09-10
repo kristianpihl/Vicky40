@@ -20,6 +20,7 @@ import AdminFaq from './pages/AdminFaq.jsx'
 import AdminFront from './pages/AdminFront.jsx'
 import AdminVenue from './pages/AdminVenue.jsx'
 import AdminOslo from './pages/AdminOslo.jsx'
+import AdminGuests from './pages/AdminGuests.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 // All URLs in one place. To change a URL, do it here and in
@@ -47,6 +48,7 @@ export default function AppRoutes() {
       <Route path="/admin/front" element={<AdminFront />} />
       <Route path="/admin/venue" element={<AdminVenue />} />
       <Route path="/admin/oslo" element={<AdminOslo />} />
+      <Route path="/admin/guests" element={<AdminGuests />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

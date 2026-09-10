@@ -9,7 +9,10 @@ export const pageMeta = {
   },
   '/rsvp': { title: 'RSVP', description: 'Sign yourself and any guests up for the celebration.' },
   '/program': { title: 'Programme', description: "What's happening, when and where, day by day." },
-  '/guests': { title: 'Guests', description: "Get to know who you'll meet during the weekend." },
+  '/guests': {
+    title: 'Get to know my guests',
+    description: "A little about the people you'll meet during the weekend.",
+  },
   '/who-is-coming-when': { title: "Who's coming when" },
   '/venue': {
     title: 'The venue',
@@ -28,4 +31,5 @@ export const pageMeta = {
   '/admin/front': { title: 'Edit front page' },
   '/admin/venue': { title: 'Edit venue page' },
   '/admin/oslo': { title: "Edit Vickie's Oslo" },
+  '/admin/guests': { title: 'Edit guest list' },
 }

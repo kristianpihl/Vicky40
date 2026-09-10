@@ -36,16 +36,19 @@ function ChangeBell({ count }) {
 export default function SubpageButtons({ links = site.navLinks }) {
   const { items } = useUpdates()
   const { get } = usePageContent()
-  const osloUnlocked = get('oslo.unlocked') === 'true'
+
+  // These "Coming soon" buttons can be unlocked from the admin.
+  const unlocked = {
+    '/oslo': get('oslo.unlocked') === 'true',
+    '/guests': get('guests.unlocked') === 'true',
+  }
 
   return (
     <nav className="subpage-buttons d-grid gap-2" aria-label="Other pages">
       {links
         .filter((link) => !link.hidden)
         .map((link) => {
-          // The "Vickie's Oslo" button can be unlocked from the admin.
-          const locked =
-            link.comingSoon && !(link.to === '/oslo' && osloUnlocked)
+          const locked = link.comingSoon && !unlocked[link.to]
 
           if (locked) {
             return (

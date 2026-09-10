@@ -58,6 +58,9 @@ export default function Admin() {
           <Button as={Link} to="/admin/oslo" variant="primary" size="lg">
             Edit Vickie&apos;s Oslo
           </Button>
+          <Button as={Link} to="/admin/guests" variant="primary" size="lg">
+            Edit guest list
+          </Button>
         </nav>
         <Button
           variant="link"

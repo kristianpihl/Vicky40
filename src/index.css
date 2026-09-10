@@ -932,6 +932,7 @@ a.oslo-card:hover {
 .guest-text {
   margin: 0;
   font-size: 0.97rem;
+  white-space: pre-line;
 }
 
 /* --- RSVP form --- */
