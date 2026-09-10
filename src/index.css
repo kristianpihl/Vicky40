@@ -71,6 +71,13 @@ h4 {
   border-bottom: 1px solid var(--color-border);
 }
 
+/* In the admin area the bar is full width and the logo sits flush left,
+   lined up with the sidebar contents below it. */
+.topbar--admin > .container-fluid {
+  padding-left: 1.1rem;
+  padding-right: 1.1rem;
+}
+
 .topbar-brand {
   font-weight: 800;
   letter-spacing: 0.5px;
