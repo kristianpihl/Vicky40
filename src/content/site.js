@@ -26,11 +26,11 @@ export const site = {
   //                      "Coming soon" badge next to its label.
   navLinks: [
     { label: 'Programme', to: '/program' },
-    { label: 'Guests', to: '/guests', hidden: true },
     { label: "Who's coming when", to: '/who-is-coming-when', hidden: true },
     { label: 'The venue', to: '/venue' },
     { label: "F&Q's", to: '/faq' },
     { label: "Vickie's Oslo", to: '/oslo', comingSoon: true },
+    { label: 'Get to know my guests', to: '/guests', comingSoon: true },
     // Photos has its own "Upload photos" button on the front page (and in the
     // mobile menu), so it is kept out of the link lists here.
     { label: 'Photos', to: '/photos', hidden: true },
