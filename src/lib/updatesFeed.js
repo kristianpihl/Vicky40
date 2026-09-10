@@ -68,8 +68,9 @@ export function formatUpdateTime(iso) {
 const AUTO_TEXT = {
   '/program': 'The programme was updated.',
   '/faq': 'The practical info was updated.',
+  '/venue': 'The venue page was updated.',
 }
-const AUTO_KEY = { '/program': 'program', '/faq': 'faq' }
+const AUTO_KEY = { '/program': 'program', '/faq': 'faq', '/venue': 'venue' }
 
 // Merge the hand-written updates.js entries with automatic "X was updated"
 // entries derived from when the programme / F&Q content last changed in the

@@ -1394,6 +1394,11 @@ a.list-item:hover {
   margin-top: 0.35rem;
 }
 
+.pe-field-label {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
 .pe-hint {
   display: flex;
   flex-wrap: wrap;

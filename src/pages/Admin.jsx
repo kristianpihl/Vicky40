@@ -49,6 +49,12 @@ export default function Admin() {
           <Button as={Link} to="/admin/faq" variant="primary" size="lg">
             Edit F&amp;Q
           </Button>
+          <Button as={Link} to="/admin/front" variant="primary" size="lg">
+            Edit front page
+          </Button>
+          <Button as={Link} to="/admin/venue" variant="primary" size="lg">
+            Edit venue page
+          </Button>
         </nav>
         <Button
           variant="link"

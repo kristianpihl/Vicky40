@@ -54,6 +54,21 @@ create policy "Anyone can read published faq"
   on public.faq_items for select to anon
   using (published = true);
 
+-- Single-blob content: front-page heading/intro, venue body/facts.
+create table if not exists public.page_content (
+  key text primary key,                    -- 'front.heading', 'front.intro', 'venue.body', 'venue.facts'
+  value text not null default '',
+  updated_at timestamptz not null default now()
+);
+
+grant select on table public.page_content to anon;
+alter table public.page_content enable row level security;
+
+drop policy if exists "Anyone can read page content" on public.page_content;
+create policy "Anyone can read page content"
+  on public.page_content for select to anon
+  using (true);
+
 -- =====================================================================
 -- 2) Seed with the content that used to live in the code.
 --    Only runs while the table is still empty, so re-running is safe.
@@ -111,6 +126,50 @@ select * from (values
    10, true)
 ) as v(heading, body, sort_order, published)
 where not exists (select 1 from public.faq_items);
+
+insert into public.page_content (key, value) values
+  ('front.heading',
+   $md$We're celebrating Vickie's 40th birthday 04-06.02.2027 in Oslo!$md$),
+  ('front.intro',
+   $md$It'll be a weekend full of good food, drinks and great company in Oslo – and we really hope you'll join us!
+
+Below you'll find the countdown to the party, the RSVP form, and links to all the practical details.$md$),
+  ('venue.facts',
+   $md$Where: Solstua, Thorleif Haugs vei 14, Oslo
+Area: Voksenkollen, up at the top of Holmenkollen
+Room for: Up to 80 seated · 120 standing
+Getting there: Metro line 1 to Voksenkollen, then a short walk uphill. About 25–30 min by car from the centre.
+Food & drink: Bring your own – the house is fully set for 80 (plates, glasses, cutlery, the lot)
+Staying over: 6–8 bedrooms, 12–15 beds
+The building: A 1905 hunting villa; the interiors are kept just as architect Arnstein Arneberg left them in 1916$md$),
+  ('venue.body',
+   $md$The party is at **Solstua**, a wooden villa tucked into the forest at Voksenkollen, high above Oslo with a wide view over the city. It's a warm, old-fashioned house with room for dinner, mingling and dancing – and beds for anyone staying the night.
+
+## A house with a history
+
+Solstua was built as a hunting villa for the industrialist Sam Eyde in 1905. In 1916 the factory owner Halvor Schou bought it and had the architect Arnstein Arneberg – later known for Oslo City Hall – design the rooms. Very little has changed since: the house is rented out unstaffed and looks much as it did a hundred years ago.
+
+## The rooms
+
+Five connected salons, plus the little timber Hallingstua:
+
+- **The Dining Room** – seats 10–80. The floor, walls, ceiling and fireplace were brought from an English manor in 1916. It becomes the dance floor after dinner.
+- **The Gobelin Hall** – 30–40 at the table, hung with antique French tapestries and gilded furniture that once belonged to Prince Heinrich, brother of Kaiser Wilhelm II.
+- **The Middle Room** – for mingling, coffee and drinks after dinner; also good for dancing.
+- **The Fireplace Room** – Norwegian timber panelling and a big open fire; coffee for 25.
+- **The Garden Room** – a bright room with large windows and the view; coffee for 15.
+- **Hallingstua** – a separate timber house from the 1740s, used for the aperitif before dinner.
+
+## Getting there
+
+Take Metro line 1 towards Frognerseteren and get off at **Voksenkollen** – it's a few minutes' walk uphill from the station. By car it's roughly 25–30 minutes from the city centre, traffic depending.
+
+## Good to know
+
+- The house is rented unstaffed, so food, drink and service are all organised by us – nothing is tied to the venue.
+- It's an old house: full of character, and a little draughty in winter. Bring a layer.
+- Dinner is in the Dining Room, which turns into the dance floor afterwards.$md$)
+on conflict (key) do nothing;
 
 -- =====================================================================
 -- 3) Admin functions (password-checked). The editor calls these.
@@ -312,9 +371,38 @@ begin
 end;
 $$;
 
+-- --- Front page / venue single-blob content ---
+
+create or replace function public.admin_page_content_save(
+  email text,
+  pass text,
+  p_key text,
+  p_value text
+)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.admin_ok(email, pass) then
+    raise exception 'Wrong username or password';
+  end if;
+  if p_key not in ('front.heading', 'front.intro', 'venue.body', 'venue.facts') then
+    raise exception 'Unknown content key: %', p_key;
+  end if;
+
+  insert into public.page_content (key, value, updated_at)
+  values (p_key, coalesce(p_value, ''), now())
+  on conflict (key) do update
+    set value = excluded.value, updated_at = now();
+end;
+$$;
+
 -- Latest change time per editable page, for the front-page "Latest update" feed.
+drop function if exists public.content_last_updated();
 create or replace function public.content_last_updated()
-returns table (program timestamptz, faq timestamptz)
+returns table (program timestamptz, faq timestamptz, venue timestamptz)
 language sql
 stable
 security definer
@@ -322,7 +410,8 @@ set search_path = public
 as $$
   select
     (select max(updated_at) from public.program_items where published),
-    (select max(updated_at) from public.faq_items where published);
+    (select max(updated_at) from public.faq_items where published),
+    (select max(updated_at) from public.page_content where key like 'venue.%');
 $$;
 
 -- =====================================================================
@@ -341,6 +430,7 @@ grant execute on function public.admin_faq_save(
 grant execute on function public.admin_faq_delete(text, text, uuid) to anon;
 grant execute on function public.admin_faq_reorder(text, text, uuid[]) to anon;
 
+grant execute on function public.admin_page_content_save(text, text, text, text) to anon;
 grant execute on function public.content_last_updated() to anon;
 
 notify pgrst, 'reload schema';

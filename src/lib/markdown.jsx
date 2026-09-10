@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
 
-// A deliberately tiny markdown renderer for admin-written text (F&Q answers):
-//   - blank line  -> new paragraph
+// A deliberately tiny markdown renderer for admin-written text:
+//   - blank line       -> new paragraph
+//   - "## " / "### "   -> heading
 //   - lines all starting with "- "  -> bullet list
 //   - **bold**
 //   - [text](url)  -> link ('/...' becomes an in-app link, anything else opens
@@ -59,6 +60,13 @@ export function renderMarkdown(text) {
 
   return blocks.map((block, bi) => {
     const lines = block.split('\n')
+
+    const h = /^(#{2,3})\s+(.*)$/.exec(block.trim())
+    if (h && lines.length === 1) {
+      const Tag = h[1].length === 2 ? 'h2' : 'h3'
+      return <Tag key={bi}>{renderInline(h[2], `h${bi}`)}</Tag>
+    }
+
     const isList = lines.every((l) => /^\s*-\s+/.test(l))
     if (isList) {
       return (
