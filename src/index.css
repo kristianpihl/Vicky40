@@ -1796,13 +1796,13 @@ a.oslo-card:hover {
 }
 
 .admin-table thead th {
-  background-color: #f3f3f4;
+  background-color: var(--color-bg);
   color: var(--color-text);
   font-weight: 700;
   text-align: left;
   padding: 0.7rem 0.7rem;
   white-space: nowrap;
-  border-bottom: 3px solid var(--color-text);
+  border-bottom: 2px solid var(--color-text);
 }
 
 .admin-table thead th.admin-th-center {
