@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Container, Button, Alert } from 'react-bootstrap'
+import JSZip from 'jszip'
 import { supabase } from '../lib/supabaseClient.js'
 import { useAdminAuth } from '../components/AdminAuthProvider.jsx'
 
@@ -24,6 +25,30 @@ function formatBytes(n) {
   const mb = kb / 1024
   if (mb < 1024) return `${mb.toFixed(mb < 10 ? 1 : 0)} MB`
   return `${(mb / 1024).toFixed(2)} GB`
+}
+
+// Turns "Kristian Pihl" into "kristian-pihl" for use inside a filename.
+function slugify(text) {
+  return (
+    (text || '')
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '') || 'guest'
+  )
+}
+
+function extensionFromPath(path) {
+  const match = /\.([a-zA-Z0-9]+)$/.exec(path || '')
+  return match ? match[1].toLowerCase() : 'jpg'
+}
+
+// "001-kristian-pihl.jpg" – the index keeps names unique even when two
+// guests share a name (or a name is missing).
+function photoFileName(row, index) {
+  const n = String(index + 1).padStart(3, '0')
+  return `${n}-${slugify(row.uploaded_by)}.${extensionFromPath(row.storage_path)}`
 }
 
 const svgProps = {
@@ -60,6 +85,14 @@ const IconUsers = () => (
   </svg>
 )
 
+const IconDownload = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" {...svgProps}>
+    <path d="M12 3v12" />
+    <path d="m7 10 5 5 5-5" />
+    <path d="M5 21h14" />
+  </svg>
+)
+
 function KpiCard({ label, value, sub, icon, foot }) {
   return (
     <div className="admin-kpi">
@@ -80,6 +113,13 @@ function AdminPhotosInner() {
   const [stats, setStats] = useState(null) // { file_count, total_bytes } | null
   const [error, setError] = useState(false)
   const [deletingId, setDeletingId] = useState(null)
+  const [zipping, setZipping] = useState(false)
+  const [zipState, setZipState] = useState({
+    phase: 'idle', // 'fetching' | 'zipping'
+    done: 0,
+    total: 0,
+    percent: 0,
+  })
 
   // Storage total is a nice-to-have – if it fails, the page still works.
   function fetchStats() {
@@ -152,6 +192,71 @@ function AdminPhotosInner() {
     fetchStats()
   }
 
+  // Fetches every photo, packs them into one zip, then hands the browser
+  // that file to save. Runs entirely in the browser – no server involved.
+  async function handleDownloadAll() {
+    if (!rows || rows.length === 0 || zipping) return
+
+    setZipping(true)
+    setZipState({ phase: 'fetching', done: 0, total: rows.length, percent: 0 })
+
+    const zip = new JSZip()
+    let failed = 0
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i]
+      try {
+        const res = await fetch(viewUrl(row.storage_path))
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        zip.file(photoFileName(row, i), await res.blob())
+      } catch (err) {
+        console.error('Could not fetch photo for the zip:', row.storage_path, err)
+        failed += 1
+      }
+      const done = i + 1
+      setZipState({
+        phase: 'fetching',
+        done,
+        total: rows.length,
+        percent: (done / rows.length) * 50,
+      })
+    }
+
+    try {
+      const blob = await zip.generateAsync(
+        { type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } },
+        (meta) => {
+          setZipState((cur) => ({
+            ...cur,
+            phase: 'zipping',
+            percent: 50 + meta.percent / 2,
+          }))
+        },
+      )
+
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `vickie-40-photos-${new Date().toISOString().slice(0, 10)}.zip`
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      URL.revokeObjectURL(url)
+
+      if (failed > 0) {
+        window.alert(
+          `${failed} of ${rows.length} photo${rows.length === 1 ? '' : 's'} could not be included. The rest downloaded fine.`,
+        )
+      }
+    } catch (err) {
+      console.error('Could not build the zip file:', err)
+      window.alert('Something went wrong while building the zip file. Please try again.')
+    } finally {
+      setZipping(false)
+      setZipState({ phase: 'idle', done: 0, total: 0, percent: 0 })
+    }
+  }
+
   const totalBytes = stats ? Number(stats.total_bytes) || 0 : null
   const pct =
     totalBytes === null ? 0 : (totalBytes / STORAGE_LIMIT_BYTES) * 100
@@ -166,7 +271,35 @@ function AdminPhotosInner() {
 
   return (
     <Container className="page admin-page">
-      <h1 className="admin-page-title">Uploaded photos</h1>
+      <div className="admin-page-head">
+        <h1 className="admin-page-title">Uploaded photos</h1>
+        {!error && rows && rows.length > 0 && (
+          <Button
+            variant="outline-primary"
+            className="admin-download-all"
+            onClick={handleDownloadAll}
+            disabled={zipping}
+          >
+            <IconDownload />
+            {zipping
+              ? zipState.phase === 'zipping'
+                ? 'Packing the zip file …'
+                : `Downloading ${zipState.done}/${zipState.total} …`
+              : `Download all (${rows.length})`}
+          </Button>
+        )}
+      </div>
+
+      {zipping && (
+        <div className="admin-zip-progress" role="status" aria-live="polite">
+          <span className="admin-zip-progress__bar">
+            <span
+              className="admin-zip-progress__fill"
+              style={{ width: `${Math.max(zipState.percent, 3)}%` }}
+            />
+          </span>
+        </div>
+      )}
 
       {error && (
         <Alert variant="danger">

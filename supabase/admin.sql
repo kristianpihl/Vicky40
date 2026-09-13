@@ -19,13 +19,13 @@ alter table public.admin_config
   add column if not exists username text not null default '';
 
 insert into public.admin_config (id, username, password)
-values (1, 'kristianpihl01@gmail.com', 'Bristol87')
+values (1, 'vickiegriffiths_1@hotmail.com', 'Bristol87')
 on conflict (id) do nothing;
 
 -- This is the one place to edit the admin credentials: change the two values
 -- here and run this file again.
 update public.admin_config
-  set username = 'kristianpihl01@gmail.com',
+  set username = 'vickiegriffiths_1@hotmail.com',
       password = 'Bristol87'
   where id = 1;
 
