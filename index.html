@@ -17,15 +17,20 @@
       content="Everything about the 40th birthday weekend – programme, RSVP, guests and practical info."
     />
 
-    <!-- How the link looks when shared (Messenger, WhatsApp, Facebook ...).
-         Replace /og-bilde.svg with your own /og-bilde.jpg (1200 x 630) when you have one. -->
+    <!-- How the link looks when shared (Messenger, WhatsApp, Facebook, iMessage ...).
+         Uses the same photo as the front page (public/images/forside.jpg).
+         The image URL needs to be absolute (with the domain) for most apps
+         to pick it up – update this if the site ever moves to another domain. -->
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://vicky40.vercel.app/" />
     <meta property="og:title" content="Vickie turns 40" />
     <meta property="og:description" content="Come celebrate – a weekend in Oslo." />
-    <meta property="og:image" content="/og-bilde.svg" />
+    <meta property="og:image" content="https://vicky40.vercel.app/images/forside.jpg" />
+    <meta property="og:image:width" content="1536" />
+    <meta property="og:image:height" content="2048" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="/og-bilde.svg" />
+    <meta name="twitter:image" content="https://vicky40.vercel.app/images/forside.jpg" />
   </head>
   <body>
     <div id="root"></div>
