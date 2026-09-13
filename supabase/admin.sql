@@ -58,6 +58,11 @@ drop function if exists public.admin_set_person_removed(text, uuid, int, boolean
 drop function if exists public.admin_update_rsvp_person(
   text, uuid, int, text, text, text, boolean, text, jsonb, text, text);
 
+-- 2026-09: photo deletion was replaced by hiding (see admin_hide_photo below).
+-- Drop the old function so the delete capability is actually gone from the
+-- database, not just unused by the app.
+drop function if exists public.admin_delete_photo(text, text, uuid);
+
 -- 3) Login check
 create or replace function public.admin_login(email text, pass text)
 returns boolean
@@ -83,7 +88,9 @@ begin
 end;
 $$;
 
--- 5) All uploaded photos (newest first)
+-- 5) All uploaded photos (newest first). Hidden ones are left out, so
+--    "deleting" a photo in the admin view (see admin_hide_photo below)
+--    makes it disappear here without actually removing anything.
 create or replace function public.admin_photos(email text, pass text)
 returns setof public.photos
 language plpgsql
@@ -94,7 +101,8 @@ begin
   if not public.admin_ok(email, pass) then
     raise exception 'Wrong username or password';
   end if;
-  return query select * from public.photos order by created_at desc;
+  return query
+    select * from public.photos where not hidden order by created_at desc;
 end;
 $$;
 
@@ -213,12 +221,12 @@ begin
 end;
 $$;
 
--- 9) Delete one uploaded photo's metadata row. Password-checked.
---    The actual file is removed from the bucket by the app afterwards, via the
---    Storage API (Postgres blocks a direct DELETE on storage.objects). The
---    "Delete orphaned photos" storage policy in photos.sql then allows it,
---    because the row this function deletes is gone by that point.
-create or replace function public.admin_delete_photo(email text, pass text, photo_id uuid)
+-- 9) "Delete" one uploaded photo. Password-checked. This only flags the row
+--    as hidden – it stays in the database and the file stays in storage. It
+--    just disappears from admin_photos() above, so it no longer shows up in
+--    the admin view. Nothing is ever actually deleted (no undo needed, no
+--    risk of a photo being permanently lost by mistake).
+create or replace function public.admin_hide_photo(email text, pass text, photo_id uuid)
 returns void
 language plpgsql
 security definer
@@ -229,7 +237,7 @@ begin
     raise exception 'Wrong username or password';
   end if;
 
-  delete from public.photos where id = photo_id;
+  update public.photos set hidden = true where id = photo_id;
 end;
 $$;
 
@@ -237,7 +245,7 @@ grant execute on function public.admin_login(text, text) to anon;
 grant execute on function public.admin_rsvps(text, text) to anon;
 grant execute on function public.admin_photos(text, text) to anon;
 grant execute on function public.admin_storage_stats(text, text) to anon;
-grant execute on function public.admin_delete_photo(text, text, uuid) to anon;
+grant execute on function public.admin_hide_photo(text, text, uuid) to anon;
 grant execute on function public.admin_set_person_removed(text, text, uuid, int, boolean) to anon;
 grant execute on function public.admin_update_rsvp_person(
   text, text, uuid, int, text, text, text, boolean, text, jsonb, text, text) to anon;

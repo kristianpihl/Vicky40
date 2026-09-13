@@ -112,7 +112,7 @@ function AdminPhotosInner() {
   const [rows, setRows] = useState(null)
   const [stats, setStats] = useState(null) // { file_count, total_bytes } | null
   const [error, setError] = useState(false)
-  const [deletingId, setDeletingId] = useState(null)
+  const [hidingId, setHidingId] = useState(null)
   const [zipping, setZipping] = useState(false)
   const [zipState, setZipState] = useState({
     phase: 'idle', // 'fetching' | 'zipping'
@@ -157,37 +157,30 @@ function AdminPhotosInner() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [email, password])
 
-  async function handleDelete(row) {
+  // "Deleting" a photo only hides it from this admin view – it is never
+  // actually removed from the database or the storage bucket.
+  async function handleHide(row) {
     const ok = window.confirm(
-      'Are you sure you want to delete this image? It will be deleted from the database.',
+      'Remove this photo from your admin view?\n\n' +
+        'It will disappear from here, but it is NOT deleted – the photo stays safely in the database.',
     )
     if (!ok) return
 
-    setDeletingId(row.id)
+    setHidingId(row.id)
 
-    // 1) Remove the metadata row (password-checked, server side).
-    const { error } = await supabase.rpc('admin_delete_photo', {
+    const { error } = await supabase.rpc('admin_hide_photo', {
       email,
       pass: password,
       photo_id: row.id,
     })
     if (error) {
-      setDeletingId(null)
-      console.error('admin_delete_photo failed:', error)
-      window.alert('Could not delete the photo. Please try again.')
+      setHidingId(null)
+      console.error('admin_hide_photo failed:', error)
+      window.alert('Could not remove the photo from view. Please try again.')
       return
     }
 
-    // 2) Now the file has no row, so it can be removed from the bucket.
-    //    Best effort – if this fails the file is just an unused leftover.
-    const { error: fileError } = await supabase.storage
-      .from('photos')
-      .remove([row.storage_path])
-    if (fileError) {
-      console.error('storage remove failed (row already deleted):', fileError)
-    }
-
-    setDeletingId(null)
+    setHidingId(null)
     setRows((cur) => (cur ? cur.filter((r) => r.id !== row.id) : cur))
     fetchStats()
   }
@@ -391,10 +384,10 @@ function AdminPhotosInner() {
                     <button
                       type="button"
                       className="admin-photo-del"
-                      onClick={() => handleDelete(row)}
-                      disabled={deletingId === row.id}
+                      onClick={() => handleHide(row)}
+                      disabled={hidingId === row.id}
                     >
-                      {deletingId === row.id ? 'Deleting …' : 'Delete'}
+                      {hidingId === row.id ? 'Removing …' : 'Remove'}
                     </button>
                   </span>
                 </figcaption>
