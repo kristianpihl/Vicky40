@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient.js'
 
 // Editable single-blob page content (front-page heading/intro, venue body/facts).
@@ -10,6 +11,13 @@ const ContentContext = createContext({
 
 export function ContentProvider({ children }) {
   const [map, setMap] = useState(null)
+  // This provider is mounted once for the whole app, so without this it would
+  // only ever load page_content at the very first page load. An admin editing
+  // the front page or venue text and then clicking through to see it (without
+  // a full reload) would still see the old text. Re-fetching on every route
+  // change keeps it in sync – cheap, and the old value stays on screen (no
+  // flicker) while the new one loads in the background.
+  const { pathname } = useLocation()
 
   useEffect(() => {
     let cancelled = false
@@ -20,7 +28,7 @@ export function ContentProvider({ children }) {
         if (cancelled) return
         if (error) {
           console.error('page_content load failed:', error)
-          setMap({}) // fall back to the built-in text
+          setMap((cur) => cur ?? {}) // keep any data already loaded
           return
         }
         const m = {}
@@ -30,7 +38,7 @@ export function ContentProvider({ children }) {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [pathname])
 
   const get = (key, fallback = '') =>
     map && map[key] != null && map[key] !== '' ? map[key] : fallback
