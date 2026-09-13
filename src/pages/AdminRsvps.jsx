@@ -607,12 +607,14 @@ function AdminRsvpsInner() {
 
       {!error && rows === null && <p className="admin-status">Loading …</p>}
 
-      {!error && rows !== null && rows.length === 0 && (
-        <p className="admin-status">No RSVPs yet.</p>
-      )}
-
-      {!error && rows && rows.length > 0 && (
+      {!error && rows !== null && (
         <>
+          {rows.length === 0 && (
+            <p className="admin-status">
+              No RSVPs yet – the overview below will fill in as guests reply.
+            </p>
+          )}
+
           <div className="admin-kpis">
             <KpiCard
               label="Submissions"
